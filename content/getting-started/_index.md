@@ -3,5 +3,5 @@ title: Get started
 weight: 10
 ---
 
-Install monbooru with Docker or as a desktop, then take a short
-tour of the UI and add your first images.
+Install monbooru, then take it for a short spin: add a few images, tag
+them, and find them again.

@@ -3,92 +3,88 @@ title: Galleries
 weight: 80
 ---
 
-A gallery is a named folder plus its own database and thumbnails. Each
-gallery is fully independent: its own images, tags, saved searches,
-collections and relations. One instance can hold several - art in one,
-photos in another - and the footer shows which one is active; click
-the name to switch when more than one is configured.
+A gallery is a folder of images with its own database: its own tags,
+saved searches, collections and relations. This is useful if you want images and tags to be completely separated, say art in one and family
+photos in another, and switch between them from the footer.
 
 ![Gallery management in Settings](settings-galleries.png)
 
-Galleries are managed at **Settings -> Galleries**. The non-obvious
-points:
+Galleries are managed under **Settings -> Galleries**. Adding one takes
+a name and a folder (on Docker, a folder you mounted into the
+container). You can also start a gallery from an export file, which
+fills it in one step.
 
-- **Add** takes a name and a path on disk (with Docker, a folder you
-  mounted into the container), and also accepts an import file
-  (.db / .sqlite / .json / .zip) so you can create a populated
-  gallery in one step.
-- Switching the active gallery is per session; the default gallery is
-  restored on restart.
-- **Delete** erases the database and thumbnails but leaves the source
-  images unless you also tick the folder option. The active, default
-  and last remaining gallery cannot be deleted - switch or demote
-  first.
+Switching galleries switches for everyone using this monbooru, not
+just your browser, and the default gallery comes back after a restart.
+
+## What a gallery indexes
+
+Everything under the gallery's folder, subfolders included.
+Symlinked folders are followed too, so a gallery can pull in folders
+from another drive without moving anything.
+
+A gallery inside another gallery's folder keeps that folder to
+itself: the outer gallery stops indexing it.
+
+**Settings -> General -> Ignored files and folders** lists what no
+gallery should index. It starts with the clutter NAS boxes, trash bins
+and snapshot tools leave behind (`@eaDir`, `#recycle`, `.Trash-*`...).
+A plain name is ignored wherever it appears (`.*` ignores every hidden
+file and folder), and a path with a `/` counts from the top of the
+gallery (`photos/raw` is just that one folder). Images the list newly
+covers are marked missing on the next sync, never deleted.
+
+**Delete** removes the gallery's database and thumbnails and leaves
+your files alone, unless you also tick the option to delete its
+folder.
 
 ## Export
 
-Each gallery row has an **Export** with three formats:
+Each gallery can be exported in three formats:
 
-- **db**: a consistent SQLite snapshot of the gallery database. The
-  format to pick for a backup.
-- **json**: one JSON document with every table, relations and
-  collections included. Same fidelity, human-readable.
-- **light**: a portable `tags.json` listing `{sha256, path, tags}` per
-  image, with everything monbooru-specific (SD/ComfyUI metadata, saved
-  searches, tag attribution, manga metadata) stripped. Useful as a
-  tags-only backup or as input for other software. Only images present
-  on disk are listed.
+- **db**: a snapshot of the gallery's database. The one to pick for a
+  backup.
+- **json**: the same content as one readable JSON file.
+- **light**: a `tags.json` listing each image's hash, path and tags,
+  and nothing else. Handy as a tags-only backup or to feed other
+  software.
 
-Tick **with images** to bundle the chosen format plus every file under
-the gallery into a `.zip`. Thumbnails are excluded; they rebuild
-after import. A db or json export without images carries
-metadata only.
+Tick **with images** to get a `.zip` holding the export and every file
+in the gallery. Thumbnails are left out; they're rebuilt on import.
 
 ## Import
 
-**Import** accepts a `.db`, `.sqlite`, `.json` or `.zip` produced by
-Export, or a foreign format by another supported application (see [Migrating](../migrating.md)). A `.json`
-upload can be a full export or a bare light `tags.json`; monbooru
-detects which.
+**Import** takes anything Export made, or an export from another
+application (see [Migrating](../migrating.md)). There are two modes:
 
-Two modes:
+- **Merge** adds what the upload has to the gallery. Images are
+  matched by their content, so tags from the upload land on the images
+  you already have. A `.db` or `.json` on its own brings tags only; new
+  images come from a `.zip` that includes files.
+- **Replace** wipes the gallery and loads the upload in its place,
+  files included when the upload has them. You type the gallery's name
+  to confirm.
 
-- **Merge** (preselected) adds new images and tags from the upload to
-  the target gallery. Existing rows are kept; tags from the upload are
-  layered onto matching images (matched by SHA-256). A `.db` or
-  `.json` upload carries no image bytes, so on its own it applies tags
-  only; new images arrive only from a `.zip` that bundles files.
-- **Replace** wipes the target gallery's database and thumbnails, then
-  loads the upload into the empty gallery. When the upload bundles
-  image files, the gallery's source folder is wiped and repopulated
-  too; a bare `.db` / `.json` leaves the source files in place. You
-  type the gallery's name to confirm. Refused on the active and the
-  default gallery (switch or demote first).
-
-After an import monbooru switches to the imported gallery and rebuilds
-its thumbnails in the background. Import is refused while any
-background job is running. An imported entry whose file is not on disk
-still lands as a tagged row flagged missing; find those with
-`missing:true`. Files inside an archive are capped at the configured
-`max_file_size_mb`, the whole upload at 16 GiB.
+Entries whose file isn't on disk still come in, tagged and marked
+missing; `missing:true` finds them.
 
 ## Transfer
 
-To move a few images to another gallery without an export/import
-cycle, use **Transfer**. It appears on the detail page and in the
-gallery batch bar (selection or whole search) whenever more than one
-gallery is configured.
+To send a few images to another gallery without exporting anything,
+use **Transfer**, on an image's page or in the batch bar. The image is
+copied over with its tags, rating, sources, notes and favorite, and
+lands in the other gallery's inbox. If that gallery already has the
+same file, the two are merged instead. Relations and collections stay
+behind, since they point at images the other gallery may not have.
+Tick **Remove from this gallery after transfer** to move rather than
+copy.
 
-The image is copied into the target gallery and re-ingested there, so
-it gets a fresh id and thumbnail. Its tags, rating, sources (each with
-its artist commentary and original link), annotations, note and
-favorite come along. If the target already has the same file (matched
-by SHA-256), the transfer merges tags and provenance into that row
-instead of duplicating it, without overwriting a note or favorite the
-row already has.
+## Download
 
-Relations and collections are not carried over: they point at other
-images that may not exist in the target. The transferred image lands
-in the target's inbox for you to re-file. Tick **Remove from this
-gallery after transfer** to move instead of copy; the source is
-deleted once the copy succeeds.
+To hand a set of images to someone, select them (or take the whole
+search) and use **Download** in the batch bar, or press `d`. Your
+browser saves one `.zip` of the original files, exactly as they are.
+
+**Include tags** adds a `tags.json` in the light export's format.
+Another monbooru can apply those tags to the same files: put the files
+in its gallery, sync, then import the `tags.json`.

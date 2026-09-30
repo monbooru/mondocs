@@ -3,121 +3,54 @@ title: Maintenance
 weight: 110
 ---
 
-monbooru needs no routine maintenance; the tools below cover the cases
-where you moved things around behind its back, restored a backup, or
-want to reclaim space.
+monbooru looks after itself: the watcher keeps it in step with your
+folders and a nightly run tidies up. The tools under
+**Settings -> Maintenance** are for the times it can't know what
+happened, like when you reorganized files with monbooru switched off
+or restored a backup.
 
-## Manual tools
+## Which tool when
 
-**Settings -> Maintenance** has the one-shot tools. Most report how
-many rows they touched; Vacuum and Free memory report space reclaimed.
+**You moved or deleted files while monbooru wasn't running.** Press
+the sync button at the top right. Files that are gone are marked
+missing rather than forgotten, so their tags survive if they come
+back. When you know they won't, **Missing images** removes them for
+good, and **Empty folders** lists the folders the move left behind so
+you can clear them out.
 
-- **Missing images** (Prune): delete the database rows of files no
-  longer on disk, along with their thumbnails. (A sync only marks such
-  rows missing; this removes them.)
-- **Orphaned thumbnails** (Remove): delete thumbnail files whose image is
-  gone.
-- **Rebuild thumbnails**: regenerate every thumbnail, including manga
-  covers and page thumbnails. Useful after an import or a backup
-  restore. Also re-probes video dimensions.
-- **Compute hashes**: backfill the two hashes an image can be missing.
-  First the perceptual hash, which the relations pair finder needs (see
-  [Relations](relations/index.md)); then the MD5.
-- **Rebuild pair queue**: wipe the relation candidate queue (skipped
-  pairs included) and rescan from scratch.
-- **Tag counts** (Recalculate): recompute every tag's usage count. The
-  watcher and bulk operations keep counts correct in real time, so you
-  only need this if you spot discrepancies. Zero-usage tags persist;
-  delete them individually on the Tags page if you want them gone.
-- **Category conflicts**: count tags whose name lives in more than one
-  category (e.g. `general:nintendo` and `copyright:nintendo`). Legal,
-  but usually means two sources disagreed; the count links to the Tags
-  page's Conflicts filter where both sides can be merged.
-- **Find folded duplicates** (Scan): pair each tag an older pull stored
-  folded (like `fate_grand_order`) with the corrected spelling that now
-  supersedes it (`fate/grand_order`), for the Tags page's Folded
-  duplicates filter. Refresh the affected images first so the corrected
-  spelling is present; the scan only pairs spellings you already have.
-- **Re-extract metadata**: re-run SD/ComfyUI metadata extraction on
-  every image, re-probe video durations, and re-parse comic archives'
-  `ComicInfo.xml`.
-- **Vacuum database**: compact the database file and release space
-  back to the filesystem.
-- **Free memory**: shrink the database caches, return heap to the
-  system, and unload the auto-tagger from RAM/VRAM.
+**Thumbnails look wrong, or you restored a backup.** **Rebuild
+thumbnails** makes them all again, manga pages included.
 
-To find and remove byte-identical duplicate files, use the SHA-256
-duplicates tool under **Relations -> Duplicates**; see
+**You're turning on a feature for a library you already have.** New
+files get this done as they arrive, so these catch up the old ones:
+
+- **Compute hashes** for finding [near-duplicates](relations/index.md);
+- **Meta tags** for the [tags monbooru writes itself](tags/index.md#where-tags-come-from),
+  and **Remove meta tags** to take them off again;
+- **Re-extract metadata** when an update reads more from your files,
+  such as [generation data](ai-metadata.md) or comic archive details.
+
+**You want disk space or memory back.** **Vacuum database** compacts
+the database file, and **Free memory** hands back the memory monbooru
+is holding, auto-tagger models included.
+
+To clean up duplicate files, use the relations tools; see
 [Relations](relations/index.md#cleaning-up-duplicates).
 
 ## Nightly schedule
 
-**Settings -> Schedule** turns on a daily run at a chosen time
-(default 01:00). Tick any of:
+**Settings -> Schedule** runs a set of jobs every night, at 01:00 by
+default. Syncing and cleaning up leftover thumbnails are on out of the
+box. Auto-tagging, finding relation pairs and
+[looking up unsourced images](lookup/index.md#looking-up-a-library-overnight)
+are there to switch on. With several galleries, you can pick which
+galleries each job runs on: your own photos might get the sync and
+skip the lookups. **Run now** starts the same run straight away.
 
-- Sync gallery
-- Remove orphaned thumbnails
-- Run enabled auto-taggers (off by default)
-- Find relation pairs (off by default)
-- Look up unsourced images, in the Public Tag Repository and on online
-  boorus (both off by default, and both hidden until monloader is
-  paired) - see
-  [scheduled lookup](lookup/index.md#looking-up-a-library-overnight)
+If you're running monbooru on a desktop, it may not be on at the scheduled time. Under
+**Run time** you can have a missed run happen a few minutes after
+monbooru starts or the machine wakes up, or drop the clock and run
+once a day at startup instead. Desktop installs start with the
+catch-up choice.
 
-The scheduler runs through every gallery in turn. If a job is already
-running at fire time, the run is skipped silently.
-
-**When it runs** matters on a machine that sleeps. A server is awake at
-01:00; a laptop usually is not, and a run that never fires says nothing
-about it. Four choices:
-
-| Choice | What happens |
-|---|---|
-| Every day at the time above | The plain daily run. A missed one is skipped |
-| ...and at startup if a day was missed | The same, plus one run five minutes after starting when the last one fell on an earlier day |
-| At startup only | No clock at all. One run per day, five minutes after you start monbooru |
-| Never | Nothing runs, whatever is ticked above |
-
-**Run now** starts the same pass immediately.
-
-## Stats
-
-**Settings -> Stats** is a read-only diagnostic block: process memory
-broken down by what holds it, the auto-tagger's current mode (CPU or
-GPU), load status and memory, database size per gallery, and free
-space on every filesystem your galleries and data live on.
-
-## Troubleshooting
-
-**Degraded mode banner.** The gallery folder is unreadable. Existing
-entries stay browsable but sync and the watcher are off. Fix the path
-or its permissions and restart.
-
-**Missing thumbnails.** Run Maintenance -> Rebuild thumbnails. Video
-and animated GIF previews need ffmpeg, which ships with the Docker
-image.
-
-**Watcher hits the inotify limit.** Logged as `no space left on
-device` from `inotify_add_watch`. Raise
-`fs.inotify.max_user_watches` on the host (not inside the container)
-and restart. If you see `too many open files` instead, raise
-`fs.inotify.max_user_instances`. Or disable the watcher in Settings
-and use Sync manually.
-
-**Permission errors on delete or move.** monbooru takes ownership of
-files at ingest so it can delete or move them later. Files ingested by
-an old version may predate this; run a Sync, which re-claims files as
-it re-hashes them.
-
-**Files added but not visible.** Check that they are under the gallery
-path, under the `max_file_size_mb` limit, and that the extension is
-one of jpg/jpeg/png/webp/gif/mp4/webm/cbz/zip. Then run Sync.
-
-**Locked out of the login.** The login backoff caps at 30 seconds and
-clears after a few minutes idle. Wait it out, or restart the process
-to clear all sessions.
-
-**API returns 503 `api_disabled`.** No API token exists yet; create
-one in Settings -> Authentication. See
-[Development](../development.md). The same status appears when no
-gallery is active.
+Something not working? See [Troubleshooting](../advanced/troubleshooting.md).

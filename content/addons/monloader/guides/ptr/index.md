@@ -3,134 +3,83 @@ title: Hydrus PTR
 weight: 50
 ---
 
-monloader can answer "what are this file's tags?" from the file's sha256
-alone, using a local copy of the
-[Hydrus Public Tag Repository](https://hydrusnetwork.github.io/hydrus/PTR.html)
-(the PTR) - a community-maintained database of billions of tag-to-file
-mappings. It is off by default and downloads nothing until you enable it.
-
-This is the offline companion to the online [lookup chain](../lookup/index.md): the
-booru lookup is instant and needs no local data, but only finds files still
-hosted on a booru; the PTR also knows files that were deleted or never
-posted there, at the cost of a large local index.
+The [Hydrus Public Tag Repository](https://hydrusnetwork.github.io/hydrus/PTR.html)
+(PTR) is a huge shared database of tags, built by Hydrus users over
+many years: billions of tags for files identified by their hash.
+monloader can keep a local copy and use it to tag your images from the
+file alone, including files that were deleted from the boorus or never
+posted there. It's off until you turn it on.
 
 ## What it costs
 
-The PTR has no per-hash query API - by design, so its server cannot learn
-which files you have. Using it means streaming the repository's whole tag
-history once and keeping a local index:
+The PTR can't be asked about a single file (on purpose, so its server
+never learns what files you have). Using it means downloading the
+whole thing once and keeping it up to date:
 
-- **Initial download**: thousands of update files, fetched and indexed
-  over days.
-- **Local index**: a database on its own volume (expect more than 70 GB).
-  monloader refuses to start the initial sync when the volume has less than
-  `min_free_gb` (default 70) free. Building the index writes all over the
-  database rather than end to end, which a spinning disk serves poorly:
-  on an HDD the initial sync can take weeks, so prefer SSD-backed storage.
-- **Steady state**: one small update roughly every day once caught up.
+- **Disk**: the local copy needs more than 70 GB, on a volume of its
+  own. Put it on an SSD; building it on a spinning disk can take
+  weeks.
+- **Time**: the first sync takes days. You can pause and resume it
+  whenever you like.
+- **After that**: one small update a day or so.
 
-The index is a rebuildable cache of public data: it can be deleted and
-re-synced at any time.
+The copy can be deleted and downloaded again at any time; it's all
+public data. To skip most of the first sync, start from a snapshot
+(below).
 
-## Enabling it
+## Turning it on
 
 ![The PTR page before enabling](ptr-disabled.png)
 
-1. Point the index somewhere that exists. A desktop install already has a
-   `ptr` folder beside its own data, so there is nothing to do here unless
-   that disk is short on space; in Docker, mount a dedicated volume at
-   `/ptr` (there is a commented block in the shipped `docker-compose.yml`
-   and `monloader.container`). Either way, **data path** in the settings ptr
-   section takes any folder on a disk with room. An index built inside a
-   container is lost when the container is recreated.
-2. Open **PTR** in the top bar, check your free space against what the
-   initial sync needs, and click **enable ptr sync**. Catching up takes
-   days; you can **pause** and **resume** at any time and it picks up
-   where it stopped.
+1. Give the copy a place to live. A desktop install already has a
+   `ptr` folder next to its data; on Docker, mount a volume at `/ptr`
+   (the compose file has a commented example). The **data path** in
+   **Settings -> ptr** can point anywhere with enough room.
+2. Open **PTR** in the top bar, check the free space, and click
+   **enable ptr sync**.
 
-To turn the lookup off without losing the index, untick **enable sync and
-answer sha256 lookups** in the settings ptr section; **delete ptr data**
-in the same section is what reclaims the disk.
+Unticking **enable sync and answer sha256 lookups** in **Settings ->
+ptr** turns it off and keeps the copy; **delete ptr data** frees the
+disk.
 
 ![The PTR page once the index has caught up](ptr-synced.png)
 
 ## Starting from a snapshot
 
-The initial sync is the slow part. To skip it, seed the index from a
-snapshot: monloader's own index file with the replay cursor baked in, so
-enabling picks up from the snapshot's date and only fetches the days
-since.
+A snapshot is a ready-made copy you can download instead of syncing
+from scratch. monloader then only fetches the days since it was made.
 
-1. Download the latest snapshot from the
-   [Hydrus PTR tag mappings dataset](https://huggingface.co/datasets/Leqwin/hydrus-ptr-tag-mappings)
-   on Hugging Face - a `ptr-snapshot-<date>.sqlite.zst` file (about 22 GB
-   compressed). The published `SHA256SUMS` file is there to verify the
-   download against.
-2. Decompress it: `zstd -d ptr-snapshot-<date>.sqlite.zst`. It expands to
-   about 68 GB, so make sure the volume has the room first.
-3. With monloader stopped, put the file in the `/ptr` volume as
-   `ptr.sqlite`. In docker the container runs as uid 1000, so
-   `chown 1000:1000 ptr.sqlite` if the owner does not already match.
-4. Start monloader and enable the PTR (if it was already enabled, it
-   resumes on its own). It syncs the days between the snapshot and now,
-   then reaches caught up.
+1. Download the latest `ptr-snapshot-<date>.sqlite.zst` (about 22 GB)
+   from the [Hydrus PTR tag mappings dataset](https://huggingface.co/datasets/Leqwin/hydrus-ptr-tag-mappings)
+   on Hugging Face. Its `SHA256SUMS` file lets you check the download.
+2. Unpack it with `zstd -d ptr-snapshot-<date>.sqlite.zst`. It grows to
+   about 68 GB.
+3. With monloader stopped, put it in the PTR folder as `ptr.sqlite`
+   (on Docker, owned by uid 1000: `chown 1000:1000 ptr.sqlite`).
+4. Start monloader and enable the PTR. It catches up the missing days
+   and is ready.
 
 ## Using it
 
-The index answers once it is caught up, and not before: a half-built copy
-would answer a few of a file's tags as if they were all of them. While it
-is syncing or paused, PTR lookups are refused and a combined lookup runs
-the online boorus alone, saying so in its miss trail.
+The PTR answers only once the copy has caught up: a half-built copy
+would give a few of a file's tags as if they were all of them.
 
-- **Tag lookup**: the PTR becomes a backend of the
-  [reverse lookup](../lookup/index.md). monbooru shows its PTR lookup option only
-  while monloader reports the index synced; each lookup appears as a job on
-  the queue page.
-- **Aliases and implications**: the synced alias and implication graph is
-  queryable (up to 500 tags per call), so monbooru can sweep its own tag
-  list and propose aliases and implications drawn from the PTR.
-
-The tags come back in monbooru form: hydrus namespaces are mapped onto
-monbooru categories (`creator:` to artist, `series:` to copyright, and
-so on) and names are normalized the same way as
-[downloaded tags](../mapping/index.md). Namespaces with no monbooru meaning -
-the PTR is full of bookkeeping like `title:`, `filename:` or
-`pixiv work:`, whose values are ids or prose rather than tags - are
-dropped whole rather than leaking into your general category.
+From then on, monbooru can use it to
+[look up images](../../../../guides/lookup/index.md) and to find
+aliases and implications for your tags. Tags come back in monbooru's
+form: hydrus namespaces become categories (`creator:` is artist,
+`series:` is copyright...), and bookkeeping namespaces like `title:`
+or `filename:` are left out.
 
 ## Contributing back
 
-The PTR is a donated community database. Once it is synced, you can also
-give back the tags you curate by hand: push tags your images carry that
-the PTR lacks, and petition tags that are wrong.
+With a personal PTR account, you can also give back the tags you
+curate yourself, from monbooru (see
+[Contributing to the PTR](../../../../guides/ptr-contributions/index.md)).
 
-Contributing needs a personal PTR account, created from the
-**account** card on the PTR page. The account is made anonymously from the
-PTR itself; uploads are attributed to it on the server for some time and
-then anonymized, and volunteer moderators (janitors) review your
-suggestions. Losing the key means losing the account, so the card lets you
-reveal your key to back it up. Creating an account never happens on its
-own, and monloader only makes one.
-
-You do the actual contributing from monbooru (see
-[Contributing to the PTR](../../../../guides/ptr-contributions/index.md));
-monloader uploads it under your account and keeps the record in the
-**contributions** card. A send that failed part-way leaves its items
-there with a retry.
-
-## Configuration
-
-The `[ptr]` block in `monloader.toml`; every key also has a
-`MONLOADER_PTR_*` environment override, and these keys are also editable
-from the settings page's **ptr** section:
-
-```toml
-[ptr]
-enabled     = false
-data_path   = "/ptr"                          # dedicated index volume; applies on restart
-address     = "https://ptr.hydrus.network:45871"   # applies on restart
-access_key  = ""                              # empty = the public read-only key; a personal account key goes here
-fetch_sleep = 1.0                             # seconds between update downloads; applies on restart
-min_free_gb = 70                              # refuse the initial sync below this free space; applies on restart
-commit_sleep = 1.0                            # seconds between contribution uploads
-```
+Create the account from the **account** card on the PTR page. It's
+anonymous, and volunteers (janitors) review what you send. The account
+is its key: lose the key and you lose the account, so use the card's
+button to reveal it and keep a copy somewhere safe. The
+**contributions** card keeps a record of what you sent, and anything
+that failed on the way can be retried from there.

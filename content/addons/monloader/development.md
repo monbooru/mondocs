@@ -3,157 +3,108 @@ title: API and development
 weight: 90
 ---
 
-## UI password
+## API tokens
 
-Off by default: on a trusted home network the web UI is open. Enable it from
-**Settings -> Authentication**, or by hashing a password on the command line
-and pasting the result into the config:
-
-```bash
-# on the host:
-./monloader -hash-password 'your-password'
-# or via Docker:
-docker exec -it monloader monloader -hash-password 'your-password'
-```
-
-Put the output in `auth.password_hash` and set
-`auth.enable_password = true`. When enabled, the web UI is gated by a
-session cookie (lifetime `auth.session_lifetime_days`, default 7); removing
-the password clears every session.
-
-## API tokens and scopes
-
-monloader's JSON API lives under `/api/v1/` and requires a bearer token; the
-API is disabled until at least one token exists. Create tokens in
-**Settings -> Authentication**: each is named, individually revocable, and
-its secret is shown once at creation, never again.
-
-Each token's **config** dialog sets its scopes: `read` (list the queue,
-inspect jobs, list sites) and/or `write` (enqueue URLs, manage jobs). A call
-whose token lacks the needed scope gets `403 insufficient_scope`. Tokens
-provisioned by [pairing](getting-started/pairing/index.md) have fixed scopes and
-are removed by removing the pairing.
-
-`/health`, `/api/v1/openapi.json`, and `/api/v1/docs` stay open without a
-token.
+monloader's API lives under `/api/v1/`. It stays off until you create
+a token under **Settings -> Authentication**. Each token has a name,
+can be revoked on its own, and its secret is shown once. Its
+permissions are `read` (see the queue, jobs and sites) and `write` (add
+URLs, manage jobs); a call it isn't allowed to make gets
+`403 insufficient_scope`. Tokens made by [pairing](../pairing.md) are
+managed by removing the pairing.
 
 ```bash
 curl -H "Authorization: Bearer <token>" \
      -X POST http://localhost:8456/api/v1/queue \
-     -d '{"url":"https://danbooru.donmai.us/posts/xxx"}'
+     -d '{"url":"https://danbooru.donmai.us/posts/123"}'
 ```
 
-## API reference
-
-The API documents itself in-app:
-
-- HTML reference: `/api/v1/docs` (linked in the footer).
-- OpenAPI spec: `/api/v1/openapi.json`.
+The full reference comes with the app: `/api/v1/docs` (also linked in
+the footer) and `/api/v1/openapi.json`. Both, and `/health`, work
+without a token.
 
 ## Error codes
 
-A `failed` queue item carries one of these stable codes; scripts and the
-monsender extension can branch on them:
+A failed item carries one of these codes, which scripts and monsender
+can rely on:
 
-| error_code | when |
+| Code | Meaning |
 |---|---|
-| `unsupported_url` | gallery-dl matched no extractor for the URL, and it is not itself a direct link to a media file monbooru can ingest |
-| `auth_required` | the site needs credentials (a 401/403 with a missing-auth message) |
-| `blocked` | a bot-protection wall (Cloudflare / captcha challenge), kept distinct from `auth_required` so its 403 is not read as a missing credential |
-| `rate_limited` | the site returned 429 / a rate-limit error |
-| `network_unreachable` | gallery-dl could not resolve or reach the host (DNS failure, network unreachable); a refused/dropped connection stays `download_failed` |
-| `download_failed` | any other non-zero gallery-dl exit (a reached host erroring, HTTP 4xx/5xx, a refused/dropped connection) |
-| `mapping_failed` | metadata present but no usable file or URL could be built |
-| `file_too_large` | monbooru rejected the upload for size |
-| `monbooru_unreachable` | the push got no HTTP response (connect / timeout) |
-| `monbooru_rejected` | monbooru returned a 4xx/5xx other than the duplicate 200 |
-| `hash_mismatch` | a metadata refetch returned a file that does not match the one monbooru stored, so nothing was merged; on a replace job, the downloaded file did not match the md5 the site claims, so nothing was pushed |
-| `hash_not_found` | a hash lookup found no site (or the PTR index) holding the hash |
-| `ptr_unavailable` | a PTR lookup was requested while the PTR backend is off; normally refused as a 409 when the lookup is enqueued |
-| `ptr_syncing` | a PTR lookup was requested while the index is still building; normally refused as a 409 when the lookup is enqueued |
-| `ptr_account_required` | a PTR contribution ran without a personal account key, or with one the PTR does not accept for contributing |
-| `ptr_banned` | the PTR reports the configured account as banned |
-| `already_exists` | a replace job's downloaded file already exists in the gallery as another image; monbooru refuses the swap and records the two as a potential-duplicate pair instead |
-| `wrong_type` | a replace job aimed at an image whose row is an archive or video, which cannot be swapped this way |
-| `canceled` | the job was canceled while the item was in flight |
+| `unsupported_url` | gallery-dl doesn't know the URL, and it isn't a direct link to a file monbooru takes |
+| `auth_required` | the site wants credentials |
+| `blocked` | a Cloudflare or captcha wall |
+| `rate_limited` | the site said to slow down |
+| `network_unreachable` | the site's host couldn't be found or reached |
+| `download_failed` | gallery-dl failed for another reason |
+| `mapping_failed` | the post had no usable file |
+| `file_too_large` | monbooru refused the file for its size |
+| `monbooru_unreachable` | monbooru didn't answer |
+| `monbooru_rejected` | monbooru answered with an error |
+| `hash_mismatch` | the file fetched doesn't match the one expected |
+| `hash_not_found` | no source in the lookup chain has the file |
+| `ptr_unavailable` | a PTR lookup while the PTR is off |
+| `ptr_syncing` | a PTR lookup while the PTR is still syncing |
+| `ptr_account_required` | a PTR contribution without a working account |
+| `ptr_banned` | the PTR account is banned |
+| `already_exists` | an upgrade's file is already in the gallery as another image |
+| `wrong_type` | an upgrade aimed at an archive or a video |
+| `canceled` | the job was canceled mid-way |
 
-The job's `summary` aggregates its items:
-`{ created, duplicate, enriched, matched, replaced, skipped, archived, failed, canceled, total }`.
-`archived` is the part of `skipped` that gallery-dl's download archive
-passed over, which is what the queue row's force download re-fetches.
-The outcomes themselves are described in
-[downloading](guides/downloading/index.md#per-item-outcomes).
+What the outcomes mean is on [Downloading](guides/downloading/index.md#per-item-outcomes).
 
 ## Building from source
 
-monloader is pure Go with no CGO, so the binary is static and builds without
-system libraries:
+monloader is plain Go, with no cgo:
 
 ```bash
-make build      # go build with the version injected from VERSION.md
-# or directly:
+make build      # injects the version from VERSION.md
+# or:
 go build -o monloader ./cmd/monloader
 
 ./monloader -config /path/to/monloader.toml
 ```
 
-`make build` injects the version and repository URL via `-ldflags` (read
-from `VERSION.md` and `REPOSITORY.md`), which feed the footer and `/health`;
-a plain `go build` reports `dev`.
+A plain `go build` reports its version as `dev`. It needs gallery-dl
+to download anything: put it on the `PATH` or set
+`gallerydl.binary_path`. Without it the UI still runs and downloads
+fail until it's there.
 
-CLI flags and subcommands:
+Command-line flags:
 
-- `-config` - path to the TOML config file (default `./monloader.toml`).
-- `-hash-password '...'` - print a bcrypt hash for the UI password and exit.
-- `-desktop` - the desktop profile: OS-native paths, a log file, a browser
-  at startup, the first-run setup. The desktop downloads have it baked in;
-  `-desktop=false` turns one back into a server build.
-- `-no-browser` - with `-desktop`, do not open a browser at startup.
-- `-version` - print the version and exit.
-- `healthcheck` - probe the local `/health` endpoint and exit non-zero if it
-  is not healthy (accepts `-config` and `-timeout`).
+- `-config <path>`: the config file (default `./monloader.toml`).
+- `-hash-password <password>`: print a password hash and exit.
+- `-desktop`: the desktop profile (OS folders or a portable folder, a
+  log file, a browser at startup, the setup page); every download has
+  it on.
+- `-no-browser`: with `-desktop`, don't open a browser.
+- `-version`: print the version and exit.
+- `healthcheck`: probe the local `/health` endpoint and exit non-zero
+  when it doesn't answer.
 
-### gallery-dl
+## Site profiles
 
-The container image bundles Python and a pinned gallery-dl. Outside the
-container you supply it yourself; if it is not on `PATH`, set
-`gallerydl.binary_path` to its location. A missing binary is not fatal at
-startup - the UI and API still run, the bundled version shows as
-unavailable, and downloads fail until it is installed.
+How monloader reads a site is data, not code: each known site has a
+profile, a small JSON file. The profile tab of a site's dialog
+([Metadata mapping](guides/mapping/index.md#editing-a-sites-profile))
+writes yours to `profiles/<site>.json` next to the config, on top of
+the shipped one. The shipped profiles are the same files, in
+`internal/mapping/profiles/`, so contributing a fix or a new site is a
+pull request adding your file there. The **export** tab of the site's
+dialog gives you the file, without your credentials.
 
-## Adding a site profile
-
-Mappings are data, not code, so tracking gallery-dl's growing site list is a
-data change. There are three levels:
-
-- **No profile needed.** Any gallery-dl site without a profile uses the
-  generic fallback ([sites](guides/sites/index.md)), and the
-  `[[tag_overrides]]` / `[[rating_overrides]]` tables in `monloader.toml`
-  ([mapping](guides/mapping/index.md)) can correct a generic site with no release.
-- **Your own profile.** The settings profile tab
-  ([mapping](guides/mapping/index.md#editing-a-sites-profile)) writes
-  `/config/profiles/<category>.json`, applied immediately and layered over
-  the shipped set. You can also write the file by hand; a file that fails
-  to parse or validate is skipped with a warning in the log.
-- **A shipped profile.** The built-ins are the same files, embedded from
-  `internal/mapping/profiles/<category>.json`. Contributing one is a pull
-  request that adds your `/config/profiles/<category>.json`.
-
-A profile's fields:
-
-| field | purpose |
+| Field | Purpose |
 |---|---|
-| `family` | `danbooru`, `e621`, `moebooru`, `gelbooru_v02`, `philomena`, or `generic` - picks the rating semantics and the per-category tag regime |
-| `kind` | `booru` (default), `manga` - a manga gallery bundles its pages into one cbz - or `other` for sites that are neither |
-| `post_url_template` | the canonical post URL with `{id}` substituted (e.g. `https://danbooru.donmai.us/posts/{id}`) |
-| `md5_search_template` | the site's md5 search URL with `{md5}` substituted, a form gallery-dl's tag-search extractor matches (e.g. `https://danbooru.donmai.us/posts?tags=md5:{md5}`); set it to make the site eligible for hash lookup |
-| `auth` | `none`, `api_optional`, `api_required`, `username_password`, `cookies`, or `oauth` - drives the settings login indicator and the credential fields the dialog shows |
-| `hosts` | extra hosts that belong to the site (file CDNs, mirror instances); a direct file link on one of them counts as the site, and monsender treats them as the site's hosts too - a domain covers its subdomains ([mapping](guides/mapping/index.md#one-label-per-site)) |
-| `example` | a representative URL for the per-site test probe |
-| `category_overrides` | per-suffix tag-category remaps baked into the profile |
-| `rating_overrides` | per-value rating remaps baked into the profile |
-| `default_rating` | rating used only when the source gives none |
-| `needs_tags` | a generic-family site that needs gallery-dl's `tags: true` to emit per-category tags (one extra request per post) |
-| `has_notes` | a generic-family site whose extractor emits note boxes with gallery-dl's `notes: true`; the note-carrying booru families get it by family |
-| `options` | gallery-dl options merged into the managed config for this site; shareable, so never secrets |
-| `tag_rules` | per-tag corrections keyed by normalized name: `""` suppresses the tag, a bare name renames it, `category:name` retargets it |
+| `family` | `danbooru`, `e621`, `moebooru`, `gelbooru_v02`, `philomena` or `generic`: how ratings and tag categories are read |
+| `kind` | `booru` (the default), `manga` (galleries become one cbz), or `other` |
+| `post_url_template` | the post page, with `{id}` |
+| `md5_search_template` | the hash search URL, with `{md5}`; makes the site usable for lookups |
+| `auth` | `none`, `api_optional`, `api_required`, `username_password`, `cookies` or `oauth` |
+| `hosts` | other hosts that belong to the site (file CDNs, mirrors) |
+| `example` | a sample URL for the site's test button |
+| `category_overrides` | tag category remaps |
+| `rating_overrides` | rating value remaps |
+| `default_rating` | the rating when the site gives none |
+| `needs_tags` | for a generic site: ask gallery-dl for per-category tags (one more request per post) |
+| `has_notes` | for a generic site: ask gallery-dl for note boxes |
+| `options` | gallery-dl options for the site; shared, so never secrets |
+| `tag_rules` | per-tag fixes: `""` drops the tag, a name renames it, `category:name` moves it |

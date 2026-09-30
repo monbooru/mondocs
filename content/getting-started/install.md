@@ -3,99 +3,95 @@ title: Install
 weight: 10
 ---
 
-## Quick start (Docker)
+monbooru comes three ways: a Docker image, a portable folder you
+unpack anywhere, or a normal installed app. They all run the same
+program and end up in the same place, a web page at
+`http://localhost:8455`.
 
-1. Grab [`docker/docker-compose.yml`](https://github.com/monbooru/monbooru/blob/main/docker/docker-compose.yml) from the monbooru repository and
-   edit the volume paths so `/gallery`, `/data`, `/config` and
-   `/models` map to your folders.
+## Docker
+
+1. Grab [`docker/docker-compose.yml`](https://github.com/monbooru/monbooru/blob/main/docker/docker-compose.yml)
+   from the monbooru repository and edit the volume paths so they
+   point at your folders.
 2. `docker compose up -d`
 3. Open `http://localhost:8455`.
 
-On first start monbooru creates a config file with defaults at
-`/config/monbooru.toml`. Most settings are editable from the Settings
-page in the UI; the few that are not (paths, bind address) need a TOML
-edit and a restart. The full reference is in
-[Configuration](../configuration.md).
-
-A gallery is a named folder full of images; the default one points at
-`/gallery`.
-
-The compose file also contains an optional `monloader` service, the
-companion that handles downloading and reverse lookup. You can ignore
-it to start with and add it later; see the
-[monloader install page](../addons/monloader/getting-started/install.md).
-
-## Volumes
-
-| Mount | Purpose |
+| Mount | What goes there |
 |---|---|
-| `/gallery` | Your source images |
-| `/data` | SQLite database and thumbnails |
-| `/config` | `monbooru.toml` |
-| `/models` | ONNX auto-tagger models, one subfolder per tagger |
+| `/gallery` | your images |
+| `/data` | the database and thumbnails |
+| `/config` | `monbooru.toml`, themes and plugins |
+| `/models` | auto-tagger models |
 
 Keep `/data` on a persistent volume: it holds everything monbooru
-derives from your files (database, thumbnails, caches). The images
-themselves only ever live under `/gallery`.
+knows about your files.
 
-## Permissions (non-root)
+The container runs as user `1000:1000`, the usual first user on a
+Linux machine. Change `user:` in the compose file to your own uid:gid
+so the files monbooru writes belong to you.
 
-The image runs as a non-root user. The bundled compose file sets
-`user: "1000:1000"`, which matches the common first user on a Linux
-host; edit it to your own uid:gid. Files written to `/gallery`,
-`/data` and `/config` then land owned by you, and the bind mounts stay
-readable and writable. Make sure those host directories are owned by,
-or accessible to, that uid.
+The compose file also starts [monloader](../addons/monloader/_index.md),
+the optional companion for downloading and reverse lookup. Delete its
+block if you don't want it.
 
-The compose file also drops all container capabilities and adds back
-only `CHOWN` and `DAC_OVERRIDE`, which monbooru needs to take
-ownership of files at ingest so it can move or delete them later. If
-every file in your gallery is already owned by the uid the container
-runs as, you can drop those two as well.
+## Portable
 
-## Healthcheck
+Download a **portable** build for your system from the
+[releases page](https://github.com/monbooru/monbooru/releases),
+unpack it and run the program. A browser opens on a short setup page.
 
-The Docker image has a built-in healthcheck: the
-`monbooru healthcheck` subcommand probes the local `/health` endpoint
-and exits 0 when the server answers. `docker ps` shows the container
-as `healthy` once the app is up; you can point your own monitoring at
-`GET /health`, which returns `{"app":"monbooru","status":"ok","version":"..."}`.
+A portable folder keeps everything inside itself:
 
-## Quick start (desktop)
+```
+monbooru/            the folder you unpacked
+  monbooru           the program (monbooru.exe on Windows)
+  monbooru.toml      settings
+  data/              database, thumbnails, logs
+  gallery/           your images
+```
 
-Download a **desktop** build for your system from the
-[releases page](https://github.com/monbooru/monbooru/releases), unpack it,
-and run it. A browser opens on a short setup page.
+Move the folder or copy it to a USB stick and it keeps working. Delete
+it and monbooru is gone. To upgrade, replace the program file (and the
+bundled tools, if you took the bundled download) and leave the rest
+alone.
 
-Downloads come on two axes, and the filename says which is which:
+Each build comes in two flavours:
 
-| Axis | What you get |
-|---|---|
-| desktop or server | **desktop** opens automatically in a browser, keeps its files where your system puts a user's files. **server** keeps the defaults meant for a machine you run it on and reach from elsewhere. |
-| lite or bundled | **lite** is one binary. Video thumbnails need ffmpeg installed yourself; auto-tagging needs ONNX Runtime. **bundled** adds ffmpeg and the ONNX Runtime, so video previews and local auto-tagging work out of the box. |
+- **lite** is just the program. Video, AVIF and JPEG XL thumbnails
+  need ffmpeg installed on your system, and auto-tagging needs ONNX
+  Runtime.
+- **bundled** adds both, so everything works out of the box.
 
-On Windows each desktop build also ships as an installer, which is the
-same files plus Start Menu and desktop shortcuts; on Linux the Flatpak is
-the desktop bundled build inside a sandbox.
+## Installed
 
-### Where your files go
+If you'd rather have monbooru in your applications menu and
+uninstall it the normal way, take one of these instead. Each opens the
+same setup page on first run.
+
+- Windows: the installer.
+- Linux: an AppImage, or a Flatpak.
+- Arch Linux: `monbooru` in the AUR. Install `onnxruntime` and
+  `ffmpeg` alongside it for auto-tagging and video thumbnails.
+
+Every release also has a `SHA256SUMS` file if you want to check your
+download.
+
+### Where an installed copy keeps your files
 
 | | Linux | Windows |
 |---|---|---|
 | Settings, plugins, themes | `~/.config/monbooru` | `%AppData%\monbooru` |
 | Database and thumbnails | `~/.local/share/monbooru` | `%LocalAppData%\monbooru` |
-| Log file | `<database folder>/logs` | `<database folder>\logs` |
+| Log file | `logs` in the database folder | same |
 | Your images | wherever you pointed setup | same |
 
-A Flatpak install keeps its own copies of the first three under
-`~/.var/app/io.github.monbooru.Monbooru/`. 
+A Flatpak keeps the first three under
+`~/.var/app/io.github.monbooru.Monbooru/` instead.
 
-If you put a `monbooru.toml` next to the program before starting it,
-monbooru uses that one and keeps its database in a `data` folder beside it
-too. That makes the whole install portable.
+To run monbooru as a service on a server, see
+[Configuration](../advanced/configuration.md#running-it-on-a-server).
 
 ## Next
 
-Head to [First steps](first-steps/index.md) to add your first images. For
-environment variables, custom CSS, a custom name and logo, GPU setup
-and log levels, see [Configuration](../configuration.md).
+[First steps](first-steps/index.md) walks you through adding and
+tagging your first images.

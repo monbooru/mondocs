@@ -3,5 +3,5 @@ title: Guides
 weight: 20
 ---
 
-One page per feature: the download queue, per-site setup, how metadata is
-mapped, reverse lookup, and the optional Hydrus PTR.
+How downloading works, how to set up sites, what happens to their
+tags, and looking up images you already have.

@@ -3,65 +3,53 @@ title: Install
 weight: 10
 ---
 
-monloader needs a monbooru instance to push into; nothing else is required
-to start. To bring up the whole stack from scratch, see the
-[quick start](../../quick-start.md).
+monloader needs a monbooru to send downloads to, and nothing else. It
+comes the same three ways as monbooru.
 
-## Quick start (Docker)
+## Docker
 
-monloader ships as a service in monbooru's
-`docker/docker-compose.yml`, so starting it there puts the two containers on
-one network with no extra wiring.
+monbooru's `docker/docker-compose.yml` already has a monloader
+service on the same network, so there's nothing to wire up:
 
-1. Start it from monbooru's compose file:
+```bash
+docker compose up -d monloader
+```
 
-   ```bash
-   docker compose up -d monloader
-   ```
+Open `http://localhost:8456`. The compose file only publishes the port
+on the machine itself; change its `ports:` line to reach monloader
+from elsewhere on your network.
 
-2. Open `http://localhost:8456`. The shipped compose publishes the port on
-   `127.0.0.1` only; to reach monloader from another machine on your
-   network, adjust the `ports:` line.
-3. Pair it with monbooru: see [pairing](pairing/index.md). Approving the
-   request issues the API tokens automatically.
-4. In monloader's settings, pick a **default gallery** and save.
-5. Paste a URL into the command bar on the home screen and press Enter. The
-   [downloading guide](../guides/downloading/index.md) explains what happens next.
+| Mount | What goes there |
+|---|---|
+| `/config` | `monloader.toml`, gallery-dl's config, cookies, and your site profiles |
+| `/ptr` | optional: the Hydrus PTR copy, only if you turn it on (tens of GB, see [Hydrus PTR](../guides/ptr/index.md)) |
 
-On first run monloader writes `monloader.toml` with defaults, plus a managed
-`gallery-dl.json`. Most settings are editable from the
-Settings page; the full reference, including the environment variables that
-override any TOML key, is in [configuration](../configuration.md).
+## Portable
 
-## Quick start (desktop)
+Download a **portable** build from the
+[releases page](https://github.com/monbooru/monloader/releases),
+unpack it and run it. Everything it writes goes in a `data` folder next
+to the program. The **lite** build expects gallery-dl to be installed
+already; the **bundled** one brings its own.
 
-Download a **desktop** build for your system from the
-[releases page](https://github.com/monbooru/monloader/releases), unpack it,
-and run it. 
+## Installed
 
-### Where your files go
+On Windows there's an installer; on Linux, an AppImage and a Flatpak.
+They keep their files here:
 
 | | Linux | Windows |
 |---|---|---|
 | Settings and site profiles | `~/.config/monloader` | `%AppData%\monloader` |
-| Queue, cookies, gallery-dl's config, archive and managed install | `~/.local/share/monloader` | `%LocalAppData%\monloader` |
-| Log file | `~/.local/share/monloader/logs` | `%LocalAppData%\monloader\logs` |
-| PTR index | `~/.local/share/monloader/ptr` | `%LocalAppData%\monloader\ptr` |
+| Queue, cookies and gallery-dl's files | `~/.local/share/monloader` | `%LocalAppData%\monloader` |
+| Log file | `logs` in that same folder | same |
+| PTR copy | `ptr` in that same folder | same |
 
-A Flatpak install keeps all of those under
-`~/.var/app/io.github.monbooru.Monloader/`.
+A Flatpak keeps all of it under
+`~/.var/app/io.github.monbooru.Monloader/` instead.
 
-If you put a `monloader.toml` next to the program before starting it,
-monloader uses that one and keeps its data in a `data` folder beside it
-too. That makes the whole install portable.
+## Next
 
-## Volumes
-
-| Mount | Purpose |
-|---|---|
-| `/config` | Persistent: `monloader.toml`, the managed `gallery-dl.json`, the gallery-dl download archive, cookies files, and your edited site profiles under `profiles/`. |
-| `/ptr` | Optional: the local Hydrus PTR tag index, only if you enable the PTR lookup. Expect tens of GB. See [Hydrus PTR](../guides/ptr/index.md). |
-
-monloader also uses an internal `/work` directory as scratch space for
-downloads; files are deleted from it after each successful push (it doesn't need to be mounted). If you want
-it RAM-backed, give it a `tmpfs` mount instead.
+[Pair it with monbooru](pairing/index.md), pick the gallery downloads
+go to, then paste a URL into the add bar on the home page. The
+[downloading guide](../guides/downloading/index.md) explains what
+happens next.

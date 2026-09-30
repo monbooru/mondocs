@@ -3,112 +3,80 @@ title: Reverse lookup
 weight: 40
 ---
 
-Reverse lookup answers "where does this file come from, and what are its
-tags?" from the file itself, without a URL. monloader walks a chain of
-sources you configure: exact hash searches on the boorus, image-similarity
-services, and optionally the local [Hydrus PTR index](../ptr/index.md), and folds
-what it finds back into monbooru.
+Reverse lookup starts from a file instead of a URL: "where does this
+picture come from, and what are its tags?" monloader asks a list of
+sources in turn, the lookup chain, and brings back the first answer.
 
 ![The lookup chain in Settings](lookup-chain.png)
 
-You reach it two ways:
-
-- **From monbooru**: the lookup actions on an image ask monloader to find tags for
-  a file monbooru already holds and merge them in. The monbooru-side view
-  is in [monbooru's lookup guide](../../../../guides/lookup/index.md).
-- **From monloader**: paste a file's md5 (bare or as `md5:<hash>`) into the
-  add bar to import the booru post carrying that file, like any single-post
-  download.
-
-Every lookup runs as a job on the queue page, so its outcome is visible like
-any download.
+Most lookups come from monbooru, when you look up an image you already
+have (see [monbooru's lookup guide](../../../../guides/lookup/index.md)).
+You can also paste a file's md5 into monloader's add bar to import the
+post that has it. Either way, each lookup shows up on the queue page
+like a download.
 
 ## The lookup chain
 
-The chain is one ordered list of sources, asked top to bottom; the first
-source that answers wins. A source is one of two kinds:
+The chain is asked top to bottom, and the first source with an answer
+wins. There are two kinds of source:
 
-- **An exact md5 search** on a booru that indexes file hashes. Precise, but
-  it only matches the exact original bytes - a resized or re-encoded copy
-  misses.
-- **A similarity service**: danbooru's IQDB instance (`iqdb`) or SauceNAO
-  (`saucenao`). These find visually matching posts, including re-encodes, by
-  uploading the image's thumbnail and answering with candidate posts and
-  0-100 scores. The best candidate at or above the **min similarity** floor
-  (default 80%) is then fetched through gallery-dl like any pasted URL.
+- **An md5 search on a booru.** Exact, but it only finds the original
+  file: a resized or re-saved copy has a different hash and misses.
+- **A similarity service**, IQDB or SauceNAO. These compare what the
+  picture looks like, so they find re-saved copies too, and answer
+  with candidates and a match score. The best candidate at or above
+  the **min similarity** (80% by default) is then downloaded like any
+  post.
 
-Out of the box the chain asks danbooru by exact md5 first, then IQDB, then
-SauceNAO, then gelbooru, rule34, e621, yandere, and konachan by exact md5.
+The **lookup** section of the Settings page is where you choose which
+sources are asked, in what order, and the minimum similarity. Each row
+has a test button. A source that's down or refuses is skipped and the
+chain carries on.
 
-A source that is down or refuses does not kill the lookup; its error is
-noted and the chain continues.
-
-## Editing the chain
-
-The Settings **lookup** section is the one place the chain is configured:
-which sources are queried, in what order, and the similarity floor
-(`lookup.min_similarity` in the TOML). Each chain row has a test button
-that runs one real query with a built-in probe image, so "no match" is a
-successful round trip; the SauceNAO test also reports your remaining daily
-quota. The `iqdb` row's **edit site** button opens danbooru's dialog,
-since IQDB borrows danbooru's credentials.
+A pasted md5 has no picture to compare, so it only goes to the md5
+searches.
 
 ## Credentials
 
-A source missing its credential is skipped at query time, so it costs
-nothing until configured:
+A source that's missing its credentials is skipped, so it costs
+nothing until you set it up.
 
-- `iqdb` uses the danbooru site credentials (username and api key from the
-  danbooru row in [sites](../sites/index.md)): danbooru refuses anonymous IQDB
-  uploads. The account must be at least Member level (email verified);
-  danbooru denies uploads from restricted accounts even with a valid key.
-- `saucenao` needs its own api key (free registration at saucenao.com; the
-  free tier allows roughly 100 queries a day, and monloader backs off while
-  the service reports its limit reached). Set the key via the **key** dialog
+- **IQDB** uses your danbooru login (username and API key, from the
+  danbooru row in [sites](../sites/index.md)). Danbooru only lets
+  accounts of Member level or above, with a verified email, use it.
+- **SauceNAO** needs its own API key, free from saucenao.com. The free
+  tier allows about 100 searches a day. Enter it with the **key** button
   in the lookup section.
-- The exact md5 searches follow each site's normal auth kind - gelbooru and
-  rule34, for instance, need their api key and user id.
+- The md5 searches use each site's usual login: gelbooru and rule34,
+  for instance, need their API key.
 
-## When a match cannot be fetched
+## When a lookup finds nothing, or only half
 
-A similarity service returns pointers, not tags, and sometimes the post it
-points at cannot be fetched - a missing credential, a deleted post. The best
-candidate is then still recorded as the image's **source**, with no tags,
-and the queue row is marked `source only`. A confident hit outside the
-supported sites (an anime database, a Pixiv or Twitter page) gets the same
-treatment when no supported site matched: its URL is recorded as the source,
-labeled by its host.
+Sometimes a similarity service points at a post that can't be
+downloaded, because it was deleted or needs a login you haven't set
+up. The match is still recorded as the image's source, without tags,
+and the queue marks it `source only`. The same goes for a confident
+match on a site monloader can't download from, like a pixiv page.
 
-When no source holds the file at all, the item ends `hash_not_found`, and
-its message lists every source asked and why it missed or was skipped. A
-similarity service that found nothing usable lists its closest candidates
-with their scores, so a near-miss stays visible and you can judge whether
-the floor is too high.
+When nothing has the file, the item ends `hash_not_found` and lists
+every source it asked and why each missed, including the closest
+similarity candidates and their scores. If good matches keep falling
+just short, lower the minimum similarity.
 
-## Hash import specifics
+## The PTR
 
-A pasted hash carries no image to compare, so a hash import uses the chain's
-exact-md5 sources only; the similarity services are skipped. A pasted sha256
-is refused: boorus index the md5 of the original upload. sha256 is the hash
-the PTR backend keys on, and PTR lookups are driven from monbooru, not the
-add bar.
+With the [Hydrus PTR](../ptr/index.md) turned on, monloader can also
+answer from its local copy of the PTR, which knows files that were
+never on a booru or were deleted since. monbooru asks it separately
+from the chain.
 
-## The PTR as a backend
+## Nightly lookups from monbooru
 
-With the [Hydrus PTR index](../ptr/index.md) enabled, monloader can also answer from
-its local sha256-keyed copy of the PTR (offline, and covering files that
-were deleted from the boorus or never posted there). monbooru drives it
-per image (the PTR panel's **Pull tags**) or in batch.
-
-## Scheduled lookups from monbooru
-
-monbooru's nightly maintenance run can send lookups for the images that
-have no source, and monloader is what bounds them: the daily budget in
-**settings -> lookup**. Those lookups queue behind everything else, so a whole library sweeping
-overnight never delays a URL you paste while it runs.
-
-The budget is how many images a night they may cover, 25 out of the
-box. Once the budget is spent monloader refuses the rest and monbooru stops for the day,
-picking up where it left off tomorrow. 
-Lookups you trigger by hand from monbooru - the detail-page button, the
-batch action, are never counted against it and never refused.
+monbooru's nightly run can look up the images that have no source yet
+(see [Looking up a library overnight](../../../../guides/lookup/index.md#looking-up-a-library-overnight)).
+monloader sets how far it goes: the **daily budget** in **Settings ->
+lookup** is how many images a night it accepts, 25 by default. Once
+it's spent, monbooru stops and picks up where it left off the next
+night. These lookups wait behind everything else, so they never hold
+up a URL you paste. Lookups you start by hand in monbooru don't count
+against the budget.

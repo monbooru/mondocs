@@ -3,54 +3,62 @@ title: AI metadata
 weight: 40
 ---
 
-If you generate images with Stable Diffusion tools, monbooru reads the
-generation parameters they embed and makes them browsable and
-searchable. Extraction runs automatically at ingest for PNG, JPEG and
-WebP files; images without metadata are ingested without it.
+Stable Diffusion tools like A1111, Forge and ComfyUI save how an image
+was made inside the file: the prompt, the model, the seed, sometimes
+the whole workflow. monbooru reads all of it as images arrive, shows
+it on the image's page, and lets you search on it.
 
-## What is read
+It reads PNG, JPEG and WebP files. AVIF and JPEG XL files aren't read.
 
-**A1111 / Forge** parameters are read from the PNG `parameters` text
-chunk, the JPEG EXIF `UserComment` field, or the WebP EXIF chunk.
-monbooru parses the positive and negative prompt plus the parameter
-line: steps, sampler, CFG scale, seed, model and LoRA hashes. The full
-parameter line is kept as well.
+## What you see
 
-**ComfyUI** workflows are read from the PNG `prompt` chunk (the API
-format) with the `workflow` chunk as a fallback. monbooru follows the
-node graph to pull out the prompt, seed, steps, CFG, sampler,
-scheduler, checkpoint and LoRAs, and stores the complete workflow
-JSON.
+An image's page gets a **Generation data** block: prompt, negative
+prompt, model, sampler, seed and the rest, with the raw parameters or
+the full ComfyUI workflow underneath.
 
-An image can carry both at once (for example a ComfyUI render
-post-processed through Forge); `ai:any` matches either.
+At the top of the block is the **generation hash**, a short
+fingerprint of the recipe (prompt, model, sampler, steps, CFG, but not
+the seed). Every image made from the same recipe shares it, so
+clicking it lists all your re-rolls of that prompt together.
 
-## Where it shows
+A PNG that only carries ComfyUI's editor graph, without the API
+version of the workflow, gives up its nodes but no prompt, seed or
+model.
 
-The detail page renders a **Generation data** block: prompt, negative
-prompt, model, sampler, seed and the rest, with the full raw
-parameters or workflow available underneath.
+## Searching
 
-At the top of the block sits the **generation hash**, a short
-fingerprint of the recipe (prompt, negative prompt, model, sampler,
-steps, CFG - deliberately not the seed). Every image generated from
-the same recipe shares the hash, so clicking it lists all your
-re-rolls of that prompt together.
+| Search | Finds |
+|---|---|
+| `ai:any` | any image with generation data (`ai:a1111`, `ai:comfyui`, `ai:none` also work) |
+| `prompt:catgirl` | images whose prompt contains "catgirl" |
+| `model:sdxl` | images made with a model whose name contains "sdxl" |
+| `sampler:dpm` | images made with a matching sampler |
+| `seed:12345` | images with that exact seed |
+| `generated:abcd1234abcd` | images sharing that generation hash |
 
-## Searching on it
+They combine like any other search: `ai:comfyui model:sdxl prompt:cat`
+finds the ComfyUI images of cats made with an SDXL model.
 
-The related filters (`ai:`, `prompt:`, `model:`, `sampler:`, `seed:`,
-`generated:`) are documented in
-[Searching](searching/index.md#ai-and-generation-metadata). A couple of
-examples:
+## Searching inside a ComfyUI workflow
 
-- `ai:comfyui model:sdxl` - ComfyUI images made with an SDXL
-  checkpoint.
-- `prompt:catgirl seed:12345` - a specific render, found by its seed.
+`prompt:`, `model:` and `sampler:` only see the handful of values
+monbooru picks out of a workflow. `comfyui:` searches the whole thing:
+every node the workflow uses and every value set on it, custom nodes
+included.
 
-## Re-extraction
+| Search | Finds |
+|---|---|
+| `comfyui:IPAdapterAdvanced` | workflows that use that node |
+| `comfyui:lora_name=my_lora.safetensors` | a node input set to that value |
+| `comfyui:lora_name=*detail*` | the same with a wildcard |
+| `comfyui:steps=20..30` | a number in a range |
+| `comfyui:"title=Base pass"` | a node by its title; quote values with spaces |
 
-If you add files that were indexed before, or a monbooru update
-improves the parser, run **Settings -> Maintenance -> Re-extract
-metadata** to re-run extraction across the library. See
-[Maintenance](maintenance.md).
+The easiest way in is the Generation data block itself: every node
+name and value there is a link that runs the search finding it. Typing
+`comfyui:` in the search bar also suggests the nodes and values your
+own images use.
+
+A search term matches anywhere in the workflow, so
+`comfyui:KSampler comfyui:steps=28` finds workflows that have both,
+not necessarily on the same node.

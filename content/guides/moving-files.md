@@ -3,75 +3,65 @@ title: Moving and renaming files
 weight: 75
 ---
 
-Files can be reorganized without leaving the app. Changes happen to
-the real files on disk, so the new layout is what you see outside
-monbooru too.
+You can reorganize your files without leaving monbooru. Moves and
+renames happen to the real files on disk, so what you see in your file
+manager matches what you see in monbooru.
 
-**Move image** on the detail page (shortcut `m`) moves the file to
-another folder inside the gallery, creating subfolders as needed. The
-Actions chooser and batch bar carry the same **Move** for a whole
-search or selection.
+**Rename / move** on an image's page (or `m`) asks for two things: the
+folder inside the gallery it goes to, and what it's called. Fill in
+one, the other or both. Leave the folder blank for the top of the
+gallery; leave the name blank to keep the current one. Missing folders
+are created, and the file extension stays as it is.
 
-**Rename image** renames the file in place (the extension stays put),
-and the batch **Rename** gives a whole search or selection numbered
-names off one base: `trip01.png`, `trip02.png`, and so on.
+The gallery's batch bar has the same thing for a selection or a whole
+search. There, a plain name numbers the files from one base,
+`trip01.png`, `trip02.png` and so on, in the order they're shown, so
+sort the gallery the way you want them counted first. When several
+files would end up with the same name, they're numbered apart.
 
 ## Naming with tokens
 
-Instead of a plain name, any of those fields takes a template:  
+Instead of a fixed name, either field can take a template made of
+tokens:
 
-| Token | What it is |
+| Token | Is replaced by |
 |---|---|
 | `{name}` | the current name, without the extension |
-| `{ext}` | the extension, lower-cased, so `{name}.{ext}` turns `.JPG` into `.jpg` |
+| `{ext}` | the extension in lowercase, so `{name}.{ext}` turns `.JPG` into `.jpg` |
 | `{id}` | the image's number in this gallery |
-| `{hash}`, `{hash:8}` | the sha256, whole or its first few characters |
-| `{md5}` | the md5, which is what boorus key their posts on |
+| `{hash}`, `{hash:8}` | the file's sha256, whole or its first few characters |
+| `{md5}` | the md5, which is what boorus know files by |
 | `{date}`, `{year}`, `{month}`, `{day}`, `{time}` | when the file was added |
 | `{gallery}` | the gallery's name |
 | `{type}` | `jpeg`, `png`, `webm` and so on |
-| `{w}`, `{h}`, `{size}` | pixel width, height, and size in bytes |
-| `{n}` | the file's position in a batch, zero-padded |
+| `{w}`, `{h}`, `{size}` | width, height, and size in bytes |
+| `{n}` | the file's position in a batch |
+| `{folder}` | the folder the file is in now (folder field only) |
 
-A move field takes `/`, so `archive/{year}/{type}` files each image
-under its own year and kind. A rename field does not: a rename keeps
-a file in its folder.
+The folder field can hold slashes, so `archive/{year}/{type}` files
+each image under its year and kind, and `{folder}/{year}` sorts within
+the folders you already have. In the batch bar the folder field
+starts out as `{folder}`, so a batch rename leaves files in their
+folders unless you change it.
 
-Only what is true the moment a file is added can be used, so tags,
-collections and ratings are not available.
-
-A token can also be empty for one particular file, like `{w}` on a
-video nothing could measure. It renders as nothing and the separators
-around it close up. If that
-leaves no name at all, the rename or move is refused rather than
-applied, so a selection can never end up named after its ids or
-emptied into the gallery root.
+Tags, collections and ratings can't be used in a name, only what's
+known about the file itself.
 
 ## Naming files as they arrive
 
-**Settings -> General** has one row, **Where received files go**, that
-decides where uploads and anything pushed in over the API land and what
-they are called. Both halves take the same tokens, so
-`inbox/{year}-{month}` and `{name}-{hash:8}` between them file and name
-every incoming file; the line under the row shows the whole path a file
-arriving now would end up at. Leave the folder blank for the gallery
-root and the name blank to keep whatever the sender called it. An
-arriving file has to be called something, so here a template that
-renders nothing falls back to the image's id rather than being
-refused. A file pushed by
-[monloader](../addons/monloader/_index.md) can also use
-`{source}` and `{post_id}`, which no other file has:
-`{source}-{post_id}` names a pull `danbooru-4821993.jpg`.
+**Settings -> General -> Where received files go** decides where
+uploads and files sent by other apps land, and what they're called.
+Both halves take the same tokens: `inbox/{year}-{month}` and
+`{name}-{hash:8}` file and name every incoming file, and the line
+under the setting shows where a file arriving right now would end up.
+Files [monloader](../addons/monloader/_index.md) sends can also use
+`{source}` and `{post_id}`: `{source}-{post_id}` names a download
+`danbooru-4821993.jpg`.
 
-Files you drop into the gallery folder yourself are left alone unless
-you turn on **Apply to files found on disk too**, which sends whatever
-the watcher and a sync pick up to that same place.
+Files you drop into the gallery folder yourself are left where you put
+them, unless you tick **Apply to files found on disk too**. Either
+way, this only applies to new files: nothing already in your library
+is moved behind your back.
 
-It only touches files as they are first
-seen, so nothing already in your library is moved behind you. (use manual move/rename instead). And the
-very first sync of a library adopts it exactly as it is: a tree you arranged before monbooru ever saw it survives being picked up, and filing starts with the next file that arrives.
-
-To move files between galleries rather than within one, see
-[Transfer](galleries/index.md#transfer). If you moved or deleted
-files behind monbooru's back, a sync reconciles the difference; see
-[Maintenance](maintenance.md).
+To move images to another gallery, see
+[Transfer](galleries/index.md#transfer).

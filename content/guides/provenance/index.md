@@ -3,78 +3,51 @@ title: Sources and notes
 weight: 105
 ---
 
-Every image can carry a record of where it came from and what you know
-about it, edited from the detail page.
+Besides its tags, an image can remember where it came from and what
+you know about it. All of it is on the image's page.
 
 ## Sources
 
 ![The Sources rows and the panel a source expands into](sources.png)
 
-A source is a link to where the image exists online - a booru post, an
-artist page. An image can carry several; monloader pushes and
-[lookups](../lookup/index.md) add them automatically, and **[+ add]**
-records one by hand.
+A source is a link to where the image lives online: a booru post, an
+artist's page. An image can have several. monloader adds them when it
+downloads or [looks an image up](../lookup/index.md), and **[+ add]**
+records one by hand. **[set primary]** picks the one listed first.
 
-Among the row actions, **[refresh]** re-pulls the
-post's tags, commentary and notes through monloader, **[upgrade]**
-(shown when the source serves a different file than your local copy)
-replaces the file in place - both covered in
-[Lookup](../lookup/index.md#running-lookups-from-monbooru) - and
-**[set primary]** picks which source leads the list and provides the
-image's headline source label.
+Open a source and it shows what the booru post said about the image:
+the artist's original upload it points to (often a pixiv or twitter
+link), the artist's own title and description, and a translation when
+the booru has one. You can edit these by hand too.
 
-A source expands into a panel with two more fields pulled from booru
-posts (or edited by hand): **Original**, the artist's own upload the
-booru post points at (a pixiv or twitter link, typically), and
-**Commentary**, the artist's title and description as the booru
-recorded them.
+Sources are also what [lookups](../lookup/index.md#running-lookups-from-monbooru)
+refresh, and what an upgrade to a bigger file comes from.
 
 ## Personal note
 
-A free-text note on the image, for you only (shortcut `e n`).
+A free-text note on the image, just for you (`e n` to edit it).
 
 ![The personal note and annotations under the image](note.png)
 
 ## Annotations
 
-Annotations are positioned boxes drawn on the image with a text each
-(the way boorus annotate translation bubbles). Booru lookups import
-the post's notes as annotations; you can also draw your own from the
-detail page. They render as hover overlays on the image.
+Annotations are boxes drawn on the image with some text, the way
+boorus mark up translated speech bubbles. A booru lookup brings in the
+post's annotations, and you can draw your own on the image's page.
+They show when you hover over the image; hovering one in the list
+highlights its box, and **[hide annotations]** hides them all.
 
-The note and your own annotations sit under the image; annotations a
-booru lookup pulled in stay on their source's panel. Hovering an
-annotation in either list highlights its box on the image, and
-**[hide annotations]** clears the overlay.
+## Formatting
 
-### Formatting
-
-Annotations, the personal note and commentary can include bracket markup. 
+Notes, annotations, tag notes and commentary understand a little
+markup:
 
 ```
 [b]bold[/b]  [i]italic[/i]  [u]underline[/u]  [s]struck[/s]
 [code]code[/code]  [tn]translator note[/tn]
 
-[tag]blue_eyes[/tag]              search this gallery for a tag
+[tag]blue_eyes[/tag]              a search for that tag
 [tag=blue_eyes]Blue eyes[/tag]    the same, with your own wording
 [url=https://example.com]link[/url]
 [image:123]                       another image in this gallery
 ```
-
-## Which sources gave a tag
-
-When more than one source agreed on the same tag - say you added it
-and a later booru refetch confirmed it, or a PTR lookup pulled it in
-too - the tag shows a small **xN** beside it in the sidebar. Hover it
-to see every source and the date it last confirmed the tag.
-
-Switching the sidebar to **[sources]** lays the same information out
-the other way: one group per source, with a tag several of them agree
-on listed under each. See [Tags](../tags/index.md#reading-an-images-tags).
-
-A refetch never deletes tags. When a source stops listing a tag it
-contributed earlier, the tag stays where it is, struck through and
-marked `stale`, so you can see it is no longer part of that source's
-current state and drop it yourself if you agree; a `remove all` link
-at the bottom of the list clears every stale tag at once. If a later
-refetch lists it again, the mark goes away.

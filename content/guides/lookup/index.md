@@ -3,131 +3,71 @@ title: Lookup
 weight: 95
 ---
 
-A lookup reverse-searches one of your images against external sources
-to backfill its tags and sources: "where does this picture come from,
-and what do other people tag it?".
+A lookup asks the internet about one of your images: where does this
+picture come from, and how do other people tag it? A hit adds the
+source to the image and brings its tags in, which is a quick way to
+tag a pile of downloaded art you never got around to.
 
 ![The batch lookup dialog](lookup-dialog.png)
 
-monbooru itself never goes online. Every lookup runs through a paired
-[monloader](../../addons/monloader/_index.md) instance, so set one up
-first: the [addons quick start](../../addons/quick-start.md) walks
-through starting monloader next to monbooru and pairing the two. The
-actions below stay hidden until the two are paired. How the
-lookup chain itself works (which services are asked, in which order,
-similarity floors) is documented on the
-[monloader lookup page](../../addons/monloader/guides/lookup/index.md).
+monbooru itself never goes online, so lookups go through a paired
+[monloader](../../addons/monloader/_index.md). The
+[addons quick start](../../addons/quick-start.md) sets one up in a few
+minutes, and the lookup buttons appear once the two are paired. How
+monloader searches (which sites, in what order, how close a match has
+to be) is on the [monloader lookup page](../../addons/monloader/guides/lookup/index.md).
 
-## Pausing the link
+There are two places to look:
 
-The green "connected to monloader" dot in the footer is also a
-switch: click it and monbooru stops calling monloader until you click
-it again. The pairing is untouched, and the pause survives restarts,
-which makes it the way to keep the online half off for a while -
-monloader is down for maintenance, or you want a session with no
-outside requests. It is monbooru's own switch: monloader has a
-separate pause for its download queue, covered in
-[downloading](../../addons/monloader/guides/downloading/index.md#pause-and-resume).
-
-## What a lookup searches
-
-Two backends, depending on what monloader has enabled:
-
-- **Online boorus and similarity services**: matches the file by its
-  md5 hash on booru sites, and by image similarity through IQDB and
-  SauceNAO. A booru hit records a new source on the image and merges
-  in its tags.
-- **Hydrus Public Tag Repository (PTR)**: matches the file by its
-  sha256 against monloader's local PTR index, once its
-  [sync](../../addons/monloader/guides/ptr/index.md#using-it) has
-  finished, and pulls the matched post's tags.
-
-Boorus index the original file's hash, so a resized or re-encoded copy
-usually misses on hash and only turns up similarity candidates. A miss
-reports what was searched along with the file's hashes; a similarity
-candidate carries a `~NN%` match score.
+- **Online boorus**, by the file's hash, and by image similarity
+  through IQDB and SauceNAO. Boorus know files by their original hash,
+  so a resized or re-saved copy usually only turns up similar-looking
+  candidates, each with a match percentage.
+- **The Hydrus Public Tag Repository (PTR)**, a big shared tag
+  database, if monloader keeps a local copy of it. See
+  [Hydrus PTR](../../addons/monloader/guides/ptr/index.md).
 
 ## Running lookups from monbooru
 
-- **Lookup online boorus** (detail page, the `L` key) runs the online
-  backend only: the md5 search on the boorus plus the similarity
-  services.
-- **Pull tags**, on the detail page's **Public Tag Repository**
-  panel - the same panel used for
-  [contributing to the PTR](../ptr-contributions/index.md) - fetches
-  the tags the synced index holds that this image lacks. It is also
-  offered when the repository merely holds tags you already have from
-  somewhere else: carrying a tag is not the same as having it from the
-  repository, so pulling records it as a source and it starts showing
-  up in the by-source tag view. Pulling needs no contribution account,
-  only the finished sync.
-- **refresh** on a source row re-pulls that post's tags, commentary
-  and notes (a `ptr` source has no URL and refreshes by sha256). A
-  refresh never deletes tags: ones the source no longer lists are
-  kept, struck through and marked `stale` - see
-  [Provenance](../provenance/index.md#which-sources-gave-a-tag).
-- **upgrade** appears on a source row when the source serves a
-  different file than your local copy. A similarity match differs by
-  definition (that is how it was found); an exact source can start
-  differing later, which a refresh detects and marks with a **file
-  differs** hint. Upgrading downloads the post's file through
-  monloader and replaces your local file in place: the image keeps
-  its tags, sources, relations and notes, and gets the new file's
-  resolution, thumbnail and embedded metadata. The old file is gone
-  once the swap lands, so the action sits behind a confirm. If the
-  post's file is already in your gallery as another image, nothing is
-  replaced - the two are recorded as potential duplicates and the
-  message links the other image so you can settle the pair in the
-  relations review.
-- **Find tags**, in the gallery's **Actions** chooser and the batch
-  bar (the `L` key while a selection is active), runs one of three
-  things across the whole scope: refresh tags from every source
-  declared on each image, look the scope up by file hash, or set whether the nightly run considers
-  these images. A hash lookup defaults to skipping the images that
-  already carry a source. Batched lookups
-  queue behind anything you are waiting on, so a big one does not delay a download.
-- **Find aliases and implications**, on the Tags page's selection
-  bar, pulls the selected tags' known relations from the PTR into
-  your catalog. With no filter active, "all matching" covers the
-  whole catalog. See [Tags](../tags/index.md#the-tags-page).
+On an image's page:
+
+- **Lookup online boorus** (or `L`) searches the boorus for this image.
+- **Pull tags**, in the **Public Tag Repository** panel, brings in the
+  tags the PTR has for this image.
+- **refresh** on a source fetches that post again, for new tags,
+  commentary and notes. Tags the source dropped are kept but marked
+  `stale` (see [Tags](../tags/index.md#where-tags-come-from)).
+- **upgrade** shows up on a source when it has a different file from
+  yours, usually a bigger one. It downloads the post's file and swaps
+  it in place of yours, keeping the image's tags, sources and
+  relations. Your old file is gone after that, so it asks first.
+
+For many images at once, tick them (or take the whole search) and
+press **Find tags** in the batch bar. It can refresh every source the
+images have, look them up by hash, or switch them in or out of the
+nightly lookup below.
 
 ## Looking up a library overnight
 
-Doing a whole library one image at a time may be a bit long, and doing batch lookup the whole gallery may exceed your query allowance , so the
-[nightly run](../maintenance.md#nightly-schedule) can do it for you little by little.
-Tick either lookup under **Settings -> Schedule** and it walks the
-images that have no source, oldest-overdue first.
+Looking up a whole library by hand is slow, and doing it in one batch
+can burn through a site's request allowance. The
+[nightly run](../maintenance.md#nightly-schedule) can do it a little
+at a time instead: tick either lookup under **Settings -> Schedule**
+and each night it works through the images that have no source yet.
 
-The two backends behave differently, which is why they are separate
-ticks:
+- The **Public Tag Repository** pass is a local read and costs nothing,
+  so it goes through every waiting image each night, and tries again
+  when monloader's copy of the PTR gets new data.
+- The **online boorus** pass costs a real request per image, so
+  monloader only accepts so many a day; set that under monloader's
+  **Settings -> lookup**. When the day's allowance runs out, the pass
+  picks up where it stopped the next night.
 
-- The **Public Tag Repository** pass is a local read with no quota, so
-  it checks the whole due set every run. It only re-checks an image
-  once monloader's index has actually moved on.
-- The **online boorus** pass spends a real request per image, so
-  monloader caps how many images per day it will accept. Set that cap
-  under monloader's settings -> lookup; when it runs out the pass stops
-  until tomorrow and picks up where it left off. With several galleries
-  the run starts at a different one each night, so none is starved.
+An image that isn't found waits longer and longer before the next try,
+and after a handful of misses online it's marked **nothing found** and
+left alone. Its page offers **look again** if you think that's wrong.
 
-An image that misses is not asked about again the next night: the wait
-doubles each time, from a week up to sixteen. After six online misses
-the image reads **nothing found** and stops spending the budget. Its detail page
-still offers **look again** if you disagree, and the same is available
-in bulk from the **Find tags** dialog over a `lookup:exhausted` search.
-
-Each unsourced image's detail page carries one switch per backend,
-saying whether the run considers this image there, when it was last
-looked up and what came of it. They are separate so you can for instance leave the
-free repository pass running on an image while taking it off the online
-boorus (your own work, a commission, anything a booru will never have).
-Turning a switch back on also puts that backend's ladder back to the
-start. The `lookup:` search filter finds
-each of those states across the library (`lookup:due`, `lookup:missed`,
-`lookup:exhausted`, `lookup:off`, `lookup:never`), and
-**Settings -> Maintenance -> Look up unsourced images** runs the
-enabled passes right now instead of waiting for the next scheduled one.
-
-A booru post that names a parent post links the two as a derivative
-relation once both are in the gallery - see
-[Relations](../relations/index.md).
+Each image without a source also has a switch per pass, so you can
+keep your own drawings or commissions out of the online lookups (no
+booru will ever have them) while the free PTR pass still runs. In the
+schedule you can leave a whole gallery out, your photos for instance.

@@ -3,35 +3,35 @@ title: Install
 weight: 10
 ---
 
-monsender runs on Firefox and Chrome.
-You need a running monloader to send to; if you do not have one yet,
-start with the [whole-stack quick start](../../quick-start.md).
+monsender runs in Firefox and Chrome. It needs a running monloader to
+send to; if you don't have one yet, start with the
+[quick start](../../quick-start.md).
 
 ## Firefox
 
-Install from Mozilla Add-ons:
-[addons.mozilla.org/en-US/firefox/addon/monsender](https://addons.mozilla.org/en-US/firefox/addon/monsender/)
-
-The add-on is signed and updates itself via the firefox manager.
+Install it from
+[Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/monsender/).
+Firefox keeps it up to date.
 
 ## Chrome
 
-There is no Web Store listing; the Chrome build ships with each
-release instead. Download `monsender-chrome-<version>.zip` from the
-[releases page](https://github.com/monbooru/monsender/releases), unzip
-it somewhere permanent, open `chrome://extensions`, switch on
-**Developer mode** (top right), and point **Load unpacked** at the
-unzipped folder. Updates are manual: download the next release's zip,
-unzip it over the same folder, and hit the reload arrow on the
-extension's card.
+There's no Chrome Web Store listing. Instead, each release has a Chrome
+build:
 
+1. Download `monsender-chrome-<version>.zip` from the
+   [releases page](https://github.com/monbooru/monsender/releases) and
+   unzip it somewhere it can stay.
+2. Open `chrome://extensions` and switch on **Developer mode** (top
+   right).
+3. Click **Load unpacked** and pick the unzipped folder.
 
-## Permissions at install
+To update, unzip the next release over the same folder and press the
+reload arrow on the extension's card.
 
-The extension asks only for the ability to read the page you act on,
-store its settings, and add a right-click menu entry - no access to
-your browsing history, downloads, or other tabs. Access to your
-monloader server is granted separately, during
-[setup](setup/index.md), for that one address only.
+## What it's allowed to do
+
+The extension only asks to read the page you use it on, store its
+settings, and add an entry to the right-click menu. It can't see your
+history, your downloads or your other tabs.
 
 Next: [set it up](setup/index.md).

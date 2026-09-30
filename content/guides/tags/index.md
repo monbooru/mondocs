@@ -3,154 +3,140 @@ title: Tags
 weight: 20
 ---
 
-## Adding tags to an image
+A tag is a short label for one thing about a picture: `red_hair`,
+`beach`, `hakurei_reimu`, `2003`. Give each image a few and you can
+combine them in a search to narrow thousands of images down to the
+handful you want.
 
-Type tags into the input on the detail page, separated by spaces.
-Wrap a multi-word tag in double quotes to fold its spaces to
-underscores, and prefix with a category to file the tag there:
-`artist:"john doe" blue_eyes 1girl` adds `john_doe` as an artist tag
-and the other two as general tags.
+## Adding tags
 
-Tag names are lowercase, up to 200 characters, and accept most
-characters (accented letters, CJK, punctuation) except space, `"` and
-`*`, which belong to the search syntax. `girls'_frontline`,
-`fate/grand_order` and `東方project` all work.
+Type tags into the tag box on an image's page, separated by spaces. A
+tag can't contain a space, so a multi-word tag uses underscores, or
+quotes that do it for you: `"john doe"` becomes `john_doe`. Names are
+lowercase and can use almost any character except spaces, quotes and
+`*`, so `girls'_frontline`, `fate/grand_order` and `東方project` all
+work.
 
-To tag many images at once, use **Add tags manually** in the
-gallery's Actions chooser (applies to the whole current search) or in
-the batch bar (applies to the checked thumbnails). **Remove tags** on
-the same surfaces strips tags by name, by source, by auto-tagger, or
-wholesale.
+To tag many images at once, tick them in the gallery and use **Add
+tags** in the batch bar. **Remove tags** next to it takes tags off
+again, by name or by where they came from.
 
-## Reading an image's tags
+In an image's tag list, click a tag to search for it. The `?` in front
+of it opens the tag's own page (see [Notes and links](#notes-and-links)).
 
-The sidebar lists the image's tags grouped by category, metadata
-first (rating, year, meta, medium), then what is in the image
-(artist, character, and the rest, with general last), alphabetically
-within a group so a tag is where you expect it.
-Each row is `[x] tagname  marker  count`: the `[x]` takes the tag off
-the image, the name searches for it, and the count is how many images
-in the library carry it. Hovering a name spells it out in full (long
-ones are cut to fit) along with any other spellings aliased to it. Each
-category heading has its own `[x]` that clears the whole category after
-a confirmation.
+## Categories
 
-The marker between the name and the count is one of three:
+Every tag sits in a category, which says what kind of thing it names
+and gives it a colour: `general` for what's in the picture,
+`character`, `artist`, `copyright` for the series or franchise, `meta`
+for things about the file, plus `medium`, `person`, `year`, `species`
+and `rating`. Put the category in front when you type:
+`artist:"john doe" blue_eyes 1girl` adds `john_doe` as an artist and
+the other two as general tags.
 
-- `stale`, with the name struck through: the source that gave you
-  this tag no longer lists it. The tag stays on the image until you
-  decide; a `remove all` link at the bottom of the list clears every
-  stale tag in one go.
-- `87%`: an auto-tagger is the only thing vouching for this tag, and
-  that is how sure it was. The percentage goes away once you or a
-  booru also apply the tag.
-- `x3`: three sources agree on this tag. Hover to see which, and when
-  each one applied it.
-
-Tags that arrived through an implication (you added `hatsune_miku`,
-so `vocaloid` came with it) sit indented and dimmed under the tag
-that brought them, and leave when it does, so they carry no `[x]` of
-their own. Hovering one names the tag that brought it.
-
-Under the input, **Just added** echoes the tags this session put on
-the image.
-
-The **[categories] / [sources]** switch at the top of the list regroups
-it by who applied each tag instead of by category: you first, then the
-boorus, then the auto-taggers. A tag several of them agree on is listed
-under each one, so you can read who agrees on what. In this view an `[x]`
-withdraws that source rather than deleting the tag: a tag another
-source also applied stays on the image and just leaves this group, and
-only goes for good once the last source vouching for it is dropped.
-
-Pressing `r` starts keyboard tag editing: the arrows move through the
-list, Enter removes the highlighted tag, Escape stops.
-
-## The Tags page
-
-![The Tags page](tags-page.png)
-
-The Tags page is the catalog view: every tag, with its category,
-usage count and controls. Points that are not obvious from the
-controls themselves:
-
-- **Rename** can keep the old name as an alias, so searches built on
-  the old spelling keep working.
-- **Alias to** moves the selected tags' images onto the canonical tag
-  and leaves the old names behind as zero-usage aliases. **Merge** is
-  the same operation among the selected tags themselves: pick the
-  survivor, the rest become its aliases.
-- Implied tags (declared with **Imply**, or edited on the tag detail
-  page) are real tags for search purposes.
-- **Find aliases and implications** (shown when a paired monloader
-  has the Hydrus PTR enabled) pulls each selected tag's known
-  relations from the Public Tag Repository into your catalog. A tag
-  the PTR does not know under your spelling is asked about under its
-  aliases too, and the PTR's own preferred spelling lands as an alias
-  of yours. Nothing
-  is removed or sent. A re-run also reconciles earlier pulls:
-  relations the PTR no longer lists move under a stale heading on the
-  tag detail page, for you to drop if you agree. See
-  [Lookup](../lookup/index.md).
-
-In the sidebar's search box, plain text matches from the start of the
-name and `*` matches anything anywhere: `kimono` finds `kimono_dress`
-but not `black_kimono`, while `*kimono*` finds both.
-
-Two sidebar filters are not obvious from their labels:
-
-- **Stale** finds tags a source dropped on its last refresh: **Has
-  stale** for any dropped usage, **Fully stale** for tags whose every
-  use was dropped (safe to delete).
-- **Used by** answers "what does this booru actually tag with", where
-  the **Origin** column only answers "what did it introduce": a tag
-  danbooru invented and gelbooru later used reads danbooru under
-  Origin and both under Used by.
-
-**Folded duplicates** cleans up tags an older pull stored folded
-(before monbooru accepted the full character set), like
-`fate_grand_order` where the source really has `fate/grand_order`.
-Refresh the affected images so the corrected spelling arrives, run
-**Find folded duplicates** from Settings -> Maintenance, then open
-the filter: it lists each old spelling next to the corrected tag, and
-**Merge into corrected spelling** collapses the ones you pick (the
-old name stays as an alias).
-
-On a tag's detail page, the aliases and "implied by" lists group by
-whoever declared each entry, and a group's **[x]** drops the whole
-group in one go - the way to undo a PTR pull or one source's
-relations without clicking them off one at a time.
-
-Tags are never deleted automatically: removing a tag's last image
-leaves the catalog row at zero usage. Delete rows explicitly from the
-Tags page when you want them gone.
-
-The **Categories** page manages the categories themselves. Built-in
-categories can be recolored but not renamed or deleted; custom ones
-can be renamed, recolored and deleted.
+The **Categories** page lets you recolour categories and add your own.
 
 ## Ratings and the SFW ceiling
 
-Each image carries at most one rating tag, from a fixed set ranked
-`general < sensitive < questionable < explicit`. Adding a rating by
-hand replaces whatever was there, even when the new level ranks below
-the old one: your choice always wins, including over an auto-tagger's.
+A rating says how safe an image is to have on screen, from `general`
+through `sensitive` and `questionable` to `explicit`. An image has one
+rating. Adding another replaces it, and yours always wins over an
+auto-tagger's.
 
-The four names are fixed: you cannot rename one, move it, or fold it
-into another tag. You can go the other way and alias an ordinary tag
-onto a rating, which is how you clean up a library that arrived with
-its own spelling for the same thing - a `safe` or `nsfw` tag from an
-import, or a leftover `meta:explicit`. Select it on the Tags page,
-use **Alias to** with `rating:explicit` as the target, and its images
-pick up the rating. Images already rated higher keep the level they
-had, so folding a tag in never makes something visible that your
-ceiling was hiding. Only the four canonical names are protected: any
-other tag sitting in the rating category is an ordinary tag you can
-rename, move or fold.
+The rating buttons in the footer set the **SFW ceiling**: click
+`general` and everything rated above it disappears from the gallery,
+related images and anything else you browse. Batch actions on "the
+whole search" respect it too, so they never touch an image you can't
+see. Click `explicit` to turn it off again. Each browser remembers its
+own ceiling.
 
-The footer carries the **SFW ceiling**: click a rating level to hide
-every image ranked above it. The ceiling follows you across pages and
-applies to gallery browsing, related images, batch operations on the
-current search, and auto-tag runs, so an action scoped to "the
-current search" can never touch images you cannot see. Setting it
-back to `explicit` turns it off.
+Only those four ratings exist. If an imported library has its own
+spelling for them, like a `safe` or `nsfw` tag, fold it in: select the
+tag on the Tags page, use **Alias to** with `rating:general` (or
+whichever level fits) as the target, and its images pick up that
+rating. An image already rated higher keeps its level.
+
+## Where tags come from
+
+A tag can come from several places: you, an auto-tagger, a booru that
+monloader pulled from, the Hydrus Public Tag Repository, or monbooru
+itself. monbooru keeps track of each one separately, and an image's tag
+list shows it next to the tag:
+
+- `87%`: only an auto-tagger vouches for this tag, and that's how sure
+  it was. The number goes away once you or a booru apply the tag too.
+- `x3`: three sources agree on it. Hover to see which ones.
+- Struck through and marked `stale`: the source that gave you the tag
+  stopped listing it the last time it was refreshed. The tag stays
+  until you decide; **remove all** at the bottom of the list clears
+  every stale tag at once.
+
+The **[categories] / [sources]** switch above the list regroups it by
+source, so you can see what each one added. Removing a tag in that
+view only withdraws that source's claim: if another source also has
+the tag, it stays.
+
+You can search on all of this: `tagged:user` finds images you tagged
+yourself, `tagged:danbooru` the ones danbooru tagged,
+`autotagged:false` the ones no auto-tagger has seen, and `stale:any`
+the ones with stale tags.
+
+### Tags monbooru adds by itself
+
+Some things can be read straight from the file, so monbooru tags them
+as images arrive: the size (`highres`, `absurdres`, `lowres`), an odd
+shape (`wide_image`, `tall_image`), what it is (`video`, `animated`,
+`sound`), and a few more like `greyscale` and `ai-generated`. They go
+in `meta` and follow Danbooru's names and rules, so a picture pulled
+from there and one you tagged at home agree on what counts as
+`highres`.
+
+They don't count as tagging: `tagged:false` still finds an image
+nobody has tagged. They also follow the file, so replace a picture with
+a bigger version and `lowres` gives way to `highres`. The switch is
+under **Settings -> General**, and **Settings -> Maintenance** can add
+them to the images you already have or take them all off.
+
+## Aliases and implications
+
+People use different tags for the same thing: `blond_hair` and
+`blonde_hair`, or a character's name in two orders. An **alias**
+points one spelling at another, so tagging or searching with
+`blond_hair` gives you `blonde_hair`.
+
+![The Tags page](tags-page.png)
+
+On the Tags page, select the
+spellings you want to fold away and use **Alias to**: their images
+move to the target and the old names stay behind as aliases. **Merge**
+does the same among the selected tags, keeping the one you pick.
+**Rename** can keep the old name as an alias too, so saved searches
+that use it keep working.
+
+An **implication** says one tag always brings another along:
+`hatsune_miku` implies `vocaloid`. Declare it with **Imply** on the
+Tags page or on the tag's own page, and every image with
+`hatsune_miku`, now and later, gets `vocaloid` too. Implied tags are
+real tags as far as search is concerned. In an image's tag list they
+sit indented under the tag that brought them, and leave when it does.
+
+With monloader and its copy of the Public Tag Repository set up,
+**Find aliases and implications** on the Tags page fetches the aliases
+and implications the PTR knows for the selected tags. It only adds;
+nothing is removed or sent anywhere.
+
+Tags are never deleted behind your back. A tag no image uses any more
+stays on the Tags page with a count of zero until you delete it.
+
+## Notes and links
+
+Every tag has its own page, opened with the `?` in front of it in any
+tag list. It holds a note about what the tag means to you and a list
+of links (an artist's pages, a series' official site), along with the
+tag's aliases and implications. The note takes the same
+[formatting](../provenance/index.md#formatting) as image notes, so it
+can point at other tags with `[tag]...[/tag]`.
+
+An artist's other names, like the ones Danbooru lists, go in as
+aliases on that page, in any script, so tagging or searching with any
+of them lands on the artist.

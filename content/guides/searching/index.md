@@ -3,188 +3,94 @@ title: Searching
 weight: 10
 ---
 
-Everything in the search bar is a space-separated list of terms:
-plain tags, negated tags, and `key:value` filters. All terms must
-match (AND) unless you use `OR`. Searches are case-insensitive.
+Finding things again is what tags are for. Type a tag in the search
+bar and you get every image that has it. Type two, `red_hair beach`,
+and you get only the images that have both. Every extra term narrows
+the results down.
 
-A few rules that apply everywhere:
+## The basics
 
-- Images whose file is missing from disk are hidden unless the query
-  contains `missing:true`.
-- Numeric and date filters accept comparisons (`>`, `<`, `>=`, `<=`,
-  `=`) and ranges: `X..Y` (inclusive), `..Y`, `X..`.
-- A `key:value` term whose key is not a known filter is treated as a
-  category-qualified tag search, so `character:midna` works even
-  though `character` is not a filter keyword.
-- Type `system:` in the search bar to get this whole reference as a
-  live dropdown, with drill-down hints per filter.
-
-![The system: dropdown in the search bar](search-system.png)
-
-## Basics
-
-| Query | Meaning |
+| Search | Finds |
 |---|---|
-| `tagname` | Images with this tag. |
-| `-tagname` | Exclude images with this tag (`NOT tagname` also works). |
-| `tagA tagB` | Images with both tags (AND). |
-| `tagA OR tagB` | Images with either tag. |
-| `red*` | Wildcard: tags starting with "red" (red_hair, red_eyes, ...). |
-| `*hair` | Tags ending in "hair". |
-| `*hair*` | Tags containing "hair". |
+| `red_hair beach` | images with both tags |
+| `red_hair -sketch` | `red_hair`, but not `sketch` |
+| `cat OR dog` | images with either tag |
+| `red*` | any tag starting with "red": `red_hair`, `red_eyes`... |
+| `*hair*` | any tag with "hair" in it |
+| `"re:zero"` | a tag with a colon in its name; quotes keep it a tag |
 
-## Tags and categories
+Case doesn't matter. The search box suggests tags as you type, each
+with the number of images you'd get by adding it.
 
-Tags live in categories (`general`, `character`, `artist`,
-`copyright`, `meta`, `rating`, `medium`, `person`, `year`, `species`, plus any
-you create).
+Tags live in categories (`character`, `artist`, `copyright` and so on,
+see [Tags](../tags/index.md)). Put the category in front to be
+specific: `character:saber` finds the character, not the general tag.
+`cat:artist` finds any image with an artist tag at all.
 
-| Query | Meaning |
+Ratings search like tags: `rating:general` finds the images rated
+general. Adding `-rating:explicit` is a quick way to keep a search
+safe.
+
+## Filters
+
+Anything written as `key:value` with a known key is a filter, which
+searches something other than tags: the file, where it came from,
+when you added it. Filters combine with tags and each other like any
+other term.
+
+Numbers can be compared (`width:>=1920`, `duration:<30`) or given as
+a range (`width:1000..2000`, `pages:100..`). Dates work the same, in
+your own timezone: `date:2024-03-15` is that day, `date:2024-01..2024-06`
+the first half of the year.
+
+A few you're likely to use:
+
+| Search | Finds |
 |---|---|
-| `character:tagname` | The tag "tagname" in the "character" category specifically. |
-| `cat:character` | Images with any tag in the given category. |
-| `tagged:true` / `tagged:false` | Images with at least one tag / with no tags. |
-| `autotagged:true` / `autotagged:false` | Images with at least one auto-tag / with none. |
-| `stale:any` / `stale:none` | Images that carry any tag a source dropped on its last refresh / none. `stale:tagname` narrows to one dropped tag; `-stale:tagname` excludes it. |
-| `tagcount:>=10` | Number of tags on the image. |
-| `rating:explicit` | Filter by rating: `general`, `sensitive`, `questionable`, `explicit`. |
+| `inbox:true` | images you haven't reviewed yet |
+| `fav:true` | your favorites |
+| `tagged:false` | images nobody has tagged |
+| `autotagged:false` | images no auto-tagger has seen |
+| `tagcount:<5` | images with fewer than five tags |
+| `folder:2024/trip` | a folder and everything under it |
+| `name:vacation` | files with "vacation" in their name |
+| `type:animated` | videos and animated GIFs |
+| `width:>=3840 ratio:>1` | large landscape images, wallpapers maybe |
+| `date:>2024-06-01` | images added since June 2024 |
+| `source:none` | images with no known source |
+| `ai:any model:sdxl` | AI images made with an SDXL model |
+| `relation:duplicate` | images you marked as duplicates |
 
-`rating:X` matches images whose highest rating is exactly X. An image
-carrying both `general` and `explicit` matches `rating:explicit` only.
-See [Tags](../tags/index.md) for how ratings and the SFW ceiling work.
-
-## File filters
-
-| Query | Meaning |
-|---|---|
-| `name:vacation` | Substring match against the filename only (folder names do not bleed in). |
-| `size:>=10MB` | File size. Bare bytes or a unit suffix `B`/`KB`/`MB`/`GB`/`TB` (1024-based). |
-| `mime:png` | File type: a bare bucket (`png`, `jpeg`, `webp`, `gif`, `mp4`, `webm`, `cbz`) or `image/...` / `video/...`. Comma-separate for a union. |
-| `type:image` / `type:archive` / `type:animated` | File-type bucket: `image` = jpeg/png/webp, `archive` = cbz/zip, `animated` = gif/mp4/webm. Comma-separate for a union. |
-| `width:>=1920` | Image width in pixels. |
-| `height:<768` | Image height in pixels. |
-| `ratio:>=1.5` | Aspect ratio (width divided by height). |
-| `duration:>=30` | Video duration in seconds. Non-video rows never match. |
-| `pages:>=100` | Page count of a comic archive. Non-archive rows count as 0 pages. |
-| `hash:abcd...` | Exact match on a digest of the file. A 64-character value is read as the SHA-256, a 32-character one as the MD5. |
-| `md5:abcd...` | Exact match on the image's MD5. |
-| `md5:` / `-md5:` | Has an MD5 computed / does not have one yet. |
-| `id:123` | Exact match on the image id. |
-| `missing:true` | Images whose file is missing from disk. |
-
-## Folder, source, collection
-
-| Query | Meaning |
-|---|---|
-| `folder:path/to` | Images in that folder or any subfolder beneath it. |
-| `folderonly:path/to` | Only images directly in that folder, no subfolders. Bare `folderonly:` means the gallery root alone. |
-| `folder:"path with spaces"` | Quote paths that contain spaces. |
-| `source:"source name"` | Images carrying that source. An image can have several sources; this matches any of them. |
-| `source:none` | Images with no source at all. Bare `source:` means the same; `source:any` matches images carrying at least one. |
-| `collection:"collection name"` | Images filed under that collection. Bare `collection:` matches images in no collection; `collection:any` matches images in at least one. |
-| `via:upload` | How the image was added: `ingest` (watcher or sync), `upload` (web form), `monloader` (pushed by a paired monloader), or any origin an API client supplied. |
-| `lookup:due` | Where the [nightly lookup](../lookup/index.md#looking-up-a-library-overnight) stands with an unsourced image: `due` (queued for the next run), `missed` (waiting out a backoff), `exhausted` (nothing found, given up), `off` (switched off on the image) or `never` (not tried yet). |
-| `upgrade:any` | Images where a source serves a file you do not have, which is what the **upgrade** action offers. `upgrade:none` is the rest. |
-| `upgrade:bigger` | The candidates whose post is larger than your copy. Only sources that publish their file's size or dimensions can answer, so this is a subset of `upgrade:any`. |
-| `upgrade:unknown` | Images with a source that never told monbooru which file it holds, so nothing can be compared. Refreshing the source settles them. |
-| `upgrade:sample` | Images whose file looks like a saved preview by its name or size (a booru `sample_` file, a pixiv `master1200`, a 850px or 1200px edge) and that carry a post to check against. A guess, not a verdict. |
-| `upgrade:kept` | Images where you chose **keep local** on a source. |
-| `upgrade:danbooru` | Any other value reads as a source name: candidates from that source alone. |
-
-## AI and generation metadata
-
-See [AI metadata](../ai-metadata.md) for what monbooru extracts.
-
-| Query | Meaning |
-|---|---|
-| `ai:any` | Any AI-generated image (A1111 and/or ComfyUI metadata present). |
-| `ai:a1111` | Generated with A1111/Forge (`ai:sd` is an alias). |
-| `ai:comfyui` | Generated with ComfyUI. |
-| `ai:none` | No detected generation metadata. |
-| `generated:abcd1234abcd` | Other images sharing the same generation recipe; the hash is shown in the Generation data block on the detail page. |
-| `prompt:cat` | Substring match across the SD or ComfyUI prompt. |
-| `model:sdxl` | Substring match against the SD model or ComfyUI checkpoint name. |
-| `sampler:dpm` | Substring match against the sampler name. |
-| `seed:12345` | Exact seed. |
-
-## State
-
-| Query | Meaning |
-|---|---|
-| `fav:true` / `fav:false` | Favorited / non-favorited. |
-| `inbox:true` / `inbox:false` | In the inbox (untriaged) / archived. |
-| `date:>2024-01-01` | Ingested after a date. |
-| `date:2024-01..2024-06` | Ingested within a range. |
-| `date:2024-03-15` | Ingested on an exact date. |
-| `date:2024-03-15T19:23..2024-03-15T19:30` | Same, with hour (`THH`), minute (`THH:MM`) or second (`THH:MM:SS`) precision. |
-
-Dates read in your timezone (the `TZ` the app displays timestamps in),
-so `date:2024-03-15` means that calendar day where you live, not the
-UTC day.
-
-## Relations and perceptual hash
-
-See [Relations](../relations/index.md) for what these mean.
-
-| Query | Meaning |
-|---|---|
-| `phash:<16hex>` | Exact perceptual-hash match. There is a copy button on the detail page's pHash row. |
-| `phash:<16hex>~4` | Within Hamming distance 4 (near-duplicates). Distances 0..64 accepted. |
-| `phash:` / `-phash:` | Has a perceptual hash / does not have one. |
-| `relation:duplicate` | Image is in any duplicate group. |
-| `relation:original` | Image is the chosen original of a duplicate group. |
-| `relation:alternate` | Image is in any alternate group. |
-| `relation:version` | Image is on a version chain (either side). |
-| `relation:derivative` | Image is the derivative end of an edge. |
-| `relation:source` | Image is the source side of at least one derivative edge. |
-| `relation:collection` | Image belongs to a collection. |
-| `relation:any` / `relation:none` | Has any declared relation / none. `any` includes collection membership. |
+Files that have gone missing from disk are left out of every search.
+Add `missing:true` to see them.
 
 ## Images with similar tags
 
-A perceptual hash finds images that look alike. Tags find images that
-are alike in other ways: a recolour, a redraw, or a piece based on
-another one shares almost no pixels with its original but plenty of
-tags.
+`similar:1042` finds images that share tags with image 1042, closest
+first. It catches what a pixel comparison can't: a redraw, a recolour,
+another picture from the same set. Each result is badged with its
+score as a percentage, and `similar:1042~0.7` keeps only the ones at
+70% or better. The **[more like this]** link on an image's page runs
+this search for you.
 
-| Query | Meaning |
-|---|---|
-| `similar:1042` | Images sharing at least one meaningful tag with image 1042, closest first. |
-| `similar:1042~0.7` | Only the ones scoring 0.7 or better. The score runs 0 to 1. |
-| `-similar:1042` | Everything except those. |
+## Everything else: the system: list
 
-The `[more like this]` link on the detail page runs the first form
-for you. Each result thumbnail is badged with its match as a whole
-percent - the same number the `~` suffix takes: a thumbnail badged
-70% is exactly what `similar:1042~0.7` keeps.
+There are many more filters: file hashes, how an image arrived,
+generation settings, relation types, lookup states and so on. Rather
+than listing them here, monbooru lists them where you need them: type
+`system:` in the search bar and a dropdown shows every filter with a
+hint for each. Pick one and it shows the values it takes.
 
-The score asks how much of the two images' tagging is the same: 1.0
-means they carry the same meaningful tags, 0.5 that about half lines
-up. Meta tags and tags most of your library carries are left out, and
-both sides are measured, so a picture with three tags cannot beat a
-well-tagged one just by being small. An image with no tags, or only
-meta tags, returns nothing.
+![The system: dropdown in the search bar](search-system.png)
 
-This is a different score from the relations pair queue's rare tag
-similarity: that one looks for the same work under a different file,
-so it leans on rare tags, and the two report different percentages
-for the same pair on purpose.
+The [AI metadata](../ai-metadata.md) page covers the filters for
+generation data, including searching inside ComfyUI workflows.
 
-## Sort options
+## Sorting and saving
 
-| Sort | Meaning |
-|---|---|
-| Newest | By ingest date, newest first (the default). |
-| File size | Largest first. |
-| Collection order | Group by collection alphabetically, then by each image's position in it. When the search pins a single `collection:`, results read in that collection's own order. |
-| Similarity | Closest tag match first. Appears once a `similar:` search is running, and such a search picks it automatically. |
+Results can be sorted by date added (newest first, the default), file
+size, or collection order. Random order (`R`) shuffles them, and the
+shuffle stays put as you turn pages.
 
-Random order (shortcut `R`) shuffles the results but stays stable
-across page turns; clicking again reshuffles. The heart button
-(shortcut `F`) filters the current search to favorites.
-
-## Saved searches
-
-To keep a query around, run it and pick **Save search** in the
-**Actions** chooser. Saved searches appear in the sidebar and are per
-gallery.
+To keep a search around, run it and press **Save search** beside the
+search bar. Saved searches show in the sidebar, one list per gallery.

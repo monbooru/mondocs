@@ -3,70 +3,51 @@ title: Collections
 weight: 70
 ---
 
-A collection is a named, (optionally) ordered set of images: a comic told in
-loose pages, a photoset, an artist's series. It is a lighter grouping
-than a [relation](../relations/index.md) - no original, no direction, just
-membership and an order. An image can belong to several collections at
-once, with its own position in each.
+A collection is a named set of images, in an order if you want one: a
+comic told in loose pages, a photo shoot, an artist's series. It's a
+lighter link than a [relation](../relations/index.md): no original, no
+direction, just "these belong together, in this order". An image can
+be in several collections, with its own place in each.
 
-On the detail page, images from the same collection render in a
-"Same collection" strip, so you can read through a set in order.
+On an image's page, the other images from its collection show in a
+strip, so you can read through a set in order.
 
 ## Filing images
 
-File an image from the **Collections** row on its detail page: the
-name autocompletes against existing collections, and a new name
-creates one. To file or unfile many images at once, use **Set
-collection** in the gallery's Actions chooser (whole current search)
-or the batch bar (selection).
+Add an image to a collection from the **Collections** row on its page.
+Type a name: an existing collection is suggested, and a new name
+creates one. To file many images at once, tick them and use **Set
+collection** in the batch bar.
 
 ## The Collections page
 
 ![A collection and its members on the Collections page](collections-page.png)
 
-The Collections page lists every collection with its member count.
-From there you can:
+The Collections page lists every collection, where you can rename,
+reorder or dissolve them. Renaming one to the name of another merges
+the two, the incoming pages going after the last page of the other.
+Dissolving a collection removes the grouping and keeps the images.
 
-- **Rename** a collection across all its members. Renaming onto a name
-  that already exists merges the two: the incoming members keep their
-  order and land after the target's last page, so neither reading order
-  is scrambled.
-- **Reorder** members. In the reorder dialog, clicking a tile's
-  filename also renames that file on the spot: type the new name and
-  press Enter (Escape cancels).
-- **Dissolve** a collection: the images stay, the grouping goes.
-- Toggle **find relations** per collection. By default the
-  near-duplicate pair finder skips pairs that share a collection
-  (the collection already relates them); the switch opts a collection
-  back in. See [Relations](../relations/index.md#finding-candidate-pairs).
+The near-duplicate finder leaves pairs from the same collection alone,
+since the collection already says they belong together. The **find
+relations** switch on a collection lets it look at them anyway.
 
-## Searching and sorting
-
-`collection:"name"` finds a collection's members, `collection:` images
-in no collection, `collection:any` images in at least one. The
-**Collection order** sort groups results by collection and reads each
-one in its own order; when the search pins a single `collection:`,
-results follow exactly that collection's order. Details in
-[Searching](../searching/index.md#folder-source-collection).
+To see a collection in the gallery, search `collection:"name"`: its
+images come up in the collection's own order.
 
 ## Turning a collection into an archive
 
-**[generate cbz]** on the Collections page packs
-a collection into a new cbz archive, useful when a set was
-downloaded as loose images but reads as one book.
+**[generate cbz]** on the Collections page packs a collection into a
+CBZ archive, in collection order, which you can then read like any
+other [comic archive](../manga/index.md). Handy when a set was
+downloaded as loose images but reads as one book. The archive lands
+in your upload folder, and the collection and its images stay as they
+were.
 
-Pages follow the collection's own order, falling back to filename
-order for members that are not numbered. The archive gets a
-`ComicInfo.xml` with the collection's name and page count, lands in
-your upload folder, and shows up in the gallery as
-an ordinary cbz you can read.
+Only still images can go in an archive, so a collection holding a
+video or an animation can't be packed. To send a collection to someone
+instead, download it as a zip; see
+[Galleries](../galleries/index.md#download).
 
-A collection holding a video, an animated image or another archive
-cannot be packed, since those have no page a reader could show.
-
-Nothing is taken away here either: the collection and its images stay as they are, and their tags are not copied onto the archive. Packing the same collection twice
-does not make a second copy: monbooru notices the result is identical
-and keeps the one it already has.
-
-Unpacking an archive back into a collection is in
+To unpack an archive into a collection, see
 [Manga and comic archives](../manga/index.md#turning-an-archive-into-a-collection).

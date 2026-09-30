@@ -1,194 +1,209 @@
 ---
-title: Advanced configuration
+title: Configuration
 weight: 80
 ---
 
-monloader keeps its configuration in `/config/monloader.toml`, written with
-defaults on first run. The Settings page edits the same values where that is
-safe at runtime; the override tables and a few server keys are file-only.
+monloader keeps its settings in `monloader.toml` (`/config/monloader.toml`
+in Docker) and writes it with defaults on first start. The Settings
+page edits almost all of it. The override tables and a few server keys
+are only in the file.
 
 ## monloader.toml
 
 ```toml
-setup_done = false                       # first-run wizard gate
+setup_done = false                       # first-run setup page, desktop installs only
+
 [server]
 bind_address = "0.0.0.0:8456"
-base_url     = "http://localhost:8456"   # the address monloader advertises when pairing
-name         = ""                        # rebrand the UI; empty = monloader
-logo         = ""                        # path to an image; empty = the bundled logo
-custom_css   = ""                        # path to a stylesheet served at /custom.css
+base_url     = "http://localhost:8456"   # shown on the API docs page
+name         = ""                        # rename the UI; empty = monloader
+logo         = ""                        # path to a logo and tab icon image
+custom_css   = ""                        # path to a stylesheet, see Look below
 
 [monbooru]
-api_url         = "http://monbooru:8455" # the monbooru instance
-api_token       = ""                     # set by pairing, or by hand for a manual setup
-web_url         = ""                     # browser-facing monbooru base for links; blank =
-                                         # api_url for image links, monbooru link hidden
-default_gallery = ""                     # blank = monbooru's active gallery
-paused          = false                  # set by the footer light; holds the link without unpairing
+api_url         = "http://monbooru:8455" # where monloader reaches monbooru
+api_token       = ""                     # written by pairing
+web_url         = ""                     # monbooru's address as your browser sees
+                                         # it, for links; empty = api_url
+default_gallery = ""                     # empty = monbooru's active gallery
 
 [downloader]
-concurrency            = 1               # worker goroutines; applies on restart
-max_items_per_job      = 200             # per-job cap on a bulk search
-default_folder         = "downloads"     # monbooru subfolder for pushed files
-success_retention_days = 3               # drop downloads that finished with
-                                         # nothing left to do after this many
-                                         # days; 0 turns it off. Must not be
-                                         # longer than the window below
-history_retention_days = 14              # drop everything else from the queue
-                                         # after this many days; 0 keeps them
+concurrency            = 1               # downloads at once; applies on restart
+max_items_per_job      = 200             # posts per job for a tag search
+default_folder         = "downloads"     # monbooru subfolder for downloads
+success_retention_days = 3               # clear finished jobs after this many days
+history_retention_days = 14              # clear everything else after this many days
 
 [gallerydl]
 binary_path   = "gallery-dl"
-config_path   = "/config/gallery-dl.json"          # managed file the app writes
-archive_path  = "/config/gallery-dl-archive.sqlite"
-cookies_dir   = "/config/cookies"                  # per-site cookies files
-                        
-sleep_request = 1.0                      # seconds between requests (politeness)
-raw_config    = ""                       # optional JSON merged into the managed config
-supportedsites_path = ""                 # override for gallery-dl's site data; blank uses the
-                                         # copy built into monloader at the pinned version
+config_path   = "/config/gallery-dl.json"          # written by monloader
+archive_path  = "/config/gallery-dl-archive.sqlite" # remembers what was downloaded
+cookies_dir   = "/config/cookies"
+sleep_request = 1.0                      # seconds between requests to a site
+raw_config    = ""                       # extra gallery-dl config, see below
 
 [auth]
-enable_password       = false            # UI password, off by default
-password_hash         = ""               # bcrypt hash; see API and development
+enable_password       = false            # see Password below
+password_hash         = ""
 session_lifetime_days = 7
 
 [log]
-level = "warn"                           # warn / info / debug (a desktop
-                                         # install seeds "info")
+level = "warn"                           # warn / info / debug
 
-[ptr]                                    # the optional Hydrus PTR index
-enabled     = false
-data_path   = "/ptr"
-address     = "https://ptr.hydrus.network:45871"
-access_key  = ""                         # empty = the PTR's public read-only key
-fetch_sleep = 1.0
-min_free_gb = 70
+[ptr]                                    # see Hydrus PTR
+enabled      = false
+data_path    = "/ptr"                    # applies on restart
+address      = "https://ptr.hydrus.network:45871"
+access_key   = ""                        # empty = the public read-only key
+fetch_sleep  = 1.0                       # seconds between update downloads
+min_free_gb  = 70                        # free space needed to start syncing
 commit_sleep = 1.0                       # seconds between contribution uploads
 
-[lookup]                                 # the chain's similarity stage, and what the nightly run may spend
-min_similarity         = 80              # percent; candidates below are ignored
-scheduled_daily_budget = 25              # images a day monbooru's scheduled lookups may cover; 0 refuses them
+[lookup]                                 # see Reverse lookup
+min_similarity         = 80              # percent
+scheduled_daily_budget = 25              # images a day for monbooru's nightly run
 
 [lookup.iqdb]
-order = 2                                # chain position; uses the danbooru site credentials
+order = 2                                # position in the lookup chain
 
 [lookup.saucenao]
 order   = 3
-api_key = ""                             # from saucenao.com account settings
+api_key = ""
 
-[desktop]                                # desktop installs only
-tray = true                              # show the tray icon where the build
-                                         # has one; need a restart
+[desktop]
+tray = true                              # tray icon, desktop builds only
 
-[[sites]]                                # one block per configured site
-name         = "gelbooru"                # gallery-dl category
-username     = ""                        # danbooru / e621 families, account-login sites
-password     = ""                        # account-login sites 
+[[sites]]                                # one block per site you configured
+name         = "gelbooru"                # gallery-dl's name for the site
 api_key      = ""
-user_id      = ""                        # gelbooru family
-gallery      = ""                        # per-source target; empty = default_gallery
-label        = ""                        # source label on every push; empty = the site name
-cookies      = ""                        # cookies file name under cookies_dir
-options      = ""                        # extra gallery-dl options JSON for this site
-lookup_order = 4                         # lookup-chain position; 0 or absent = not queried
+user_id      = ""
+username     = ""
+password     = ""
+gallery      = ""                        # monbooru gallery; empty = default_gallery
+label        = ""                        # source label; empty = the site name
+cookies      = ""                        # cookies file, in cookies_dir
+options      = ""                        # extra gallery-dl options, as JSON
+lookup_order = 4                         # position in the lookup chain; 0 = not asked
 ```
 
-User-edited site profiles live beside the config as
-`/config/profiles/<site>.json`, written by the Settings profile tab
-([metadata mapping](guides/mapping/index.md#editing-a-sites-profile)).
+Sites edited on the profile tab are saved next to the config as
+`profiles/<site>.json`; see [development](development.md#site-profiles).
 
-Most of these are edited from the Settings page; its "sleep / request"
-field writes `gallerydl.sleep_request`.
+## Override tables
 
-Three more repeatable tables: `[[tag_overrides]]` and `[[rating_overrides]]`
-reroute a site's tag categories and rating values, and `[[host_labels]]`
-(edited in the Settings sites section) names the source for hosts no site
-claims; they are covered in
-[metadata mapping](guides/mapping/index.md). The `[ptr]` block is covered in
-[Hydrus PTR](guides/ptr/index.md), the lookup chain and `[[sites]]` in
-[reverse lookup](guides/lookup/index.md) and [sites](guides/sites/index.md).
+Three more tables, for corrections the profiles don't cover. An
+override wins over any profile and applies from the next download:
+
+```toml
+# send one site's tag category somewhere else
+[[tag_overrides]]
+site = "e621"
+from = "species"
+to   = "general"
+
+# read one site's rating value differently
+[[rating_overrides]]
+site = "somebooru"
+from = "x"
+to   = "explicit"
+
+# the source label for a host no site covers (also in Settings)
+[[host_labels]]
+host  = "static.example.org"
+label = "example"
+```
+
+`site` is gallery-dl's name for the site, the same as `[[sites]] name`.
 
 ## Environment variables
 
-Environment variables override the TOML on the pattern
-`MONLOADER_{SECTION}_{KEY}`:
+Each of these overrides its key in the file.
 
-| Variable | Overrides | Type |
-|---|---|---|
-| `MONLOADER_SERVER_BIND_ADDRESS` | `server.bind_address` | string |
-| `MONLOADER_SERVER_BASE_URL` | `server.base_url` | string |
-| `MONLOADER_MONBOORU_API_URL` | `monbooru.api_url` | string |
-| `MONLOADER_MONBOORU_API_TOKEN` | `monbooru.api_token` | string |
-| `MONLOADER_MONBOORU_WEB_URL` | `monbooru.web_url` | string |
-| `MONLOADER_MONBOORU_DEFAULT_GALLERY` | `monbooru.default_gallery` | string |
-| `MONLOADER_DOWNLOADER_CONCURRENCY` | `downloader.concurrency` | int |
-| `MONLOADER_DOWNLOADER_MAX_ITEMS_PER_JOB` | `downloader.max_items_per_job` | int |
-| `MONLOADER_DOWNLOADER_DEFAULT_FOLDER` | `downloader.default_folder` | string |
-| `MONLOADER_DOWNLOADER_SUCCESS_RETENTION_DAYS` | `downloader.success_retention_days` | int |
-| `MONLOADER_DOWNLOADER_HISTORY_RETENTION_DAYS` | `downloader.history_retention_days` | int |
-| `MONLOADER_GALLERYDL_BINARY_PATH` | `gallerydl.binary_path` | string |
-| `MONLOADER_GALLERYDL_CONFIG_PATH` | `gallerydl.config_path` | string |
-| `MONLOADER_GALLERYDL_ARCHIVE_PATH` | `gallerydl.archive_path` | string |
-| `MONLOADER_GALLERYDL_COOKIES_DIR` | `gallerydl.cookies_dir` | string |
-| `MONLOADER_GALLERYDL_SUPPORTEDSITES_PATH` | `gallerydl.supportedsites_path` | string |
-| `MONLOADER_GALLERYDL_SLEEP_REQUEST` | `gallerydl.sleep_request` | float |
-| `MONLOADER_AUTH_ENABLE_PASSWORD` | `auth.enable_password` | bool |
-| `MONLOADER_AUTH_PASSWORD_HASH` | `auth.password_hash` | string |
-| `MONLOADER_LOG_LEVEL` | `log.level` | `warn` / `info` / `debug` |
-| `MONLOADER_PTR_ENABLED` | `ptr.enabled` | bool |
-| `MONLOADER_PTR_DATA_PATH` | `ptr.data_path` | string |
-| `MONLOADER_PTR_ADDRESS` | `ptr.address` | string |
-| `MONLOADER_PTR_ACCESS_KEY` | `ptr.access_key` | string |
-| `MONLOADER_PTR_FETCH_SLEEP` | `ptr.fetch_sleep` | float |
-| `MONLOADER_PTR_MIN_FREE_GB` | `ptr.min_free_gb` | int |
-| `MONLOADER_PTR_COMMIT_SLEEP` | `ptr.commit_sleep` | float |
-| `MONLOADER_LOOKUP_MIN_SIMILARITY` | `lookup.min_similarity` | int |
-| `MONLOADER_LOOKUP_SAUCENAO_API_KEY` | `lookup.saucenao.api_key` | string |
-
-One more variable affects runtime behavior without overriding a TOML
-key:
-
-| Variable | Effect |
+| Variable | Overrides |
 |---|---|
-| `TZ` | Timezone name (default `UTC`) for displayed timestamps. Any IANA name works. |
+| `MONLOADER_SERVER_BIND_ADDRESS` | `server.bind_address` |
+| `MONLOADER_SERVER_BASE_URL` | `server.base_url` |
+| `MONLOADER_MONBOORU_API_URL` | `monbooru.api_url` |
+| `MONLOADER_MONBOORU_API_TOKEN` | `monbooru.api_token` |
+| `MONLOADER_MONBOORU_WEB_URL` | `monbooru.web_url` |
+| `MONLOADER_MONBOORU_DEFAULT_GALLERY` | `monbooru.default_gallery` |
+| `MONLOADER_DOWNLOADER_CONCURRENCY` | `downloader.concurrency` |
+| `MONLOADER_DOWNLOADER_MAX_ITEMS_PER_JOB` | `downloader.max_items_per_job` |
+| `MONLOADER_DOWNLOADER_DEFAULT_FOLDER` | `downloader.default_folder` |
+| `MONLOADER_DOWNLOADER_SUCCESS_RETENTION_DAYS` | `downloader.success_retention_days` |
+| `MONLOADER_DOWNLOADER_HISTORY_RETENTION_DAYS` | `downloader.history_retention_days` |
+| `MONLOADER_GALLERYDL_BINARY_PATH` | `gallerydl.binary_path` |
+| `MONLOADER_GALLERYDL_CONFIG_PATH` | `gallerydl.config_path` |
+| `MONLOADER_GALLERYDL_ARCHIVE_PATH` | `gallerydl.archive_path` |
+| `MONLOADER_GALLERYDL_COOKIES_DIR` | `gallerydl.cookies_dir` |
+| `MONLOADER_GALLERYDL_SUPPORTEDSITES_PATH` | `gallerydl.supportedsites_path` |
+| `MONLOADER_GALLERYDL_SLEEP_REQUEST` | `gallerydl.sleep_request` |
+| `MONLOADER_AUTH_ENABLE_PASSWORD` | `auth.enable_password` |
+| `MONLOADER_AUTH_PASSWORD_HASH` | `auth.password_hash` |
+| `MONLOADER_LOG_LEVEL` | `log.level` |
+| `MONLOADER_PTR_ENABLED` | `ptr.enabled` |
+| `MONLOADER_PTR_DATA_PATH` | `ptr.data_path` |
+| `MONLOADER_PTR_ADDRESS` | `ptr.address` |
+| `MONLOADER_PTR_ACCESS_KEY` | `ptr.access_key` |
+| `MONLOADER_PTR_FETCH_SLEEP` | `ptr.fetch_sleep` |
+| `MONLOADER_PTR_MIN_FREE_GB` | `ptr.min_free_gb` |
+| `MONLOADER_PTR_COMMIT_SLEEP` | `ptr.commit_sleep` |
+| `MONLOADER_LOOKUP_MIN_SIMILARITY` | `lookup.min_similarity` |
+| `MONLOADER_LOOKUP_SAUCENAO_API_KEY` | `lookup.saucenao.api_key` |
 
-## Updating gallery-dl
+`TZ` sets the timezone for displayed times (UTC by default), and
+`MONLOADER_CONTAINER`, set by the official image, makes a brand-new
+config use the container paths.
 
-The **advanced** section of the Settings page installs any gallery-dl release
-without waiting for a monloader update. The install lands in a
-`gallery-dl/` folder monloader keeps with its own files, so it survives updates, and
-one click reverts to the version monloader ships with.
+## Pairing by hand
 
-## Raw gallery-dl passthrough
+To manage the monbooru token yourself instead of pairing, put a
+monbooru API token with read and write permissions in
+`monbooru.api_token` or `MONLOADER_MONBOORU_API_TOKEN`. There's no
+field for it in the Settings page.
 
-The **advanced** section of the Settings page has a raw gallery-dl config
-textarea: a JSON object merged into the managed `gallery-dl.json` last, so
-your keys win. Invalid JSON is rejected at save and never written. This is
-the escape hatch for gallery-dl options monloader does not manage itself.
+## gallery-dl
 
-## Custom CSS
+**Settings -> advanced** can install any gallery-dl release without
+waiting for a monloader update, and go back to the bundled version in
+one click. The installed copy is kept with monloader's own files, so
+it survives updates.
 
-Set `custom_css` in `[server]` to a file path and monloader serves it at
-`/custom.css`, linked after the bundled stylesheet, so a `:root` block there
-wins the cascade. One custom stylesheet can theme monbooru and monloader
-together.
+The same section has a box for raw gallery-dl configuration: a JSON
+object merged into the `gallery-dl.json` monloader writes, with your
+keys winning. It's the way to set any gallery-dl option monloader has
+no field for. Per-site options go in the site's own dialog instead
+(see [Sites and credentials](guides/sites/index.md)).
 
-## Logo and title
+Downloads pass through a scratch folder, `/work` in Docker, and are
+deleted from it once monbooru has them. It doesn't need a volume; give
+it a `tmpfs` mount if you'd like it in RAM.
 
-`name` and `logo` in `[server]` rebrand the UI without a rebuild. `name`
-replaces the wordmark, page titles, and the login heading (the CSS
-uppercases the wordmark). `logo` is a path to an image used for both the
-favicon and the logo. Empty values fall back to the bundled name and
-assets.
+## Password
+
+The web UI has no password by default. Turn one on under **Settings ->
+Authentication**, or hash one and put it in the file:
+
+```bash
+./monloader -hash-password 'your-password'
+# or with Docker:
+docker exec -it monloader monloader -hash-password 'your-password'
+```
+
+Put the result in `auth.password_hash` and set
+`auth.enable_password = true`. A login lasts `session_lifetime_days`.
+
+## Look
+
+`name` and `logo` under `[server]` change the name in the top bar and
+page titles, and the logo and tab icon. `custom_css` points at a
+stylesheet served after monloader's own, so a `:root` block in it
+wins. monloader uses the same base colour variables as
+[monbooru's themes](../../advanced/themes.md) (`--bg`, `--fg`,
+`--accent` and so on), so a theme's colours carry over.
 
 ## Log levels
 
-`log.level`:
-
-- `warn` (the default; a desktop install seeds `info`) - warnings, errors,
-  and explicit mutations (logins, settings saves).
-- `info` - adds one line per non-noisy HTTP request and the startup banner
-  (gallery-dl version, extractor count, work dir).
-- `debug` - adds the 2-second queue poll, the connectivity-light check, and
-  `/health` hits.
+- `warn` (the default): warnings, errors, logins and settings changes.
+- `info`: adds a line per request and the startup banner.
+- `debug`: adds the queue polling and health checks.

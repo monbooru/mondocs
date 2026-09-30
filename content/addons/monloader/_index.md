@@ -4,37 +4,28 @@ weight: 30
 ---
 
 monloader is the downloader that feeds [monbooru](../../_index.md).
-Paste the URL of a booru post, a pool, a tag search, an artist page, or a
-direct image link; monloader fetches the files and their per-post metadata,
-maps that metadata onto monbooru's data model, and pushes each file into a
-monbooru gallery over its API.
+Give it the URL of a booru post, a pool, a tag search, an artist page
+or a plain image link, and it fetches the files along with their tags,
+rating and source, and hands them to monbooru.
 
 ![The monloader add page](add.png)
 
-The actual scraping is done by
-[gallery-dl](https://github.com/mikf/gallery-dl), so any site gallery-dl
-supports works. monloader adds the download queue, the metadata mapping, and
-the push into monbooru, with per-site profiles that correct tags, ratings
-and URLs for known sites.
+The downloading itself is done by
+[gallery-dl](https://github.com/mikf/gallery-dl), so any site
+gallery-dl supports works. monloader adds a download queue, turns each
+site's tags and ratings into monbooru's, and ships corrections for the
+sites it knows well.
 
-It also runs in reverse: for a file monbooru already holds, monloader can
-find tags by file hash and by image similarity (IQDB, SauceNAO) across the
-boorus, and optionally from a local copy of the Hydrus Public Tag
-Repository, then fold them back into the image. See
-[reverse lookup](guides/lookup/index.md).
+It also works the other way round. For an image you already have,
+monloader can search the boorus by the file's hash or by image
+similarity (IQDB, SauceNAO), and optionally a local copy of the Hydrus
+Public Tag Repository, then bring the tags and sources it finds back
+into monbooru. See [Reverse lookup](guides/lookup/index.md).
 
-The two apps stay separate on purpose: monbooru holds your files and needs
-no internet access, while monloader has internet access but never touches
-the gallery files - everything flows through monbooru's API. monloader is
-intended for your local network; its UI is not designed to be exposed to the
-public internet.
+The two apps stay apart on purpose. monbooru holds your files and
+needs no internet. monloader has internet but never touches your
+files directly: everything goes through monbooru's API. Like monbooru,
+it's meant for your home network, not the open internet.
 
-- [Install](getting-started/install.md) - - [Install](getting-started/install.md) - via docker or binaries.
-- [Pairing](getting-started/pairing/index.md) - connect it to monbooru and to the monsender extension.
-- [Downloading](guides/downloading/index.md) - the queue, outcomes, retries, pools and manga.
-- [Sites and credentials](guides/sites/index.md) - site profiles, logins, cookies files.
-- [Metadata mapping](guides/mapping/index.md) - how tags, ratings, and sources land in monbooru.
-- [Reverse lookup](guides/lookup/index.md) - find tags for files you already have.
-- [Hydrus PTR](guides/ptr/index.md) - the optional offline tag database.
-- [Configuration](configuration.md) - the TOML file, environment variables, theming.
-- [API and development](development.md) - tokens, error codes, building from source.
+Start with [Install](getting-started/install.md), then
+[pair it](getting-started/pairing/index.md) with monbooru.

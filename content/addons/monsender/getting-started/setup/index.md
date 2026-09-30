@@ -3,53 +3,42 @@ title: Setup
 weight: 20
 ---
 
-Setup is two steps: tell the extension where your monloader is, then
-pair with it.
+Setup is two steps: tell the extension where monloader is, then pair
+the two.
 
 ## 1. Set the monloader URL
 
-In the extension options, enter the base URL your browser reaches
-monloader at: `http://localhost:8456` if it runs on the same machine,
-or a LAN address like `http://monloader.lan:8456`. Use the address as
-you would type it in the address bar, scheme included; plain
-`http://` is fine on a home network.
+In the extension's options, enter the address your browser reaches
+monloader at, the way you'd type it in the address bar:
+`http://localhost:8456` on the same machine, or something like
+`http://192.168.1.20:8456` on your network. Plain `http://` is fine at
+home.
 
-## 2. Allow access to that one address
+## 2. Connect to monloader
 
-When you save, the browser asks to allow access to that one origin
-(the wording varies by browser). If you decline, the options page
-warns that monloader cannot be reached until you allow it; click
-**save** or **connect to monloader** again to get the prompt back.
-
-## 3. Connect to monloader
-
-Click **connect to monloader**, then open monloader in another tab,
-go to **Settings -> pairing**, and approve the pending request in the
-**monsender extension** block.
+Click **connect to monloader**. Then open monloader in another tab, go
+to **Settings -> pairing**, and approve the request in the **monsender
+extension** block.
 
 ![The pairing request waiting in monloader](approve-request.png)
 
-The extension stores the issued token and shows "paired with
-monloader" with a green connection dot. If you deny the request or
-let it expire (about a minute and a half), the options page says so;
-click **connect to monloader** again.
+The options page then says "paired with monloader", with a green dot.
+If it gave up waiting before you approved, click **connect to
+monloader** again and approve the new request.
 
 ![The extension's monloader section once paired](options-paired.png)
-
-This is the same pairing model all three apps use; see
-[how pairing works](../../../pairing.md).
 
 ## Check it worked
 
 Click **test connection**. A green dot with the monloader and
-gallery-dl versions means you are set. "token rejected" or
-"unreachable" point to [troubleshooting](../../troubleshooting.md).
+gallery-dl versions means you're set. Anything else is covered in
+[troubleshooting](../../troubleshooting.md).
 
 ## If you change the URL later
 
-The token is bound to the monloader instance that issued it. Saving a
-different URL clears the stored token, so the old key is never sent
-to a different server. Click **connect to monloader** again to pair
-with the new instance.
+The extension's key belongs to the monloader that issued it, so saving
+a different URL forgets the key rather than send it to another
+server. Click **connect to monloader** again to pair with the new
+address.
 
 Next: [sending pages and images](../../guides/sending.md).
