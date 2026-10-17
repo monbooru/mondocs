@@ -44,7 +44,7 @@ rating. Adding another replaces it, and yours always wins over an
 auto-tagger's.
 
 The rating buttons in the footer set the **SFW ceiling**: click
-`general` and everything rated above it disappears from the gallery,
+`sfw` and everything rated above `general` disappears from the gallery,
 related images and anything else you browse. Batch actions on "the
 whole search" respect it too, so they never touch an image you can't
 see. Click `explicit` to turn it off again. Each browser remembers its

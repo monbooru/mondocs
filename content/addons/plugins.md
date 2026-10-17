@@ -9,8 +9,8 @@ on an image's page, or a **rotate** button for a batch of selected
 images. Anyone can write one, in any language.
 
 A plugin works on your library through monbooru's API, and it can
-show its own pages. It can't change monbooru's own pages beyond adding
-its buttons.
+show its own pages. Those pages open inside monbooru and can do
+anything you can do there, so only pair plugins you trust.
 
 ## The two kinds of button
 

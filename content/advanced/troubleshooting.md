@@ -9,6 +9,14 @@ monbooru can't read the gallery folder. What's already indexed stays
 browsable, but syncing and the watcher are off. Fix the path or its
 permissions and restart.
 
+## "Library too old to upgrade directly"
+
+monbooru may upgrades a gallery's database from the last two minor
+releases. A gallery last opened by something older stops the start
+with this message, and names a release that still upgrades it: run
+that release once against the same folders, then start the current
+one again. Nothing is changed in the meantime.
+
 ## Thumbnails are missing
 
 Run **Settings -> Maintenance -> Rebuild thumbnails**. Videos,

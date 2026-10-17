@@ -41,12 +41,12 @@ name          = ""               # rename the UI; empty = monbooru
 theme         = ""               # see Themes
 theme_color   = ""               # see Themes
 monloader_url = ""               # monloader's address as your browser sees it,
-                                 # for the footer link; empty = monloader.api_url
+                                 # for the footer link; empty = no link
 
 [monloader]
 api_url = ""                     # the monloader address monbooru calls;
                                  # empty = the one learned at pairing
-# api_token is written by pairing
+# api_token and paused are written by pairing and the footer light
 
 [paths]
 data_path  = "/data"             # databases, thumbnails, caches
@@ -75,12 +75,20 @@ min_hit_fraction = 0.05          # see Auto-tagger: GPU and models
 name                 = "wd-swinv2"   # Settings -> Auto-Tagger
 enabled              = true
 confidence_threshold = 0.40
+category_thresholds  = { character = 0.85 }  # optional threshold per category
+per_category_top_k   = { general = 25 }      # optional cap on tags per category; 0 = no cap
+disabled_categories  = ["meta"]              # optional, categories it never tags
+galleries            = ["default"]           # optional; missing = every gallery, [] = none
+model_file           = "model.onnx"          # optional; default model.onnx
+tags_file            = "tags.csv"            # optional; default tags.csv (or tags.txt)
 
 [auth]
 enable_password       = false    # see Password below
 password_hash         = ""
 session_lifetime_days = 7
 # [[auth.tokens]] blocks are managed by Settings -> Authentication
+
+# [[plugin]] blocks are written by pairing and by Settings -> Plugins
 
 [ui]
 page_size     = 40               # images per gallery page
@@ -116,7 +124,7 @@ tray = true                      # tray icon, desktop builds only
 
 ## Environment variables
 
-Each of these overrides its key in the file.
+Each of these overrides its key in the file. The file keeps its own value, and Settings shows the key greyed out with the variable's name.
 
 | Variable | Overrides |
 |---|---|
@@ -174,7 +182,9 @@ restarts. Changing the password logs out every other browser.
 
 ## Running it on a server
 
-The docker container is the best option for servers. If you want to run a binary, there's no separate server download: take a portable archive, and
+The docker container is the best option for servers; its compose file
+publishes the port on the machine itself only, so change its `ports:`
+line for other machines to reach it. If you want to run a binary, there's no separate server download: take a portable archive, and
 before starting it as a service,
 
 - write a `monbooru.toml` next to the program with the settings you
@@ -206,6 +216,32 @@ or delete them.
 The image has a healthcheck built in (`monbooru healthcheck`, which
 probes `/health`), so `docker ps` shows the container as healthy once
 it's up. Point your own monitoring at `GET /health` if you like.
+
+## ComfyUI nodes
+
+monbooru fills an image's prompt, model, sampler, seed and the rest
+from the ComfyUI nodes it knows: KSampler, the checkpoint loaders, the
+LoRA loaders and a few more. A workflow built from other nodes keeps
+those fields empty. To teach monbooru a node, put a
+`comfyui_nodes.json` next to `monbooru.toml` naming, for each node
+type, the input that holds each field:
+
+```json
+{
+  "version": 1,
+  "nodes": {
+    "RandomNoise": {"seed": "noise_seed"},
+    "Efficient Loader": {"model": "ckpt_name", "lora": "lora_name"}
+  }
+}
+```
+
+The fields are `prompt`, `seed`, `steps`, `cfg`, `sampler`,
+`scheduler`, `model`, `lora`, and `positive` (the sampler input that
+points at the prompt node). An entry replaces monbooru's own for the
+same node type. New images pick the file up as they arrive; run
+**Settings -> Maintenance -> Re-extract metadata** for the ones
+already in the gallery.
 
 ## Command-line flags
 

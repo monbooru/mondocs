@@ -61,16 +61,16 @@ several images from a page, [scan it](scanning/index.md).
 
 The bottom of the popup shows monloader's recent jobs, with a marker
 on the ones this browser sent. It's monloader's whole queue, so it
-also shows the lookups monbooru asks for. The words in each row are
-monloader's outcomes (new, duplicate, skipped, failed...), explained
-on [Downloading](../../monloader/guides/downloading/index.md#per-item-outcomes).
+also shows the lookups monbooru asks for. Each row counts monloader's
+outcomes in short words (new, dup, skip, fail...), explained on
+[Downloading](../../monloader/guides/downloading/index.md#per-item-outcomes).
 Hover a failed row to see why.
 
 Each job can be retried. When a job skipped posts monloader had
 downloaded before, **[force download]** fetches them anyway, the way to
 get back something you deleted in monbooru. A tag search that hit
 monloader's limit offers **[continue]** for the next batch and
-**[fetch all]** for the rest. **[clear]** removes finished jobs.
+**[fetch all]** for the rest. **[clear all]** removes finished jobs.
 
 The pause button holds monloader's whole queue: the download in
 progress finishes, and nothing new starts until you resume. It's the

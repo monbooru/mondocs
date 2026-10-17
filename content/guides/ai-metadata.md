@@ -42,9 +42,11 @@ finds the ComfyUI images of cats made with an SDXL model.
 ## Searching inside a ComfyUI workflow
 
 `prompt:`, `model:` and `sampler:` only see the handful of values
-monbooru picks out of a workflow. `comfyui:` searches the whole thing:
-every node the workflow uses and every value set on it, custom nodes
-included.
+monbooru picks out of a workflow, from the nodes it knows. A custom
+node it doesn't know can be taught to it, see
+[Configuration](../advanced/configuration.md#comfyui-nodes).
+`comfyui:` searches the whole thing: every node the workflow uses and
+every value set on it, custom nodes included.
 
 | Search | Finds |
 |---|---|

@@ -34,7 +34,8 @@ public data. To skip most of the first sync, start from a snapshot
 1. Give the copy a place to live. A desktop install already has a
    `ptr` folder next to its data; on Docker, mount a volume at `/ptr`
    (the compose file has a commented example). The **data path** in
-   **Settings -> ptr** can point anywhere with enough room.
+   **Settings -> ptr** can point anywhere with enough room; on the
+   Flatpak, grant access to a folder outside its sandbox first with.
 2. Open **PTR** in the top bar, check the free space, and click
    **enable ptr sync**.
 
@@ -62,7 +63,8 @@ from scratch. monloader then only fetches the days since it was made.
 ## Using it
 
 The PTR answers only once the copy has caught up: a half-built copy
-would give a few of a file's tags as if they were all of them.
+would give a few of a file's tags as if they were all of them. After
+that, **pause** on the PTR page stops the downloads.
 
 From then on, monbooru can use it to
 [look up images](../../../../guides/lookup/index.md) and to find

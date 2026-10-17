@@ -26,6 +26,7 @@ api_token       = ""                     # written by pairing
 web_url         = ""                     # monbooru's address as your browser sees
                                          # it, for links; empty = api_url
 default_gallery = ""                     # empty = monbooru's active gallery
+paused          = false                  # set by the footer light's pause
 
 [downloader]
 concurrency            = 1               # downloads at once; applies on restart
@@ -41,6 +42,7 @@ archive_path  = "/config/gallery-dl-archive.sqlite" # remembers what was downloa
 cookies_dir   = "/config/cookies"
 sleep_request = 1.0                      # seconds between requests to a site
 raw_config    = ""                       # extra gallery-dl config, see below
+supportedsites_path = ""                 # site table override; empty = the built-in one
 
 [auth]
 enable_password       = false            # see Password below
@@ -52,6 +54,7 @@ level = "warn"                           # warn / info / debug
 
 [ptr]                                    # see Hydrus PTR
 enabled      = false
+paused       = false                     # set by the PTR page's pause and resume
 data_path    = "/ptr"                    # applies on restart
 address      = "https://ptr.hydrus.network:45871"
 access_key   = ""                        # empty = the public read-only key
@@ -65,10 +68,12 @@ scheduled_daily_budget = 25              # images a day for monbooru's nightly r
 
 [lookup.iqdb]
 order = 2                                # position in the lookup chain
+# url = "https://..."                    # only if the service moves
 
 [lookup.saucenao]
 order   = 3
 api_key = ""
+# url = "https://..."                    # only if the service moves
 
 [desktop]
 tray = true                              # tray icon, desktop builds only
@@ -117,7 +122,9 @@ label = "example"
 
 ## Environment variables
 
-Each of these overrides its key in the file.
+Each of these overrides its key in the file on every start, so a
+Settings change to an env-set key lasts until the next restart; change
+it in the compose file instead.
 
 | Variable | Overrides |
 |---|---|
@@ -150,6 +157,8 @@ Each of these overrides its key in the file.
 | `MONLOADER_PTR_COMMIT_SLEEP` | `ptr.commit_sleep` |
 | `MONLOADER_LOOKUP_MIN_SIMILARITY` | `lookup.min_similarity` |
 | `MONLOADER_LOOKUP_SAUCENAO_API_KEY` | `lookup.saucenao.api_key` |
+| `MONLOADER_LOOKUP_IQDB_URL` | `lookup.iqdb.url` |
+| `MONLOADER_LOOKUP_SAUCENAO_URL` | `lookup.saucenao.url` |
 
 `TZ` sets the timezone for displayed times (UTC by default), and
 `MONLOADER_CONTAINER`, set by the official image, makes a brand-new

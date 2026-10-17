@@ -37,10 +37,18 @@ A failed item also carries an error code; the list is in
 ## Big searches
 
 A tag search or an artist page can run to thousands of posts, so a job
-takes at most 200 of them (change that in **Settings -> downloads**).
-A job that hit the limit offers **get next N** for the next batch and
-**get all** to keep going until the search runs out. Pools and manga
+takes by default at most 200 of them (change that in **Settings -> downloads**).
+You can change this temporarily in the menu beside the add bar. It remembers your last
+pick. A job that hit its limit offers **get next N** for the next batch
+and **get all** for the rest. Pools and manga
 are exempt: you asked for the whole thing, so you get all of it.
+
+## Watching a search
+
+Watch a tag search or an artist page and monloader checks it again on a
+schedule, so new posts keep landing in monbooru without you pasting the
+URL again. Click **watch** on a finished search in the queue, or paste
+the URL on the **Watched** page and pick how often to check it. 
 
 ## Retrying
 

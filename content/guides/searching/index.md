@@ -20,7 +20,8 @@ the results down.
 | `"re:zero"` | a tag with a colon in its name; quotes keep it a tag |
 
 Case doesn't matter. The search box suggests tags as you type, each
-with the number of images you'd get by adding it.
+with a count of the images that have it alongside what you already
+typed.
 
 Tags live in categories (`character`, `artist`, `copyright` and so on,
 see [Tags](../tags/index.md)). Put the category in front to be

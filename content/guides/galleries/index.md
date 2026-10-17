@@ -12,7 +12,8 @@ photos in another, and switch between them from the footer.
 Galleries are managed under **Settings -> Galleries**. Adding one takes
 a name and a folder (on Docker, a folder you mounted into the
 container). You can also start a gallery from an export file, which
-fills it in one step.
+fills it in one step; an export .zip, which carries the images, goes
+into an empty folder.
 
 Switching galleries switches for everyone using this monbooru, not
 just your browser, and the default gallery comes back after a restart.

@@ -50,27 +50,81 @@ default 4) is how many images are prepared and tagged at once. On a
 GPU, raise it if the GPU sits idle waiting for images. DirectML tags
 one image at a time whatever you set.
 
+## More models
+
+The [monbooru-plugins](https://github.com/monbooru/monbooru-plugins)
+registry lists every tagger monbooru supports in `TAGGERS.md`, each
+one a folder under `taggers/`. To add one, copy its folder into the
+models folder: it shows up in **Settings -> Auto-Tagger** with an
+**Install** button to download the weights, which the folder does not hold.
+
+A registry folder holds a `model.json` (the description, the default
+thresholds and the files to download), and when the model needs them
+a `profile_default.json` and a `dispatch_default.json`. Those two are
+the stock settings: a newer copy of the folder can replace them, while
+your own changes go in `tagger.json` and `dispatch.json` beside them.
+
 ## Your own models
 
 Other ONNX tagging models may work too. Give each one its own
-subfolder in the models folder, holding:
+subfolder in the models folder, holding the `.onnx` weights (and the
+`.onnx.data` file next to them, when the model ships one) and one
+label file:
 
-- `model.onnx`, the weights;
-- one label file: `tags.csv` (WD14 layout: `tag_id,name,category_id`),
-  `tags.txt` (one label per line, all `general`), or a Camie-style
-  metadata `.json`.
+- `tags.csv`: a header row, then `index,name,category` per row. The
+  category is a WD14 category number (`0` general, `4` character, ...)
+  or a category name.
+- `tags.txt`: one label per line, all `general`.
+- a `.json` label file, described by the `tagger.json` below.
 
 The new tagger shows up in **Settings -> Auto-Tagger** on the next
-page load.
+page load. 
 
-monbooru works out how to feed the model from the label file for
-`.csv` (WD14-style) and `.txt` (JoyTag-style) models. For anything
-else, including a Camie-style `.json`, add a `tagger.json` next to
-`model.onnx` describing the model: `label_format` and
-`category_scheme` at least, plus any of input size, channel order,
-normalization, padding and output activation that differ from what
-monbooru guessed. The files in the repository's
-`internal/tagger/profile_default/` folder are working examples.
+monbooru works out how to feed `.csv` (WD14-style) and `.txt`
+(JoyTag-style) models on its own. For anything else, add a
+`tagger.json` next to the model saying how its authors feed it. Every
+field is optional and only restates what differs from that guess:
+
+| Field | Values |
+|---|---|
+| `input_size` | the square side in pixels; leave it out to read it from the model |
+| `layout` | `nhwc` or `nchw` |
+| `channels` | `rgb` or `bgr` |
+| `normalize` | `none`, `div255`, `imagenet`, `clip`, or `mean_std` with `norm_scale`, `norm_mean` and `norm_std`: each pixel becomes `(value / norm_scale - norm_mean) / norm_std` |
+| `pad` | `white_square`, `mean_color_aspect` or `fill` with `fill_color` as `[r, g, b]` |
+| `activation` | `logits` when the model's scores still need a sigmoid, `sigmoid_in_model` when they don't |
+| `label_format` | `csv`, `txt` or `json` |
+| `label_json` | where a `.json` label file keeps its labels: `shape` is `index_map` (`{"0": "tag", ...}`), `list` (`["tag", ...]`) or `blocks` (`[{"name": category, "offset": n, "tags": [...]}]`), `path` the dotted way to it, and `category_path` the dotted way to a tag-to-category object |
+| `category_scheme` | `wd14_numeric`, `name_string` (the label file names the categories) or `single_general` |
+| `category_map` | renames the label file's categories, `{"style": "artist"}` |
+| `output_index` | which of the model's outputs holds the scores, when it has several |
+
+Here's an example with PixAI's tagger. Its runner pads to a black square,
+maps pixels to `-1..1`, applies a sigmoid, and keeps its labels in
+`tags.json` as one block per category, the `style` block being
+artists:
+
+```json
+{
+  "version": 1,
+  "profile": {
+    "layout": "nchw", "channels": "rgb",
+    "normalize": "mean_std", "norm_scale": 255,
+    "norm_mean": [0.5, 0.5, 0.5], "norm_std": [0.5, 0.5, 0.5],
+    "pad": "fill", "fill_color": [0, 0, 0],
+    "activation": "logits",
+    "label_format": "json",
+    "label_json": {"shape": "blocks", "path": "categories"},
+    "category_scheme": "name_string",
+    "category_map": {"style": "artist"}
+  }
+}
+```
+
+Its ratings are labelled `rating:g` and so on, so it also needs the
+four `dispatch.json` rules below that rename them. The
+`profile_default.json` files in the registry's folders are more
+examples.
 
 ## Label rules (dispatch.json)
 
@@ -94,12 +148,15 @@ to the model, and you can also write or share that file by hand:
 - `name`, if set, renames the tag. A rule into `rating` has to end on
   one of the four ratings.
 
-monbooru ships rules of its own for the catalog taggers
-(`internal/tagger/dispatch_default/` in the repository), and your file
+monbooru ships rules of its own for the suggested taggers, taken from
+their registry folders, and any other model from the registry brings
+its own as `dispatch_default.json`. Your file
 goes on top: a rule for the same label replaces the shipped one, a new
-label is added. The **Export** tab of the Configure dialog shows the
-merged result, ready to copy over the shipped file in a pull request
-or to drop next to `model.onnx` on another install.
+label is added. **Reset** removes your file and keeps the shipped
+rules. The **Export** tab of the Configure dialog shows the
+merged result, ready to copy over the folder's `dispatch_default.json`
+in a pull request to the registry or to drop next to `model.onnx` on
+another install.
 
 ## Memory
 
@@ -113,9 +170,6 @@ Tagging runs in a separate `tagger-worker` process, so unloading gives
 everything back to the system, GPU libraries included. If that
 process gives you trouble, `MONBOORU_TAGGER_BACKEND=inproc` runs
 tagging inside monbooru itself instead.
-
-Tagging one image from its detail page always uses the CPU, even with
-a GPU configured.
 
 ## Videos and archives
 
@@ -131,7 +185,7 @@ it to `0` and one frame is enough.
 |---|---|
 | `MONBOORU_TAGGER_EXECUTION_PROVIDER` | Overrides `tagger.execution_provider`. |
 | `MONBOORU_TAGGER_BACKEND` | `inproc` runs tagging inside monbooru instead of a separate process. |
-| `MONBOORU_TAGGER_WORKER_LOG` | Log level (`warn` / `info` / `debug`) for the tagger process only. |
+| `MONBOORU_TAGGER_WORKER_LOG` | Log level (`warn` / `info` / `debug`) for the tagger process only. Unset, it follows monbooru's own level. |
 | `MONBOORU_TAGGER_DIRECTML_DEVICE_ID` | Which GPU DirectML uses, by adapter number. Defaults to `0`, which on a laptop is often the integrated GPU rather than the fast one. |
 | `ORT_LIB_PATH` | Full path to the ONNX Runtime library, when it isn't next to the program or on the system library path. |
 | `CUDA_CACHE_PATH` | Where CUDA keeps its compiled cache. Defaults to `.nv-cache/` in the data folder. |

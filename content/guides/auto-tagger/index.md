@@ -23,7 +23,8 @@ as soon as monbooru finds them.
 
 ![The taggers list with one model installed and enabled](taggers-table.png)
 
-Other ONNX tagging models can work too; see
+More models are listed in the monbooru-plugins registry: copy a
+model's folder into the models folder. Other ONNX tagging models can work as well; see
 [Auto-tagger: GPU and models](../../advanced/auto-tagger.md).
 
 ## Tuning it

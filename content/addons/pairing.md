@@ -13,8 +13,8 @@ There are two links:
 - **monloader and monbooru.** In monloader, **Settings -> pairing ->
   connect to monbooru** sends the request, and you approve it in
   monbooru under **Settings -> Plugins**. monloader can then add
-  images and tags to monbooru (but never delete), and monbooru can ask
-  monloader for lookups.
+  images and tags to monbooru and update them (it can't delete any),
+  and monbooru can ask monloader for lookups.
 - **monsender and monloader.** In the extension's options, **connect
   to monloader** sends the request, and you approve it in monloader
   under **Settings -> pairing**. The extension can then add URLs to

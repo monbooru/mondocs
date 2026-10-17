@@ -43,11 +43,13 @@ Tokens for monloader and plugins are made by
 
 ## Calling it from a web page
 
-A page monbooru serves can call the API right away. A page served from
-anywhere else, like your own tool on another port or a browser
-extension, is blocked by the browser until you add its address to
-`server.cors_origins` in [the config file](configuration.md), for
-example `http://192.168.1.50:5173`. `*` allows any page. Scripts, curl
+A page monbooru serves can call the API right away when you reach
+monbooru at its IP address, at `localhost`, or at the address in
+`server.base_url`. A page served from anywhere else, like your own
+tool on another port or a browser extension, is blocked by the browser
+until you add its address to `server.cors_origins` in
+[the config file](configuration.md), for example
+`http://192.168.1.50:5173`. `*` allows any page. Scripts, curl
 and monloader aren't browsers and don't need this. `/api/v1/docs`
 shows the addresses currently allowed.
 
@@ -96,6 +98,13 @@ exchange, the relay message, the button slots and variables, the
 `/plugins/<name>/` mount, and the theme variables. Templates,
 `/internal/` URLs and the database are not part of that and can
 change in any release.
+
+That contract has a number, currently `1`. Send it as `"contract"` in
+the pairing request and put `contract = 1` in `plugin.toml`. A monbooru
+that speaks an older contract than your plugin refuses the pairing
+(`409`, code `contract_unsupported`) and doesn't start the folder,
+instead of half working. The number only moves when a change would
+break a plugin written against the old one.
 
 [`examples/simple-edit`](https://github.com/monbooru/monbooru-plugins/tree/main/examples/simple-edit)
 in the plugins registry is a working plugin to copy: it pairs, rotates
