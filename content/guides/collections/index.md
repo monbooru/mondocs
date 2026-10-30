@@ -5,28 +5,24 @@ weight: 70
 
 A collection is a named set of images, in an order if you want one: a
 comic told in loose pages, a photo shoot, an artist's series. It's a
-lighter link than a [relation](../relations/index.md): no original, no
-direction, just "these belong together, in this order". An image can
-be in several collections, with its own place in each.
-
-On an image's page, the other images from its collection show in a
-strip, so you can read through a set in order.
+lighter link than a [relation](../relations/index.md), with no
+original and no direction. An image can be in several collections,
+with its own place in each.
 
 ## Filing images
 
-Add an image to a collection from the **Collections** row on its page.
-Type a name: an existing collection is suggested, and a new name
-creates one. To file many images at once, tick them and use **Set
-collection** in the batch bar.
+Add an image to a collection from the **Collections** row on its page;
+a new name creates a new collection. To file many images at once, tick
+them and use **Collection** in the batch bar.
 
 ## The Collections page
 
 ![A collection and its members on the Collections page](collections-page.png)
 
-The Collections page lists every collection, where you can rename,
-reorder or dissolve them. Renaming one to the name of another merges
-the two, the incoming pages going after the last page of the other.
-Dissolving a collection removes the grouping and keeps the images.
+On the Collections page, renaming a collection to the name of another
+merges the two, the incoming pages going after the last page of the
+other. Dissolving a collection removes the grouping and keeps the
+images.
 
 The near-duplicate finder leaves pairs from the same collection alone,
 since the collection already says they belong together. The **find

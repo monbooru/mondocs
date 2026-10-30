@@ -17,8 +17,9 @@ anything you typed.
 
 Open **Settings -> Auto-Tagger** and press **Install** on one of the
 suggested models. The dialog tells you which files to download and
-where to put them (on Docker, it gives you a command that does it).
-Reload the page once the files are in place: the model is switched on
+where to put them, or gives you a command that fetches them. On
+Docker, run that command on the host, inside the folder you mounted at
+`/models`. Reload the page once the files are in place: the model is switched on
 as soon as monbooru finds them.
 
 ![The taggers list with one model installed and enabled](taggers-table.png)
@@ -61,8 +62,7 @@ merged, so a tag two models agree on is added once.
 - **Every night:** tick **Run enabled auto-taggers** in
   **Settings -> Schedule** (see [Maintenance](../maintenance.md#nightly-schedule)).
 
-A batch run shows its progress in the status bar and can be cancelled.
-Whatever it already tagged stays tagged.
+If you cancel a batch run, whatever it already tagged stays tagged.
 
 ## Videos and archives
 

@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} - {{ site.Title }}{{ end }}</title>
+  {{- if eq .Kind "404" }}
+  <script>(function () { var b = document.createElement('base'); b.href = {{ site.Params.root | default "/" }}; document.head.appendChild(b); })();</script>
+  {{- end }}
+  <script>try { var t = localStorage.getItem('mondocs-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <link rel="icon" type="image/png" href="{{ "favicon.png" | relURL }}">
+  <link rel="icon" type="image/png" href="{{ "light/favicon.png" | relURL }}" media="(prefers-color-scheme: light)">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/chroma.css" | relURL }}">
 </head>
@@ -13,7 +18,7 @@
   <header id="topbar">
     <label for="sidebar-state" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</label>
     <a href="{{ site.Home.RelPermalink }}" id="logo">
-      <img src="{{ "logo.png" | relURL }}" alt="" class="topbar-logo"><span>{{ site.Title }}</span>
+      <img src="{{ "logo.png" | relURL }}" alt="" class="topbar-logo art-dark"><img src="{{ "light/logo.png" | relURL }}" alt="" class="topbar-logo art-light"><span>{{ partial "wordmark.html" site.Title }}</span>
     </a>
     <nav id="nav">
       {{ $first := .FirstSection }}
@@ -21,6 +26,9 @@
       <a href="{{ .RelPermalink }}"{{ if eq $first . }} class="active"{{ end }}>{{ .Title }}</a>
       {{ end }}
     </nav>
+    <div id="topbar-right">
+      <div class="theme-switch" id="theme-switch"><span>theme:</span><button type="button" data-pick="dark">dark</button><span class="theme-sep">&middot;</span><button type="button" data-pick="light">light</button></div>
+    </div>
   </header>
   <div id="layout">
     <aside id="sidebar">

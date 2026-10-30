@@ -33,3 +33,27 @@ addEventListener('click', function (e) {
   }, function () {});
   try { history.replaceState(null, '', link.getAttribute('href')); } catch (e) {}
 });
+
+var themeIcons = Array.prototype.map.call(document.querySelectorAll('link[rel="icon"]'), function (l) { return l.getAttribute('href'); });
+function applyTheme(pick) {
+  var light = pick ? pick === 'light' : matchMedia('(prefers-color-scheme: light)').matches;
+  if (pick) document.documentElement.dataset.theme = pick;
+  document.querySelectorAll('#theme-switch button').forEach(function (b) {
+    b.setAttribute('aria-pressed', String((b.dataset.pick === 'light') === light));
+  });
+  if (pick) document.querySelectorAll('link[rel="icon"]').forEach(function (l) {
+    l.setAttribute('href', themeIcons[light ? 1 : 0]);
+  });
+}
+var storedTheme = null;
+try { storedTheme = localStorage.getItem('mondocs-theme'); } catch (e) {}
+applyTheme(storedTheme);
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
+  if (!document.documentElement.dataset.theme) applyTheme(null);
+});
+addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('#theme-switch button');
+  if (!b) return;
+  try { localStorage.setItem('mondocs-theme', b.dataset.pick); } catch (err) {}
+  applyTheme(b.dataset.pick);
+});

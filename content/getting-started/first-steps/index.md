@@ -5,8 +5,7 @@ weight: 20
 
 Now you have monbooru running and an empty gallery. This page walks
 through the basic loop once with a handful of images: add them, tag
-them, find them again, and file them away. Each step has its own guide
-page with more detail.
+them, find them again, and file them away.
 
 ## Add a few images
 
@@ -30,8 +29,7 @@ of things you haven't looked at yet.
 
 ## Tag one
 
-Click a thumbnail to open its page: the image, its tags, and what
-monbooru knows about the file.
+Click a thumbnail to open its page.
 
 ![A detail page: the image, its tags, and the metadata panels](detail-page.png)
 
@@ -53,12 +51,9 @@ images tagged `red_hair`, not tagged `sketch`, and rated general.
 [Searching](../../guides/searching/index.md) has the rest of the
 syntax.
 
-Everything in the sidebar is clickable and narrows the search: the
-tags on the current results, the folder tree, your saved searches.
-Tick thumbnails in the grid and a batch bar appears, with actions for
-everything you ticked; it can also take every result of the search at
-once. On an image's page, the arrow keys step through the search
-results.
+Click anything in the sidebar (a tag, a folder, a saved search) to
+narrow the search. Tick thumbnails and a batch bar appears, with
+actions for everything you ticked or for the whole search.
 
 The rating buttons in the footer are the SFW ceiling: click a level to
 hide everything rated above it.
@@ -71,11 +66,11 @@ do it from the batch bar.
 
 ## Help inside the app
 
-- Type `system:` in the search bar for a list of every search filter,
-  with hints for each.
-- Press `?` on any page for the keyboard shortcuts that work there.
-  Nearly everything can be done from the keyboard.
-- The `help` link in the footer opens these docs.
+Type `system:` in the search bar for a list of every search filter,
+with hints for each.
+
+{{< tip >}}Press `?` on any page for the keyboard shortcuts that work
+there. Nearly everything can be done from the keyboard.{{< /tip >}}
 
 ![The keyboard shortcuts overlay](shortcuts.png)
 

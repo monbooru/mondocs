@@ -34,10 +34,9 @@ already; the **bundled** one brings its own.
 
 ## Installed
 
-On Windows there's an installer; on Linux, an AppImage and a Flatpak.
-They keep their files here:
+On Windows there's an installer; on Linux, an AppImage and a Flatpak. They keep their files here:
 
-| | Linux | Windows |
+| | Linux (AppImage, AUR) | Windows |
 |---|---|---|
 | Settings and site profiles | `~/.config/monloader` | `%AppData%\monloader` |
 | Queue, cookies and gallery-dl's files | `~/.local/share/monloader` | `%LocalAppData%\monloader` |
@@ -46,6 +45,17 @@ They keep their files here:
 
 A Flatpak keeps all of it under
 `~/.var/app/io.github.monbooru.Monloader/` instead.
+
+## First run
+
+The portable and installed builds open a browser on a short setup page
+the first time they start. Under **Connect to monbooru**, check the
+**monbooru API URL**; the default fits a monbooru on the same computer.
+If monbooru is already running, tick **Ask monbooru to pair** and
+approve the request in monbooru under **Settings -> Plugins**. Under
+**Who can reach it?**, pick **Other devices on the LAN too** if
+monsender will send from a browser on another device; **Only this
+computer** keeps monloader to this machine.
 
 ## Next
 

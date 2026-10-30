@@ -22,9 +22,6 @@ provider under **Settings -> Auto-Tagger** (or set
 | `openvino` | Intel GPUs |
 | `coreml`, `coremlv2` | Apple hardware |
 
-monbooru checks the provider when you save and refuses it, with an
-error saying why, when the library or the device isn't there.
-
 The Windows downloads already carry a runtime built with DirectML, so
 `directml` works with nothing else to install. Every other provider
 needs an ONNX Runtime built for it: take one from the
@@ -47,8 +44,8 @@ volume and later starts are quick.
 
 **Settings -> Auto-Tagger -> Parallel workers** (`tagger.parallel`,
 default 4) is how many images are prepared and tagged at once. On a
-GPU, raise it if the GPU sits idle waiting for images. DirectML tags
-one image at a time whatever you set.
+GPU, raise it if the GPU sits idle waiting for images. DirectML
+tags one image at a time whatever you set.
 
 ## More models
 
@@ -56,7 +53,8 @@ The [monbooru-plugins](https://github.com/monbooru/monbooru-plugins)
 registry lists every tagger monbooru supports in `TAGGERS.md`, each
 one a folder under `taggers/`. To add one, copy its folder into the
 models folder: it shows up in **Settings -> Auto-Tagger** with an
-**Install** button to download the weights, which the folder does not hold.
+**Install** button that shows the commands to fetch the weights, which
+the folder does not hold.
 
 A registry folder holds a `model.json` (the description, the default
 thresholds and the files to download), and when the model needs them
@@ -153,7 +151,7 @@ their registry folders, and any other model from the registry brings
 its own as `dispatch_default.json`. Your file
 goes on top: a rule for the same label replaces the shipped one, a new
 label is added. **Reset** removes your file and keeps the shipped
-rules. The **Export** tab of the Configure dialog shows the
+rules. The **export** tab of the Configure dialog shows the
 merged result, ready to copy over the folder's `dispatch_default.json`
 in a pull request to the registry or to drop next to `model.onnx` on
 another install.
@@ -166,18 +164,16 @@ to free RAM and VRAM. **Settings -> Auto-Tagger** has the delay
 run. **Settings -> Maintenance -> Free memory** unloads it on the
 spot.
 
-Tagging runs in a separate `tagger-worker` process, so unloading gives
-everything back to the system, GPU libraries included. If that
-process gives you trouble, `MONBOORU_TAGGER_BACKEND=inproc` runs
-tagging inside monbooru itself instead.
+Tagging runs in a separate `tagger-worker` process. If it gives you
+trouble, `MONBOORU_TAGGER_BACKEND=inproc` runs tagging inside monbooru
+itself instead.
 
 ## Videos and archives
 
 A video is tagged from five frames and an archive from its pages, and
 a label has to show up on several of them to stick.
 `tagger.aggregation.min_hit_fraction` (default `0.05`) sets what share
-of the frames that is, never fewer than 2 or more than 10 frames. Set
-it to `0` and one frame is enough.
+of the frames that is. Set it to `0` and one frame is enough.
 
 ## Environment variables
 

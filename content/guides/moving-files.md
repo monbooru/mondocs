@@ -52,16 +52,17 @@ known about the file itself.
 **Settings -> General -> Where received files go** decides where
 uploads and files sent by other apps land, and what they're called.
 Both halves take the same tokens: `inbox/{year}-{month}` and
-`{name}-{hash:8}` file and name every incoming file, and the line
-under the setting shows where a file arriving right now would end up.
-Files [monloader](../addons/monloader/_index.md) sends can also use
+`{name}-{hash:8}` file and name every incoming file. Files
+[monloader](../addons/monloader/_index.md) sends can also use
 `{source}` and `{post_id}`: `{source}-{post_id}` names a download
 `danbooru-4821993.jpg`.
 
 Files you drop into the gallery folder yourself are left where you put
 them, unless you tick **Apply to files found on disk too**. Either
 way, this only applies to new files: nothing already in your library
-is moved behind your back.
+is moved behind your back. To rename and file those images too, use
+**Settings -> Maintenance -> Apply destination**. With the folder left
+blank, every image keeps its folder and only its name changes.
 
 To move images to another gallery, see
 [Transfer](galleries/index.md#transfer).

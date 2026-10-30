@@ -17,21 +17,20 @@ setup_done = false                       # first-run setup page, desktop install
 bind_address = "0.0.0.0:8456"
 base_url     = "http://localhost:8456"   # shown on the API docs page
 name         = ""                        # rename the UI; empty = monloader
-logo         = ""                        # path to a logo and tab icon image
-custom_css   = ""                        # path to a stylesheet, see Look below
+theme        = ""                        # dark, light, legacy-dark, legacy-light or a theme in themes/, see Look below; empty = dark
 
 [monbooru]
 api_url         = "http://monbooru:8455" # where monloader reaches monbooru
 api_token       = ""                     # written by pairing
 web_url         = ""                     # monbooru's address as your browser sees
-                                         # it, for links; empty = api_url
+                                         # it, for links; empty = no links
 default_gallery = ""                     # empty = monbooru's active gallery
 paused          = false                  # set by the footer light's pause
 
 [downloader]
 concurrency            = 1               # downloads at once; applies on restart
 max_items_per_job      = 200             # posts per job for a tag search
-default_folder         = "downloads"     # monbooru subfolder for downloads
+default_folder         = ""              # monbooru subfolder for downloads; blank = monbooru's "Where received files go"
 success_retention_days = 3               # clear finished jobs after this many days
 history_retention_days = 14              # clear everything else after this many days
 
@@ -48,6 +47,7 @@ supportedsites_path = ""                 # site table override; empty = the buil
 enable_password       = false            # see Password below
 password_hash         = ""
 session_lifetime_days = 7
+# named API tokens live under [[auth.tokens]]; create them in Settings -> Authentication
 
 [log]
 level = "warn"                           # warn / info / debug
@@ -173,7 +173,7 @@ field for it in the Settings page.
 
 ## gallery-dl
 
-**Settings -> advanced** can install any gallery-dl release without
+**Settings -> Advanced** can install any gallery-dl release without
 waiting for a monloader update, and go back to the bundled version in
 one click. The installed copy is kept with monloader's own files, so
 it survives updates.
@@ -184,9 +184,9 @@ keys winning. It's the way to set any gallery-dl option monloader has
 no field for. Per-site options go in the site's own dialog instead
 (see [Sites and credentials](guides/sites/index.md)).
 
-Downloads pass through a scratch folder, `/work` in Docker, and are
-deleted from it once monbooru has them. It doesn't need a volume; give
-it a `tmpfs` mount if you'd like it in RAM.
+Downloads pass through a scratch folder and are deleted from it once
+monbooru has them. In Docker it doesn't need a volume; mount a `tmpfs`
+at `/work` if you'd like it in RAM.
 
 ## Password
 
@@ -204,12 +204,12 @@ Put the result in `auth.password_hash` and set
 
 ## Look
 
-`name` and `logo` under `[server]` change the name in the top bar and
-page titles, and the logo and tab icon. `custom_css` points at a
-stylesheet served after monloader's own, so a `:root` block in it
-wins. monloader uses the same base colour variables as
-[monbooru's themes](../../advanced/themes.md) (`--bg`, `--fg`,
-`--accent` and so on), so a theme's colours carry over.
+`name` under `[server]` changes the name in the top bar and page
+titles. monloader takes the same theme folders as monbooru: put one in
+`themes/`, next to `monloader.toml`, and pick it under
+**Settings -> Themes** (`theme` holds the choice). A theme's logo, tab
+icon and drawings come with it. See
+[Themes](../../advanced/themes.md).
 
 ## Log levels
 

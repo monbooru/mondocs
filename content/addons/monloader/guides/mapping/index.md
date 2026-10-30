@@ -69,28 +69,28 @@ them under one source in monbooru, a site's settings have two fields:
   monsender uses the same list to recognize the site on a mirror.
 
 For a host that isn't any site gallery-dl knows (a wiki you save
-images from, say), give it a label under **host labels**, below the
+images from, say), give it a label under **Host labels**, below the
 sites tables. Labels only apply to new downloads.
 
 ## Editing a site's profile
 
-![The mapping tab of a site's edit dialog](site-profile.png)
+![The mappings tab of a site's edit dialog](site-profile.png)
 
 When a site's tags or ratings come out wrong, fix them on the
-**profile** and **mapping** tabs of its settings. Changes apply to the
+**profile** and **mappings** tabs of its settings. Changes apply to the
 next download.
 
 - **Family** decides how ratings and tag categories are read. Most
   sites that aren't boorus use `generic`. **Kind** says whether a
   gallery is a manga, bundled into one archive.
-- The **rating map** fixes a site whose letters read wrong: a site that
+- The **Rating map** fixes a site whose letters read wrong: a site that
   uses `e` for "everyone" would otherwise come out explicit.
-- The **category map** sends one of the site's tag categories to a
+- The **Category map** sends one of the site's tag categories to a
   different monbooru category, or drops it.
 - **Tag rules** fix single tags: rename a misspelled one, move it to
   another category with a `category:` prefix, or leave the replacement
   empty to drop it.
-- Setting the **md5 search** URL lets the site take part in
+- Setting the **MD5 search** URL lets the site take part in
   [reverse lookup](../lookup/index.md).
 
 Your profile is saved as one file, and the **export** tab gives it to

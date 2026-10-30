@@ -23,8 +23,8 @@ and looking up where an image came from are the job of the optional
 
 > **Keep it on your home network.** monbooru is meant for a trusted
 > network or a private VPN. It has an optional password but
-> isn't thought for exposure to the open internet. If you expose it anyway,
-> put proper reverse protections in front.
+> isn't made for exposure to the open internet. If you expose it anyway,
+> put it behind a reverse proxy with proper protections.
 
 ## What it can do
 

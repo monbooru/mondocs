@@ -19,9 +19,7 @@ the results down.
 | `*hair*` | any tag with "hair" in it |
 | `"re:zero"` | a tag with a colon in its name; quotes keep it a tag |
 
-Case doesn't matter. The search box suggests tags as you type, each
-with a count of the images that have it alongside what you already
-typed.
+Case doesn't matter.
 
 Tags live in categories (`character`, `artist`, `copyright` and so on,
 see [Tags](../tags/index.md)). Put the category in front to be
@@ -69,18 +67,16 @@ Add `missing:true` to see them.
 
 `similar:1042` finds images that share tags with image 1042, closest
 first. It catches what a pixel comparison can't: a redraw, a recolour,
-another picture from the same set. Each result is badged with its
-score as a percentage, and `similar:1042~0.7` keeps only the ones at
-70% or better. The **[more like this]** link on an image's page runs
-this search for you.
+another picture from the same set. `similar:1042~0.7` keeps only the
+ones at 70% or better. The **[more like this]** link on an image's
+page runs this search for you.
 
 ## Everything else: the system: list
 
 There are many more filters: file hashes, how an image arrived,
-generation settings, relation types, lookup states and so on. Rather
-than listing them here, monbooru lists them where you need them: type
-`system:` in the search bar and a dropdown shows every filter with a
-hint for each. Pick one and it shows the values it takes.
+generation settings, relation types, lookup states and so on. Type
+`system:` in the search bar and a dropdown lists every filter with a
+hint for each, and the values it takes once you pick one.
 
 ![The system: dropdown in the search bar](search-system.png)
 
@@ -89,9 +85,11 @@ generation data, including searching inside ComfyUI workflows.
 
 ## Sorting and saving
 
-Results can be sorted by date added (newest first, the default), file
-size, or collection order. Random order (`R`) shuffles them, and the
-shuffle stays put as you turn pages.
+Random order (`R`) keeps the same shuffle as you turn pages.
+
+The play button at the end of the search controls (`w`) plays the
+search as a slideshow, or only the images you've ticked. On an image's
+page, the same button plays on through the search from that image.
 
 To keep a search around, run it and press **Save search** beside the
 search bar. Saved searches show in the sidebar, one list per gallery.

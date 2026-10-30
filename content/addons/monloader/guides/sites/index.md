@@ -18,7 +18,7 @@ The sites tables in **Settings** list the sites you've set up, not the
 sites that work, so they start short. Add a site with the search box
 above them.
 
-The **login** column says what a site needs, and flags a site that's
+The **Login** column says what a site needs, and flags a site that's
 missing it:
 
 | Login | Means | For example |
@@ -44,22 +44,20 @@ tab.
   default one;
 - enter its **credentials**, which are never shown back once saved;
 - fix how its tags and ratings are read, on the **profile** and
-  **mapping** tabs (see [Metadata mapping](../mapping/index.md#editing-a-sites-profile));
+  **mappings** tabs (see [Metadata mapping](../mapping/index.md#editing-a-sites-profile));
 - add extra [gallery-dl options](https://gdl-org.github.io/docs/configuration.html)
   for anything monloader has no field for.
 
-**Test** tries the site with your credentials and tells you whether
-it works, needs a login, or is blocked by a captcha. **Remove** takes
-all your settings for the site away again.
+**Test** tries the site with your credentials and tells you whether it
+works, needs a login, or is blocked by a captcha.
 
 ## Cookies
 
 Some sites only work with a logged-in session. Log in with your
 browser, export the site's cookies in the `cookies.txt` format (a
-browser extension can do it), and paste them into **paste cookies** on
-the site's auth tab. monloader saves them to a file only it can read,
-and the page only ever shows how many cookies it holds. When the
-session expires, export and paste again.
+browser extension can do it), and paste them into **Paste cookies** on
+the site's auth tab. monloader saves them to a file only it can read.
+When the session expires, export and paste again.
 
 The same settings can be written in `monloader.toml`; see
 [Configuration](../../configuration.md).

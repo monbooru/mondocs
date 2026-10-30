@@ -11,7 +11,7 @@ permissions and restart.
 
 ## "Library too old to upgrade directly"
 
-monbooru may upgrades a gallery's database from the last two minor
+monbooru upgrades a gallery's database from the last two minor
 releases. A gallery last opened by something older stops the start
 with this message, and names a release that still upgrades it: run
 that release once against the same folders, then start the current

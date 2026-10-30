@@ -33,14 +33,14 @@ public data. To skip most of the first sync, start from a snapshot
 
 1. Give the copy a place to live. A desktop install already has a
    `ptr` folder next to its data; on Docker, mount a volume at `/ptr`
-   (the compose file has a commented example). The **data path** in
-   **Settings -> ptr** can point anywhere with enough room; on the
-   Flatpak, grant access to a folder outside its sandbox first with.
+   (the compose file has a commented example). The **Data path** in
+   **Settings -> PTR** can point anywhere with enough room; on the
+   Flatpak, grant access to a folder outside its sandbox first.
 2. Open **PTR** in the top bar, check the free space, and click
-   **enable ptr sync**.
+   **Enable PTR sync**.
 
-Unticking **enable sync and answer sha256 lookups** in **Settings ->
-ptr** turns it off and keeps the copy; **delete ptr data** frees the
+Unticking **Enable sync and answer SHA-256 lookups** in **Settings ->
+PTR** turns it off and keeps the copy; **Delete PTR data** frees the
 disk.
 
 ![The PTR page once the index has caught up](ptr-synced.png)
@@ -63,8 +63,7 @@ from scratch. monloader then only fetches the days since it was made.
 ## Using it
 
 The PTR answers only once the copy has caught up: a half-built copy
-would give a few of a file's tags as if they were all of them. After
-that, **pause** on the PTR page stops the downloads.
+would give a few of a file's tags as if they were all of them.
 
 From then on, monbooru can use it to
 [look up images](../../../../guides/lookup/index.md) and to find
@@ -79,9 +78,9 @@ With a personal PTR account, you can also give back the tags you
 curate yourself, from monbooru (see
 [Contributing to the PTR](../../../../guides/ptr-contributions/index.md)).
 
-Create the account from the **account** card on the PTR page. It's
+Create the account from the **Account** card on the PTR page. It's
 anonymous, and volunteers (janitors) review what you send. The account
 is its key: lose the key and you lose the account, so use the card's
 button to reveal it and keep a copy somewhere safe. The
-**contributions** card keeps a record of what you sent, and anything
+**Contributions** card keeps a record of what you sent, and anything
 that failed on the way can be retried from there.

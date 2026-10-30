@@ -34,6 +34,12 @@ The compose file also starts [monloader](../addons/monloader/_index.md),
 the optional companion for downloading and reverse lookup. Delete its
 block if you don't want it.
 
+On Podman, you can run it as a Quadlet instead: copy
+[`monbooru.container`](https://github.com/monbooru/monbooru/blob/main/docker/monbooru.container)
+and the
+[`monbooru.network`](https://github.com/monbooru/monbooru/blob/main/docker/monbooru.network)
+it joins into `~/.config/containers/systemd/`.
+
 ## Portable
 
 Download a **portable** build for your system from the

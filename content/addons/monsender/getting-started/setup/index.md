@@ -17,12 +17,11 @@ home.
 ## 2. Connect to monloader
 
 Click **connect to monloader**. Then open monloader in another tab, go
-to **Settings -> pairing**, and approve the request in the **monsender
+to **Settings -> Pairing**, and approve the request in the **monsender
 extension** block.
 
 ![The pairing request waiting in monloader](approve-request.png)
 
-The options page then says "paired with monloader", with a green dot.
 If it gave up waiting before you approved, click **connect to
 monloader** again and approve the new request.
 
@@ -36,9 +35,8 @@ gallery-dl versions means you're set. Anything else is covered in
 
 ## If you change the URL later
 
-The extension's key belongs to the monloader that issued it, so saving
-a different URL forgets the key rather than send it to another
-server. Click **connect to monloader** again to pair with the new
-address.
+Saving a different URL forgets the extension's key, so it's never sent
+to another server. Click **connect to monloader** again to pair with
+the new address.
 
 Next: [sending pages and images](../../guides/sending.md).

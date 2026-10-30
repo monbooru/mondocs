@@ -19,7 +19,7 @@ and a contribution account created on monloader's PTR page.
 An image's page has a **Public Tag Repository** panel under the tag
 box. It says how many of the image's tags the PTR doesn't have yet,
 and how many tags the PTR has that your image doesn't. **Pull tags**
-brings the second kind in; **contribute...** sends the first kind out.
+brings the second kind in; **Contribute...** sends the first kind out.
 
 The contribute dialog has two lists:
 
@@ -32,9 +32,8 @@ The contribute dialog has two lists:
   doesn't. Your image lacking a tag doesn't make it wrong, so only
   tick one that is actually wrong for the picture, and give a reason.
 
-**send to PTR** sends it under your account and shows what went
-through. Added tags apply right away. Petitions go to the janitors
-with your reason, and can't be taken back once sent.
+Added tags apply right away. Petitions go to the janitors with your
+reason, and can't be taken back once sent.
 
 ## From a tag
 
@@ -50,7 +49,7 @@ pull would bring. You can then keep your own spelling and add the
 PTR's as aliases, or switch your images over to the PTR's name and
 keep yours as the alias. Either way, the two are linked from then on.
 
-Its **contribute...** dialog works like the image one: **suggest**
+Its **Contribute...** dialog works like the image one: **suggest**
 sends aliases and implications you declared that the PTR doesn't have,
 and **petition removal** asks for wrong ones to go. Both need a short
 reason for the janitors. The dialog only sends what your own tags

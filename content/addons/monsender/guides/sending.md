@@ -24,9 +24,8 @@ knows is covered in [Sites and credentials](../../monloader/guides/sites/index.m
 
 ## The toolbar button
 
-The popup shows the page you're on, its label, and a **send page**
-button. The button works on any web page, labelled or not: monloader
-makes the final call, and a page it can't handle comes back as "not a
+**send page** works on any web page, labelled or not: monloader makes
+the final call, and a page it can't handle comes back as "not a
 supported site".
 
 The result shows in the popup within a few seconds. If monloader takes
@@ -35,10 +34,9 @@ popup says "queued" and the job carries on in the queue below.
 
 ## The keyboard shortcut
 
-Ctrl+Shift+L sends the current page without opening the popup. The
-toolbar icon shows the result instead: a badge counts what you sent,
-coloured by the last outcome (green added, grey already there, indigo
-still queued, red failed). Opening the popup clears it.
+Ctrl+Shift+L sends the current page without opening the popup. A badge
+on the toolbar icon shows how it went, and opening the popup clears
+it.
 
 ## Right-click an image or video
 
@@ -67,12 +65,11 @@ outcomes in short words (new, dup, skip, fail...), explained on
 Hover a failed row to see why.
 
 Each job can be retried. When a job skipped posts monloader had
-downloaded before, **[force download]** fetches them anyway, the way to
-get back something you deleted in monbooru. A tag search that hit
+downloaded before, **[force download]** fetches them anyway, the way
+to get back something you deleted in monbooru. A tag search that hit
 monloader's limit offers **[continue]** for the next batch and
-**[fetch all]** for the rest. **[clear all]** removes finished jobs.
+**[fetch all]** for the rest.
 
 The pause button holds monloader's whole queue: the download in
 progress finishes, and nothing new starts until you resume. It's the
-same pause as on monloader's own pages. Click the monsender name at
-the top to open monloader's queue page.
+same pause as on monloader's own pages.

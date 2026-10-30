@@ -17,9 +17,9 @@ lowercase and can use almost any character except spaces, quotes and
 `*`, so `girls'_frontline`, `fate/grand_order` and `東方project` all
 work.
 
-To tag many images at once, tick them in the gallery and use **Add
-tags** in the batch bar. **Remove tags** next to it takes tags off
-again, by name or by where they came from.
+To tag many images at once, tick them in the gallery and press
+**Add** in the batch bar's tags group. **Remove** next to it takes
+tags off again, by name or by where they came from.
 
 In an image's tag list, click a tag to search for it. The `?` in front
 of it opens the tag's own page (see [Notes and links](#notes-and-links)).
@@ -34,7 +34,15 @@ and `rating`. Put the category in front when you type:
 `artist:"john doe" blue_eyes 1girl` adds `john_doe` as an artist and
 the other two as general tags.
 
-The **Categories** page lets you recolour categories and add your own.
+The **Categories** page lets you recolour categories, add your own and
+change their order: drag a row to move its group of tags up or down on
+the image page and in the gallery sidebar.
+
+The same name can sit in two categories as two different tags, like
+`artist:kirin` and `character:kirin`. The Tags page lists names like
+that under **Conflicts**, since most of them are one tag filed twice
+that you'll want to merge. When the two really are different things,
+select them and use **Mark distinct**, and they stop showing up there.
 
 ## Ratings and the SFW ceiling
 
@@ -65,15 +73,15 @@ list shows it next to the tag:
 
 - `87%`: only an auto-tagger vouches for this tag, and that's how sure
   it was. The number goes away once you or a booru apply the tag too.
-- `x3`: three sources agree on it. Hover to see which ones.
+- `x3`: three sources agree on it.
 - Struck through and marked `stale`: the source that gave you the tag
   stopped listing it the last time it was refreshed. The tag stays
   until you decide; **remove all** at the bottom of the list clears
   every stale tag at once.
 
-The **[categories] / [sources]** switch above the list regroups it by
-source, so you can see what each one added. Removing a tag in that
-view only withdraws that source's claim: if another source also has
+The **group by: [category] / [source]** switch above the list regroups
+it by source, so you can see what each one added. Removing a tag in
+that view only removes that source's copy: if another source also has
 the tag, it stays.
 
 You can search on all of this: `tagged:user` finds images you tagged
@@ -118,7 +126,7 @@ An **implication** says one tag always brings another along:
 Tags page or on the tag's own page, and every image with
 `hatsune_miku`, now and later, gets `vocaloid` too. Implied tags are
 real tags as far as search is concerned. In an image's tag list they
-sit indented under the tag that brought them, and leave when it does.
+sit indented under each tag that brought them, and leave when it does.
 
 With monloader and its copy of the Public Tag Repository set up,
 **Find aliases and implications** on the Tags page fetches the aliases

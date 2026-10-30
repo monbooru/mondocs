@@ -1,0 +1,4 @@
+<div class="tip">
+  {{ partial "mascot.html" "sparkle-head" }}
+  <div><span class="tip-label">Tip</span>{{ .Inner | .Page.RenderString (dict "display" "block") }}</div>
+</div>

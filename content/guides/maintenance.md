@@ -22,13 +22,22 @@ you can clear them out.
 thumbnails** makes them all again, manga pages included.
 
 **You're turning on a feature for a library you already have.** New
-files get this done as they arrive, so these catch up the old ones:
+files are handled as they arrive; these catch up the images you
+already had:
 
 - **Compute hashes** for finding [near-duplicates](relations/index.md);
 - **Meta tags** for the [tags monbooru writes itself](tags/index.md#where-tags-come-from),
   and **Remove meta tags** to take them off again;
 - **Re-extract metadata** when an update reads more from your files,
   such as [generation data](ai-metadata.md) or comic archive details.
+
+**You want to start your tags over, or tidy up after an import.**
+**Unused tags** deletes the tags no image carries. The ones you gave an
+alias, an implication or a note stay unless you tick the box. **Reset
+tags** deletes every tag, alias and implication in the gallery, the
+ratings aside, so you can tag from scratch; export the gallery first if
+you might want them back. To empty a single category instead, use
+**Clean up** next to it on the Categories page.
 
 **You want disk space or memory back.** **Vacuum database** compacts
 the database file, and **Free memory** hands back the memory monbooru

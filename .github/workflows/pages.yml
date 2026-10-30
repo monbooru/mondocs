@@ -28,6 +28,8 @@ jobs:
         with:
           fetch-depth: 0
       - run: ./build.sh
+        env:
+          HUGO_PARAMS_ROOT: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public

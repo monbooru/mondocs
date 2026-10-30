@@ -12,8 +12,8 @@ you know about it. All of it is on the image's page.
 
 A source is a link to where the image lives online: a booru post, an
 artist's page. An image can have several. monloader adds them when it
-downloads or [looks an image up](../lookup/index.md), and **[+ add]**
-records one by hand. **[set primary]** picks the one listed first.
+downloads or [looks an image up](../lookup/index.md), and you can add
+your own.
 
 Open a source and it shows what the booru post said about the image:
 the artist's original upload it points to (often a pixiv or twitter
@@ -34,8 +34,7 @@ A free-text note on the image, just for you (`e n` to edit it).
 Annotations are boxes drawn on the image with some text, the way
 boorus mark up translated speech bubbles. A booru lookup brings in the
 post's annotations, and you can draw your own on the image's page.
-They show when you hover over the image; hovering one in the list
-highlights its box, and **[hide annotations]** hides them all.
+They show when you hover over the image.
 
 ## Formatting
 

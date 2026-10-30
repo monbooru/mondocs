@@ -43,9 +43,9 @@ On an image's page:
   relations. Your old file is gone after that, so it asks first.
 
 For many images at once, tick them (or take the whole search) and
-press **Find tags** in the batch bar. It can refresh every source the
-images have, look them up by hash, or switch them in or out of the
-nightly lookup below.
+press **Find** in the batch bar's tags group. It can refresh every
+source the images have, look them up by hash, or switch them in or out
+of the nightly lookup below.
 
 ## Looking up a library overnight
 
@@ -60,7 +60,7 @@ and each night it works through the images that have no source yet.
   when monloader's copy of the PTR gets new data.
 - The **online boorus** pass costs a real request per image, so
   monloader only accepts so many a day; set that under monloader's
-  **Settings -> lookup**. When the day's allowance runs out, the pass
+  **Settings -> Lookup**. When the day's allowance runs out, the pass
   picks up where it stopped the next night.
 
 An image that isn't found waits longer and longer before the next try,

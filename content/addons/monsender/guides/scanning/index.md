@@ -23,8 +23,7 @@ images arrive in monbooru without tags (see
   images, and MP4 and WebM videos.
 - Nothing smaller than the **min image size** (64 pixels by default),
   which keeps out icons and buttons.
-- At most the **scan cap** (100 by default). When a page holds more,
-  the header says so: "scan: 100 of 350 images".
+- At most the **scan cap** (100 by default).
 
 Both are in [settings](../../settings/index.md).
 

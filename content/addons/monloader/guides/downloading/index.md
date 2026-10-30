@@ -36,36 +36,32 @@ A failed item also carries an error code; the list is in
 
 ## Big searches
 
-A tag search or an artist page can run to thousands of posts, so a job
-takes by default at most 200 of them (change that in **Settings -> downloads**).
-You can change this temporarily in the menu beside the add bar. It remembers your last
-pick. A job that hit its limit offers **get next N** for the next batch
-and **get all** for the rest. Pools and manga
+A tag search or an artist page can run to thousands of posts, so a job takes at most 200 of them by default (**Settings -> Downloads**). To change it on the fly, use the menu beside the add bar; it remembers your last pick. A job that hit its limit offers **Get next N** for the next batch
+and **Get all** for the rest. Pools and manga
 are exempt: you asked for the whole thing, so you get all of it.
 
 ## Watching a search
 
 Watch a tag search or an artist page and monloader checks it again on a
 schedule, so new posts keep landing in monbooru without you pasting the
-URL again. Click **watch** on a finished search in the queue, or paste
+URL again. Click **Watch** on a finished search in the queue, or paste
 the URL on the **Watched** page and pick how often to check it. 
 
 ## Retrying
 
-- **retry** runs a job again. Posts it already downloaded are skipped
+- **Retry** runs a job again. Posts it already downloaded are skipped
   (`skipped_archive`), unless the job had failed.
-- **force download** fetches everything again, skipped posts included:
+- **Force download** fetches everything again, skipped posts included:
   the way to get back a post whose image you deleted in monbooru.
 - Sending a **single post** again always fetches it again, and
   monbooru adds any new tags to the image it has. That's how to
   refresh one post.
-- **cancel** stops a job; posts already done keep their outcome.
 
 Stopping or restarting monloader cancels the jobs that hadn't
 finished. They stay in the list so you can retry them, and one that was
 mid-download comes back marked **interrupted**, one click away from
 being queued again. Finished jobs clear themselves after a few days;
-the delays are in **Settings -> downloads**.
+the delays are in **Settings -> Downloads**.
 
 When a download fails and you want to know why, the `[?]` next to a
 finished item fetches that post again with gallery-dl's debug log on,
@@ -73,10 +69,10 @@ and shows you the log. Nothing is sent to monbooru.
 
 ## Pause and resume
 
-The pause button on the queue (also in the monsender popup) holds all
-downloads: the one in progress finishes, then nothing new starts until
-you resume. Handy to line up a batch before letting it run. A restart
-un-pauses.
+The **pause** button in the top bar (also in the monsender popup)
+holds all downloads: the one in progress finishes, then nothing new
+starts until you resume. Handy to line up a batch before letting it
+run. A restart un-pauses.
 
 ## Pools and manga
 

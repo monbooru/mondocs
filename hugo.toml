@@ -1,6 +1,6 @@
 baseURL = '/'
 languageCode = 'en'
-title = 'monbooru docs'
+title = 'mondocs'
 theme = 'monbooru'
 enableGitInfo = true
 
@@ -17,6 +17,9 @@ enableDefault = true
 
 [markup.highlight]
 noClasses = false
+
+[params]
+  root = '/'
 
 [[cascade]]
   [cascade._build]

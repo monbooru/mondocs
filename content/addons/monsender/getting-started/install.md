@@ -18,7 +18,7 @@ Firefox keeps it up to date.
 There's no Chrome Web Store listing. Instead, each release has a Chrome
 build:
 
-1. Download `monsender-chrome-<version>.zip` from the
+1. Download `monsender-chrome-v<version>.zip` from the
    [releases page](https://github.com/monbooru/monsender/releases) and
    unzip it somewhere it can stay.
 2. Open `chrome://extensions` and switch on **Developer mode** (top

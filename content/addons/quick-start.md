@@ -24,11 +24,11 @@ Then open `http://localhost:8456`.
 ## 2. Pair monloader with monbooru
 
 1. In monloader, go to **Settings**. Under **monbooru**, the default
-   api url `http://monbooru:8455` is right for the shared compose
+   API URL `http://monbooru:8455` is right for the shared compose
    network.
-2. Under **pairing**, click **connect to monbooru**.
+2. Under **Pairing**, click **Connect to monbooru**.
 3. In monbooru, open **Settings -> Plugins** and approve the request.
-4. Back in monloader, pick the **default gallery** downloads go to, and
+4. Back in monloader, pick the **Default gallery** downloads go to, and
    save.
 
 To try it, paste the URL of a booru post into monloader's add bar. A
@@ -38,15 +38,16 @@ moment later the image is in monbooru, with its tags.
 
 1. [Install monsender](monsender/getting-started/install.md) in
    Firefox or Chrome.
-2. In the extension's options, set the monloader URL, the address your
-   browser reaches it at: `http://localhost:8456` on the same machine,
-   or your server's address, like `http://192.168.1.20:8456`.
+2. In the extension's options, set the monloader URL to
+   `http://localhost:8456`. The compose file only publishes monloader's
+   port on the machine itself; to reach it from another device, change
+   its `ports:` line and use your server's address instead.
 3. Click **connect to monloader**, then approve the request in
-   monloader under **Settings -> pairing**.
+   monloader under **Settings -> Pairing**.
 
-Now open a post on a booru and press the extension's toolbar button
-(or Ctrl+Shift+L). The page goes to monloader, downloads, and shows up
-in monbooru.
+Now open a post on a booru, click the extension's toolbar button and
+press **send page** in its popup (Ctrl+Shift+L sends straight away).
+The page goes to monloader, downloads, and shows up in monbooru.
 
 ## Where next
 

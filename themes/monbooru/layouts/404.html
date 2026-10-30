@@ -1,6 +1,11 @@
 {{ define "main" }}
 <article class="doc">
-  <div class="doc-head"><h1>Page not found</h1></div>
-  <p>This page does not exist. <a href="{{ site.Home.RelPermalink }}">Back to the documentation</a>.</p>
+  <div class="notfound">
+    {{ partial "mascot.html" "lost" }}
+    <div class="notfound-text">
+      <div class="doc-head"><h1>Page not found</h1></div>
+      <p>This page does not exist, or it moved. <a href="{{ site.Home.RelPermalink }}">Back to the documentation</a>, or pick a section in the sidebar.</p>
+    </div>
+  </div>
 </article>
 {{ end }}

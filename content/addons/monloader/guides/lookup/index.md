@@ -25,13 +25,12 @@ wins. There are two kinds of source:
 - **A similarity service**, IQDB or SauceNAO. These compare what the
   picture looks like, so they find re-saved copies too, and answer
   with candidates and a match score. The best candidate at or above
-  the **min similarity** (80% by default) is then downloaded like any
+  the **Min similarity** (80% by default) is then downloaded like any
   post.
 
-The **lookup** section of the Settings page is where you choose which
-sources are asked, in what order, and the minimum similarity. Each row
-has a test button. A source that's down or refuses is skipped and the
-chain carries on.
+The **Lookup** section of the Settings page is where you choose which
+sources are asked, in what order, and the minimum similarity. A source
+that's down or refuses is skipped and the chain carries on.
 
 A pasted md5 has no picture to compare, so it only goes to the md5
 searches.
@@ -45,7 +44,7 @@ nothing until you set it up.
   danbooru row in [sites](../sites/index.md)). Danbooru only lets
   accounts of Member level or above, with a verified email, use it.
 - **SauceNAO** needs its own API key, free from saucenao.com. The free
-  tier allows about 100 searches a day. Enter it with the **key** button
+  tier allows about 100 searches a day. Enter it with the **Key** button
   in the lookup section.
 - The md5 searches use each site's usual login: gelbooru and rule34,
   for instance, need their API key.
@@ -74,9 +73,8 @@ from the chain.
 
 monbooru's nightly run can look up the images that have no source yet
 (see [Looking up a library overnight](../../../../guides/lookup/index.md#looking-up-a-library-overnight)).
-monloader sets how far it goes: the **daily budget** in **Settings ->
-lookup** is how many images a night it accepts, 25 by default. Once
-it's spent, monbooru stops and picks up where it left off the next
-night. These lookups wait behind everything else, so they never hold
-up a URL you paste. Lookups you start by hand in monbooru don't count
-against the budget.
+monloader sets how far it goes: the **Daily budget** in **Settings ->
+Lookup** is how many images a night it accepts, 25 by default. These
+lookups wait behind everything else, so they never hold up a URL you
+paste. Lookups you start by hand in monbooru don't count against the
+budget.

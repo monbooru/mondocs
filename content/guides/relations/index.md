@@ -17,8 +17,8 @@ There are four kinds:
 | Version | An earlier and a later version of one picture, in a chain. |
 | Derivative | An image based on another: an edit, a crop, a composite. A composite can have several sources. |
 
-Marking a pair **Not related** is a decision too: monbooru won't
-suggest it again.
+Marking a pair **Not related** stops monbooru from suggesting it
+again.
 
 To declare a relation yourself, use **Add a relation** on an image's
 page. When monloader downloads a booru post that names a parent post,
@@ -38,12 +38,11 @@ checked as they arrive. **Relations -> Find new pairs** checks
 everything added since the last time, and the nightly run can do it
 for you (see [Maintenance](../maintenance.md#nightly-schedule)).
 
-**Settings -> Relations -> pHash matching distance** says how
+**Settings -> Relations -> How alike images must look** says how
 different two images may look and still be paired: lower means fewer
 pairs, but surer ones.
 
-A fingerprint can't see that a recolour or a redraw belongs with its
-original, since the pixels are too different. Their tags can. So
+A recolour or a redraw looks too different for the fingerprint, so
 monbooru also pairs images that share rare tags, the ones few of your
 images carry. This only works once your images are tagged, and it
 costs a full pass over the library each time, so switch it off under

@@ -8,22 +8,20 @@ was made inside the file: the prompt, the model, the seed, sometimes
 the whole workflow. monbooru reads all of it as images arrive, shows
 it on the image's page, and lets you search on it.
 
-It reads PNG, JPEG and WebP files. AVIF and JPEG XL files aren't read.
+It reads PNG, JPEG and WebP images. With ffmpeg installed, it also reads
+the MP4 and WebM videos ComfyUI saves. AVIF and JPEG XL files aren't read.
 
 ## What you see
 
-An image's page gets a **Generation data** block: prompt, negative
-prompt, model, sampler, seed and the rest, with the raw parameters or
-the full ComfyUI workflow underneath.
+The image's page shows all of it in a **Generation data** block.
 
 At the top of the block is the **generation hash**, a short
 fingerprint of the recipe (prompt, model, sampler, steps, CFG, but not
 the seed). Every image made from the same recipe shares it, so
 clicking it lists all your re-rolls of that prompt together.
 
-A PNG that only carries ComfyUI's editor graph, without the API
-version of the workflow, gives up its nodes but no prompt, seed or
-model.
+If a PNG only has ComfyUI's editor graph and not the API workflow, you
+get its nodes but no prompt, seed or model.
 
 ## Searching
 
@@ -41,12 +39,11 @@ finds the ComfyUI images of cats made with an SDXL model.
 
 ## Searching inside a ComfyUI workflow
 
-`prompt:`, `model:` and `sampler:` only see the handful of values
-monbooru picks out of a workflow, from the nodes it knows. A custom
-node it doesn't know can be taught to it, see
+`prompt:`, `model:` and `sampler:` only see the few values monbooru
+picks out of a workflow, from the nodes it knows. `comfyui:` searches
+the whole thing: every node the workflow uses and every value set on
+it, custom nodes included. To teach monbooru a custom node, see
 [Configuration](../advanced/configuration.md#comfyui-nodes).
-`comfyui:` searches the whole thing: every node the workflow uses and
-every value set on it, custom nodes included.
 
 | Search | Finds |
 |---|---|

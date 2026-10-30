@@ -5,8 +5,8 @@ weight: 35
 
 A CBZ or ZIP archive full of images is treated as one item: one
 thumbnail in the grid (its first page), one set of tags, one rating.
-Its page has **Open in reader** to read it, and **See all pages** for
-a grid of every page. The reader remembers where you stopped.
+**Open in reader** on its page reads it, and the reader remembers
+where you stopped.
 
 If the archive carries a `ComicInfo.xml`, the series, author and other
 details it holds show on the archive's page.

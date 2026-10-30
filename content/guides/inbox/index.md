@@ -23,6 +23,6 @@ inbox.
 
 When the inbox is sorted newest first, images are grouped by how they
 arrived: each upload is its own group, and files that showed up on
-disk are grouped by time. **Select all** on a group's header ticks the
-whole group, even across pages, so you can tag or archive one
-download in a single go.
+disk are grouped by time. **Select whole batch** on a group's header
+ticks the whole group, even across pages, so you can tag or archive
+one download in a single go.

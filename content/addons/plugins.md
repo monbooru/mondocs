@@ -15,17 +15,15 @@ anything you can do there, so only pair plugins you trust.
 ## The two kinds of button
 
 A **relay** button sends the plugin the image you're looking at, or
-everything you selected, and shows you the plugin's answer. If the
-plugin changed the files, the page reloads so you see the result.
+everything you selected, and shows you the plugin's answer.
 
 An **open** button shows one of the plugin's own pages in a pop-in
 over monbooru, for anything that needs a real interface: a crop tool,
-an artist database, a tag editor of your own design. When you're done,
-it closes and the page reloads.
+an artist database, a tag editor of your own design.
 
 A plugin can say which files it handles. One that only edits pictures
 won't show its buttons on videos or comic archives, and leaves them
-out of a batch, telling you how many it skipped.
+out of a batch.
 
 ## Installing one
 

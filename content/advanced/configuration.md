@@ -35,7 +35,7 @@ gallery_path = "/gallery"        # the folder holding your images
 
 [server]
 bind_address  = "127.0.0.1:8455"          # the containers set 0.0.0.0:8455 instead
-base_url      = "http://localhost:8455"   # used for links back to monbooru and CORS
+base_url      = "http://localhost:8455"   # links back to monbooru and CORS
 cors_origins  = []               # other pages allowed to call the API; "*" for any
 name          = ""               # rename the UI; empty = monbooru
 theme         = ""               # see Themes
@@ -182,10 +182,7 @@ restarts. Changing the password logs out every other browser.
 
 ## Running it on a server
 
-The docker container is the best option for servers; its compose file
-publishes the port on the machine itself only, so change its `ports:`
-line for other machines to reach it. If you want to run a binary, there's no separate server download: take a portable archive, and
-before starting it as a service,
+Docker is the best option for servers. Its compose file only publishes the port on the machine itself, so change its `ports:` line for other machines to reach it. To run the program directly instead, there's no separate server download: take a portable archive, and before starting it as a service,
 
 - write a `monbooru.toml` next to the program with the settings you
   want, at least `bind_address` under `[server]` if other machines
@@ -198,9 +195,9 @@ full paths; paths inside the folder stay relative, so the folder can
 still move.
 
 An empty `monbooru.toml` next to the program is what makes a copy
-portable. The AppImage behaves like an installed app because a single
-file has nowhere to carry one; put an empty `monbooru.toml` next to
-the `.AppImage` and it keeps everything beside it instead.
+portable. The AppImage behaves like an installed app; put an empty
+`monbooru.toml` next to the `.AppImage` and it keeps everything beside
+it instead.
 
 ## Docker details
 
