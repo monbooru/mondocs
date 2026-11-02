@@ -103,11 +103,6 @@ you ready to share. If a fix is worth having for everyone, see
 
 ## What applies when
 
-Every post goes through the same steps, in this order, and **Settings -> Tags**
-and each site's **mappings** tab show them as a strip: the site's maps, its tag
-rules, the blacklists, the download, then **Categories sent**. A blacklist skips
-the whole post, and everything else only drops or moves tags.
-
 | You want to... | Use | Applies to |
 |---|---|---|
 | never fetch posts with a tag | **Global blacklist** | every site |
@@ -125,5 +120,4 @@ so a post can be skipped for a tag you'd never have kept.
 To see what these steps would do, paste a post URL under **Trace a post**, in
 **Settings -> Tags** or on a site's **mappings** tab. You get one line per tag,
 showing what each step did to it and what monbooru would receive, or which rule
-would skip the post. Nothing is downloaded, and a trace uses your saved settings,
-so save your edits first. A search or a pool traces its first post.
+would skip the post. Nothing is downloaded.
