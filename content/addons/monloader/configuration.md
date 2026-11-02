@@ -34,6 +34,10 @@ default_folder         = ""              # monbooru subfolder for downloads; bla
 success_retention_days = 3               # clear finished jobs after this many days
 history_retention_days = 14              # clear everything else after this many days
 
+[tags]
+drop_categories = []                     # monbooru categories left out of every push
+blacklist       = []                     # a post matching any of these rules is skipped before download
+
 [gallerydl]
 binary_path   = "gallery-dl"
 config_path   = "/config/gallery-dl.json"          # written by monloader
@@ -88,6 +92,7 @@ gallery      = ""                        # monbooru gallery; empty = default_gal
 label        = ""                        # source label; empty = the site name
 cookies      = ""                        # cookies file, in cookies_dir
 options      = ""                        # extra gallery-dl options, as JSON
+blacklist    = []                        # adds to [tags] blacklist for this site
 lookup_order = 4                         # position in the lookup chain; 0 = not asked
 ```
 

@@ -7,9 +7,8 @@
   {{- if eq .Kind "404" }}
   <script>(function () { var b = document.createElement('base'); b.href = {{ site.Params.root | default "/" }}; document.head.appendChild(b); })();</script>
   {{- end }}
-  <script>try { var t = localStorage.getItem('mondocs-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <script>try { if (localStorage.getItem('mondocs-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}</script>
   <link rel="icon" type="image/png" href="{{ "favicon.png" | relURL }}">
-  <link rel="icon" type="image/png" href="{{ "light/favicon.png" | relURL }}" media="(prefers-color-scheme: light)">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/chroma.css" | relURL }}">
 </head>
@@ -26,7 +25,15 @@
       <a href="{{ .RelPermalink }}"{{ if eq $first . }} class="active"{{ end }}>{{ .Title }}</a>
       {{ end }}
     </nav>
+    <div id="search" role="search">
+      <input type="search" id="search-input" placeholder="search..." title="Search the docs (press s)" aria-label="Search the docs" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+      <div id="search-results" role="listbox" aria-label="Search results" hidden></div>
+    </div>
     <div id="topbar-right">
+      <nav class="topbar-links">
+        <a href="{{ site.Params.demo }}" target="_blank" rel="noopener" title="Try monbooru in the browser">demo</a>
+        <a href="{{ site.Params.github }}" target="_blank" rel="noopener" title="monbooru on GitHub">repository</a>
+      </nav>
       <div class="theme-switch" id="theme-switch"><span>theme:</span><button type="button" data-pick="dark">dark</button><span class="theme-sep">&middot;</span><button type="button" data-pick="light">light</button></div>
     </div>
   </header>

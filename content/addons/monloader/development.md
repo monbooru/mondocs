@@ -96,7 +96,7 @@ dialog gives you the file, without your credentials.
 |---|---|
 | `family` | `danbooru`, `e621`, `moebooru`, `gelbooru_v02`, `philomena` or `generic`: how ratings and tag categories are read |
 | `kind` | `booru` (the default), `manga` (galleries become one cbz), or `other` |
-| `post_url_template` | the post page, with `{id}` |
+| `post_url_template` | the post page, with `{id}` or any gallery-dl keyword, such as `{author[handle]}` |
 | `md5_search_template` | the hash search URL, with `{md5}`; makes the site usable for lookups |
 | `auth` | `none`, `api_optional`, `api_required`, `username_password`, `cookies` or `oauth` |
 | `hosts` | other hosts that belong to the site (file CDNs, mirrors) |

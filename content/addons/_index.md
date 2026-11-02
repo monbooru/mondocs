@@ -24,3 +24,5 @@ programs that add a few buttons to monbooru.
 The apps connect by [pairing](pairing.md): one asks, you approve once
 in the other, and they set up access between themselves. The
 [quick start](quick-start.md) adds both addons to a running monbooru.
+
+{{< pages >}}

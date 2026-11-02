@@ -6,3 +6,4 @@ bin/
 .frontmatter/
 .vscode/
 frontmatter.json
+__pycache__/

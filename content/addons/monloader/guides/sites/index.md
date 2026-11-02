@@ -30,6 +30,10 @@ missing it:
 | `cookies` | a logged-in browser session (see below) | twitter, sankaku, exhentai |
 | `oauth` | gallery-dl's own login flow, run once | pixiv, reddit, deviantart |
 
+Danbooru also wants your **User ID**, the number on your profile page:
+monloader names your account with it in every request, and Danbooru can
+block requests that don't.
+
 For a site monloader has no profile for, the login type is a guess
 from gallery-dl's data. If it's wrong, fix it on the site's profile
 tab.

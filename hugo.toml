@@ -9,6 +9,15 @@ uglyURLs = true
 
 disableKinds = ['taxonomy', 'term', 'rss', 'sitemap']
 
+[outputFormats.SearchIndex]
+mediaType = 'text/javascript'
+baseName = 'search-index'
+isPlainText = true
+notAlternative = true
+
+[outputs]
+home = ['html', 'SearchIndex']
+
 [markup.goldmark.renderHooks.image]
 enableDefault = true
 
@@ -20,6 +29,8 @@ noClasses = false
 
 [params]
   root = '/'
+  github = 'https://github.com/monbooru/monbooru'
+  demo = 'https://monbooru.github.io/demo/'
 
 [[cascade]]
   [cascade._build]

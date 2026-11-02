@@ -27,6 +27,10 @@ Tag names are brought into monbooru's form on the way: lowercase, with
 spaces turned into underscores (`fate/grand order` becomes
 `fate/grand_order`).
 
+If you only want some categories at all, say characters and copyrights,
+uncheck the others under **Settings -> Tags**. That applies to every site,
+after everything above.
+
 ## Ratings
 
 The full words (general, sensitive, questionable, explicit, and safe,
@@ -86,13 +90,40 @@ next download.
 - The **Rating map** fixes a site whose letters read wrong: a site that
   uses `e` for "everyone" would otherwise come out explicit.
 - The **Category map** sends one of the site's tag categories to a
-  different monbooru category, or drops it.
+  different monbooru category, your own included, or drops it.
 - **Tag rules** fix single tags: rename a misspelled one, move it to
-  another category with a `category:` prefix, or leave the replacement
-  empty to drop it.
+  another category, your own included, with a `category:` prefix, or
+  leave the replacement empty to drop it.
 - Setting the **MD5 search** URL lets the site take part in
   [reverse lookup](../lookup/index.md).
 
 Your profile is saved as one file, and the **export** tab gives it to
 you ready to share. If a fix is worth having for everyone, see
 [site profiles](../../development.md#site-profiles).
+
+## What applies when
+
+Every post goes through the same steps, in this order, and **Settings -> Tags**
+and each site's **mappings** tab show them as a strip: the site's maps, its tag
+rules, the blacklists, the download, then **Categories sent**. A blacklist skips
+the whole post, and everything else only drops or moves tags.
+
+| You want to... | Use | Applies to |
+|---|---|---|
+| never fetch posts with a tag | **Global blacklist** | every site |
+| never fetch them from one site | the site's **Blacklist** | that site |
+| keep the posts, lose a whole category | **Categories sent** | every site |
+| the same, on one site | **Category map**, set to drop | that site |
+| keep the posts, lose one tag | **Tag rules**, empty replacement | that site |
+| rename a tag or move it to another category | **Tag rules** | that site |
+
+A blacklist rule reads every tag the post lists, including the ones you drop,
+so a post can be skipped for a tag you'd never have kept.
+
+## Tracing a post
+
+To see what these steps would do, paste a post URL under **Trace a post**, in
+**Settings -> Tags** or on a site's **mappings** tab. You get one line per tag,
+showing what each step did to it and what monbooru would receive, or which rule
+would skip the post. Nothing is downloaded, and a trace uses your saved settings,
+so save your edits first. A search or a pool traces its first post.

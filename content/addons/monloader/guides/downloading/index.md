@@ -29,10 +29,20 @@ Every post in a job ends with one of these:
 | `replaced` | an [upgrade](../../../../guides/lookup/index.md#running-lookups-from-monbooru) swapped in a better file |
 | `skipped_archive` | already downloaded before, so not again |
 | `skipped_unsupported` | a file type monbooru doesn't take (audio, a document...) |
+| `skipped_blacklist` | it matched one of your blacklist rules, named beside it |
 | `failed` | something went wrong; the row says what |
 
 A failed item also carries an error code; the list is in
 [API and development](../../development.md#error-codes).
+
+## Skipping posts by tag
+
+You can skip posts that contain certain tags. List their tags under
+**Global blacklist** in **Settings -> Tags**, one rule per line:
+`guro` skips any post carrying that tag, `furry -rating:general` skips furry
+posts unless they're rated general, and
+`*_(cosplay)` uses a wildcard. A list for just one site should go on the site's
+**mappings** tab.
 
 ## Big searches
 
