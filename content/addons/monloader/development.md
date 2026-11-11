@@ -3,6 +3,9 @@ title: API and development
 weight: 90
 ---
 
+For scripts and contributors: the API and its tokens, the error codes a
+failed item carries, building from source, and the site profile format.
+
 ## API tokens
 
 monloader's API lives under `/api/v1/`. It stays off until you create
@@ -64,6 +67,8 @@ go build -o monloader ./cmd/monloader
 ./monloader -config /path/to/monloader.toml
 ```
 
+`main` is one snapshot per release and what a clone builds; `dev` is
+where the work happens, with the Go tests, and where pull requests go.
 A plain `go build` reports its version as `dev`. It needs gallery-dl
 to download anything: put it on the `PATH` or set
 `gallerydl.binary_path`. Without it the UI still runs and downloads
@@ -101,7 +106,7 @@ dialog gives you the file, without your credentials.
 | `auth` | `none`, `api_optional`, `api_required`, `username_password`, `cookies` or `oauth` |
 | `hosts` | other hosts that belong to the site (file CDNs, mirrors) |
 | `example` | a sample URL for the site's test button |
-| `category_overrides` | tag category remaps |
+| `category_overrides` | remaps of a tag category, a manga field or a tag prefix |
 | `rating_overrides` | rating value remaps |
 | `default_rating` | the rating when the site gives none |
 | `needs_tags` | for a generic site: ask gallery-dl for per-category tags (one more request per post) |

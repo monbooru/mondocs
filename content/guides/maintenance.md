@@ -12,7 +12,7 @@ or restored a backup.
 ## Which tool when
 
 **You moved or deleted files while monbooru wasn't running.** Press
-the sync button at the top right. Files that are gone are marked
+**sync** in the top bar (or `Y`). Files that are gone are marked
 missing rather than forgotten, so their tags survive if they come
 back. When you know they won't, **Missing images** removes them for
 good, and **Empty folders** lists the folders the move left behind so

@@ -3,8 +3,6 @@ title: Troubleshooting
 weight: 90
 ---
 
-## The connection dot
-
 The popup and the options page show a dot for the link to monloader:
 
 - **green (connected)**: all good.
@@ -16,7 +14,9 @@ The popup and the options page show a dot for the link to monloader:
   first pairing, after you change the URL, after the pairing was
   removed, or after monloader was reinstalled. Click **connect to
   monloader** in the options and approve the request in monloader
-  under **Settings -> Pairing**.
+  under **Settings -> Pairing**. If monloader still shows the
+  extension as paired there (after you reinstalled the extension,
+  say), remove that pairing first.
 - **amber (setup not finished)**: monloader answers but its first-run
   setup isn't done. Finish the setup page in monloader.
 

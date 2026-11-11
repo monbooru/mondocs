@@ -7,11 +7,11 @@ Every new image lands in the **inbox**, however it arrived: dropped
 into a folder, uploaded, pushed by monloader. The inbox is your "not
 looked at yet" pile. Once an image's tags and rating are right, move
 it to the **archive**, and new arrivals never get mixed in with the
-part of your library you've already sorted. 
+part of your library you've already sorted.
 
-![The inbox with a batch cluster](inbox.png)
+![The inbox with a batch cluster](inbox.webp)
 
-The inbox is just a search, `inbox:true`, so every filter and sort
+The inbox is a search, `inbox:true`, so every filter and sort
 works on it. `inbox:false` is the archive.
 
 Press `i` on an image's page to move it between inbox and archive, or
@@ -23,6 +23,6 @@ inbox.
 
 When the inbox is sorted newest first, images are grouped by how they
 arrived: each upload is its own group, and files that showed up on
-disk are grouped by time. **Select whole batch** on a group's header
+disk are grouped by time. **[Select whole batch]** on a group's header
 ticks the whole group, even across pages, so you can tag or archive
 one download in a single go.

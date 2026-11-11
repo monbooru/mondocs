@@ -10,15 +10,13 @@ they exchange keys that allow only what each needs.
 
 There are two links:
 
-- **monloader and monbooru.** In monloader, **Settings -> Pairing ->
-  Connect to monbooru** sends the request, and you approve it in
-  monbooru under **Settings -> Plugins**. monloader can then add
-  images and tags to monbooru and update them (it can't delete any),
-  and monbooru can ask monloader for lookups.
-- **monsender and monloader.** In the extension's options, **connect
-  to monloader** sends the request, and you approve it in monloader
-  under **Settings -> Pairing**. The extension can then add URLs to
-  monloader's queue.
+- monloader and monbooru: monloader asks, you approve in monbooru.
+  monloader can then add images and tags to monbooru and update them
+  (it can't delete any), and monbooru can ask monloader for lookups.
+  [Step by step](monloader/getting-started/pairing/index.md).
+- monsender and monloader: the extension asks, you approve in
+  monloader. The extension can then add URLs to monloader's queue.
+  [Step by step](monsender/getting-started/setup/index.md).
 
 [Plugins](plugins.md) pair with monbooru the same way and show up in
 the same list.
@@ -27,15 +25,13 @@ the same list.
 
 - You approve a pairing once and it stays. Removing it on either side
   withdraws the keys on both.
-- A request waits a few minutes for you to approve it, and doesn't
-  survive a restart of the app it's waiting on. If it runs out, just
+- A request waits a few minutes for your approval. If it runs out,
   connect again.
-- If a link stops working, press **Reconnect** in monloader and
+- If a link stops working, press **Pair again** in monloader and
   approve the new request; the old pairing keeps working until you
-  do. For the extension, remove its old pairing in monloader first,
-  then click **connect to monloader** again.
+  do. For the extension, click **connect to monloader** again. If
+  monloader still lists the old pairing under **Settings -> Pairing**,
+  remove it there first.
 
-Step by step: [monloader pairing](monloader/getting-started/pairing/index.md),
-[monsender setup](monsender/getting-started/setup/index.md). For
-scripts of your own, see [API and plugins](../advanced/api.md) and
+For scripts of your own, see [API and plugins](../advanced/api.md) and
 [monloader's API](monloader/development.md).

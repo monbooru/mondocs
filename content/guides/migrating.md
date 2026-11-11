@@ -26,17 +26,10 @@ Files keep their names and folders. Hydrus names files after their
 SHA-256, and on a Merge that's what matches them to images you already
 have.
 
-Namespaced tags land in the matching category:
-
-| Hydrus namespace | monbooru category |
-|---|---|
-| `character:` | `character` |
-| `creator:` | `artist` |
-| `copyright:`, `series:`, `studio:` | `copyright` |
-| `meta:`, `medium:`, `person:`, `year:` | the category of the same name |
-| any namespace matching one of your categories | that category |
-| no namespace | `general` |
-| any other namespace (`title:`, `filename:`...) | `general`, without the namespace |
+Namespaced tags land in the category of the same name. `creator:`
+becomes `artist`, and `series:` and `studio:` become `copyright`. A
+namespace that matches none of your categories (`title:`,
+`filename:`...) is dropped and the tag lands in `general`.
 
 **Not brought over:** URLs, rating services, notes and file
 relationships.
@@ -47,19 +40,11 @@ relationships.
    backup**. You get a `.zip` with every media file and its tags.
 2. Drop that zip into monbooru's import dialog.
 
-Files keep their names, and tags land by category:
-
-| Blombooru category id | monbooru category |
-|---|---|
-| 0 | general |
-| 1 | artist |
-| 3 | copyright |
-| 4 | character |
-| 5 | meta |
-| anything else | general |
+Files keep their names, and tags keep their category: artist,
+copyright, character and meta. Everything else lands in `general`.
 
 On a Merge, images are matched to the ones you already have by their
-SHA-256, when Blombooru stored one (older entries only have an MD5).
+SHA-256, when Blombooru stored one.
 
 **Not brought over:** albums, ratings, parent/child relations and
 custom metadata.

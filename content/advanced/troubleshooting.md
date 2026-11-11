@@ -3,6 +3,9 @@ title: Troubleshooting
 weight: 60
 ---
 
+The problems people run into most, by what you see on screen or in the
+log.
+
 ## A "degraded mode" banner
 
 monbooru can't read the gallery folder. What's already indexed stays
@@ -11,18 +14,17 @@ permissions and restart.
 
 ## "Library too old to upgrade directly"
 
-monbooru upgrades a gallery's database from the last two minor
-releases. A gallery last opened by something older stops the start
-with this message, and names a release that still upgrades it: run
-that release once against the same folders, then start the current
-one again. Nothing is changed in the meantime.
+The gallery was last opened by a monbooru too old for this one to
+upgrade. The message names a release that still can: run that release
+once against the same folders, then start the current one again.
 
 ## Thumbnails are missing
 
-Run **Settings -> Maintenance -> Rebuild thumbnails**. Videos,
-animated GIFs, AVIF and JPEG XL need ffmpeg, which comes with the
-Docker image and the bundled downloads. If you installed your own,
-restart monbooru so it finds it (JPEG XL needs a build with libjxl).
+Run **Settings -> Maintenance -> Rebuild thumbnails**. Videos, AVIF,
+JPEG XL and the animated preview of a GIF need ffmpeg, which comes
+with the Docker image and the bundled downloads. If you installed your
+own, restart monbooru so it finds it (JPEG XL needs a build with
+libjxl).
 
 The bundled ffmpeg is a small build that only covers the formats
 monbooru supports. If one of your videos uses a codec it refuses and
@@ -37,25 +39,23 @@ sync button. A file the watcher missed is always picked up by a sync.
 
 ## The watcher stops with "no space left on device"
 
-That's Linux's limit on watched folders (`inotify_add_watch` in the
+That's Linux's limit on watched folders (`inotify limit hit` in the
 log). Raise `fs.inotify.max_user_watches` on the host, not inside the
-container, and restart. If the log says "too many open files"
-instead, raise `fs.inotify.max_user_instances`. Or turn the watcher
-off in **Settings -> General** and sync by hand.
+container, and restart. If raising it changes nothing, raise
+`fs.inotify.max_user_instances` too. Or turn the watcher off in
+**Settings -> General** and sync by hand.
 
 ## Moving or deleting a file fails with a permission error
 
-monbooru takes ownership of new files as it indexes them so it can
-move or delete them later. A file that still belongs to another user
-has to be made writable for the user monbooru runs as. On Docker,
-taking ownership needs the `CHOWN` and `DAC_OVERRIDE` capabilities;
-see [Docker details](configuration.md#docker-details).
+The file belongs to another user. Make it writable for the user
+monbooru runs as. On Docker, check that the `CHOWN` and `DAC_OVERRIDE`
+capabilities are still there; see
+[Docker details](configuration.md#docker-details).
 
 ## Locked out of the login
 
 After a few wrong passwords the login makes you wait before trying
-again. The wait is short and resets after a few quiet minutes, and
-restarting monbooru clears it.
+again. Wait a few minutes, or restart monbooru.
 
 ## The API answers 503 api_disabled
 

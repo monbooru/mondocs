@@ -3,13 +3,11 @@ title: Contributing to the PTR
 weight: 100
 ---
 
-The Hydrus Public Tag Repository (PTR) is a huge tag database shared by
-Hydrus users, where anyone can add tags and volunteers (janitors)
-review the disputed ones. monloader can keep a copy of it for lookups
-(see the [PTR guide](../../addons/monloader/guides/ptr/index.md)).
-Once you have a PTR account, monbooru also lets you give back: add
-tags your images have that the PTR lacks, and ask for wrong ones to be
-removed.
+Once monloader keeps a copy of the
+[Hydrus Public Tag Repository (PTR)](../../addons/monloader/guides/ptr/index.md)
+and you have a PTR account, monbooru lets you give back: add tags your
+images have that the PTR lacks, and ask for wrong ones to be removed.
+Volunteers there (janitors) review what needs a second look.
 
 Everything goes through monloader. You need its PTR copy fully synced,
 and a contribution account created on monloader's PTR page.
@@ -28,7 +26,7 @@ The contribute dialog has two lists:
   there), and the row says so. A row marked "not a PTR tag" would
   create a brand new tag on the PTR, so check first that the PTR
   doesn't already know it under another name.
-- **petition removal**: tags the PTR has for this file that your image
+- **ask to remove**: tags the PTR has for this file that your image
   doesn't. Your image lacking a tag doesn't make it wrong, so only
   tick one that is actually wrong for the picture, and give a reason.
 
@@ -51,7 +49,7 @@ keep yours as the alias. Either way, the two are linked from then on.
 
 Its **Contribute...** dialog works like the image one: **suggest**
 sends aliases and implications you declared that the PTR doesn't have,
-and **petition removal** asks for wrong ones to go. Both need a short
+and **ask to remove** asks for wrong ones to go. Both need a short
 reason for the janitors. The dialog only sends what your own tags
 declare, so set things up in monbooru first, then contribute.
 

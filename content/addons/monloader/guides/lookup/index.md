@@ -3,11 +3,11 @@ title: Reverse lookup
 weight: 40
 ---
 
-Reverse lookup starts from a file instead of a URL: "where does this
-picture come from, and what are its tags?" monloader asks a list of
-sources in turn, the lookup chain, and brings back the first answer.
+Reverse lookup starts from a file instead of a URL and finds the post
+it came from, with its tags. monloader asks a list of sources in turn,
+the lookup chain, and brings back the first answer.
 
-![The lookup chain in Settings](lookup-chain.png)
+![The lookup chain in Settings](lookup-chain.webp)
 
 Most lookups come from monbooru, when you look up an image you already
 have (see [monbooru's lookup guide](../../../../guides/lookup/index.md)).
@@ -25,7 +25,7 @@ wins. There are two kinds of source:
 - **A similarity service**, IQDB or SauceNAO. These compare what the
   picture looks like, so they find re-saved copies too, and answer
   with candidates and a match score. The best candidate at or above
-  the **Min similarity** (80% by default) is then downloaded like any
+  **Min similarity %** (80 by default) is then downloaded like any
   post.
 
 The **Lookup** section of the Settings page is where you choose which
@@ -43,9 +43,8 @@ nothing until you set it up.
 - **IQDB** uses your danbooru login (username and API key, from the
   danbooru row in [sites](../sites/index.md)). Danbooru only lets
   accounts of Member level or above, with a verified email, use it.
-- **SauceNAO** needs its own API key, free from saucenao.com. The free
-  tier allows about 100 searches a day. Enter it with the **Key** button
-  in the lookup section.
+- **SauceNAO** needs its own API key, free from saucenao.com. Enter it
+  with the **Key** button in the lookup section.
 - The md5 searches use each site's usual login: gelbooru and rule34,
   for instance, need their API key.
 
@@ -57,8 +56,8 @@ up. The match is still recorded as the image's source, without tags,
 and the queue marks it `source only`. The same goes for a confident
 match on a site monloader can't download from, like a pixiv page.
 
-When nothing has the file, the item ends `hash_not_found` and lists
-every source it asked and why each missed, including the closest
+When nothing has the file, the item fails with "no match found" and
+lists every source it asked and why each missed, including the closest
 similarity candidates and their scores. If good matches keep falling
 just short, lower the minimum similarity.
 
@@ -73,7 +72,7 @@ from the chain.
 
 monbooru's nightly run can look up the images that have no source yet
 (see [Looking up a library overnight](../../../../guides/lookup/index.md#looking-up-a-library-overnight)).
-monloader sets how far it goes: the **Daily budget** in **Settings ->
+monloader sets how far it goes: **Nightly lookups per day** in **Settings ->
 Lookup** is how many images a night it accepts, 25 by default. These
 lookups wait behind everything else, so they never hold up a URL you
 paste. Lookups you start by hand in monbooru don't count against the

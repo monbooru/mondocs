@@ -13,14 +13,14 @@ the MP4 and WebM videos ComfyUI saves. AVIF and JPEG XL files aren't read.
 
 ## What you see
 
-The image's page shows all of it in a **Generation data** block.
+The image's page shows all of it in a Generation data block.
 
-At the top of the block is the **generation hash**, a short
+At the top of the block is the generation hash, a short
 fingerprint of the recipe (prompt, model, sampler, steps, CFG, but not
 the seed). Every image made from the same recipe shares it, so
 clicking it lists all your re-rolls of that prompt together.
 
-If a PNG only has ComfyUI's editor graph and not the API workflow, you
+If a file only has ComfyUI's editor graph and not the API workflow, you
 get its nodes but no prompt, seed or model.
 
 ## Searching
@@ -54,9 +54,9 @@ it, custom nodes included. To teach monbooru a custom node, see
 | `comfyui:"title=Base pass"` | a node by its title; quote values with spaces |
 
 The easiest way in is the Generation data block itself: every node
-name and value there is a link that runs the search finding it. Typing
-`comfyui:` in the search bar also suggests the nodes and values your
-own images use.
+name and value there is a link that runs the search finding it. Start
+typing after `comfyui:` in the search bar and it suggests the nodes
+and values your own images use.
 
 A search term matches anywhere in the workflow, so
 `comfyui:KSampler comfyui:steps=28` finds workflows that have both,

@@ -31,10 +31,6 @@ curl -H "Authorization: Bearer <token>" \
      "http://localhost:8455/api/v1/images/search?q=1girl"
 ```
 
-The errors you're most likely to meet: `401 unauthorized` for a
-missing or wrong token, `403 insufficient_scope` when the token lacks
-the permission, and `503 api_disabled` when no token exists yet.
-
 Requests go to the active gallery. Add `?gallery=<name>` or an
 `X-Monbooru-Gallery` header to talk to another one.
 
@@ -49,9 +45,9 @@ monbooru at its IP address, at `localhost`, or at the address in
 tool on another port or a browser extension, is blocked by the browser
 until you add its address to `server.cors_origins` in
 [the config file](configuration.md), for example
-`http://192.168.1.50:5173`. `*` allows any page. Scripts, curl
-and monloader aren't browsers and don't need this. `/api/v1/docs`
-shows the addresses currently allowed.
+`http://192.168.1.50:5173`. `*` allows any page. Scripts, curl and
+monloader aren't browsers and don't need this. `/api/v1/docs` shows
+the addresses currently allowed.
 
 ## Writing a plugin
 
@@ -87,11 +83,12 @@ plugin really deletes images. Changing your buttons in a later release
 means offering again: the user approves a request marked **re-pair**.
 
 To ship it as a folder people drop into `plugins/`, add a
-`plugin.toml` with the launch line, `command = "./yourplugin"` (and
-`command_windows` if Windows needs another one). monbooru starts it
-with the folder as working directory and `MONBOORU_URL` in its
-environment, and stops it by closing its stdin, so exit when stdin
-closes. monbooru installs nothing, so ship a self-contained program.
+`plugin.toml` with the launch line, `command = "./yourplugin"` and
+`args = [...]` if it takes any (`command_windows` and `args_windows`
+when Windows needs another one). monbooru starts it with the folder as
+working directory and `MONBOORU_URL` in its environment, and stops it
+by closing its stdin, so exit when stdin closes. monbooru installs
+nothing, so ship a self-contained program.
 
 What monbooru keeps stable for plugins: the `/api/v1` API, the pairing
 exchange, the relay message, the button slots and variables, the
@@ -101,10 +98,8 @@ change in any release.
 
 That contract has a number, currently `1`. Send it as `"contract"` in
 the pairing request and put `contract = 1` in `plugin.toml`. A monbooru
-that speaks an older contract than your plugin refuses the pairing
-(`409`, code `contract_unsupported`) and doesn't start the folder,
-instead of half working. The number only moves when a change would
-break a plugin written against the old one.
+that speaks an older contract than your plugin won't pair with it or
+start its folder.
 
 [`examples/simple-edit`](https://github.com/monbooru/monbooru-plugins/tree/main/examples/simple-edit)
 in the plugins registry is a working plugin to copy: it pairs, rotates

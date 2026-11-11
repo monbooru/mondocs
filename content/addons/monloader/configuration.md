@@ -15,7 +15,7 @@ setup_done = false                       # first-run setup page, desktop install
 
 [server]
 bind_address = "0.0.0.0:8456"
-base_url     = "http://localhost:8456"   # shown on the API docs page
+base_url     = "http://localhost:8456"   # shown on the API docs page; set it to a domain you reach monloader by
 name         = ""                        # rename the UI; empty = monloader
 theme        = ""                        # dark, light, legacy-dark, legacy-light or a theme in themes/, see Look below; empty = dark
 
@@ -31,8 +31,8 @@ paused          = false                  # set by the footer light's pause
 concurrency            = 1               # downloads at once; applies on restart
 max_items_per_job      = 200             # posts per job for a tag search
 default_folder         = ""              # monbooru subfolder for downloads; blank = monbooru's "Where received files go"
-success_retention_days = 3               # clear finished jobs after this many days
-history_retention_days = 14              # clear everything else after this many days
+success_retention_days = 3               # clear succeeded jobs after this many days; 0 = never
+history_retention_days = 14              # clear every other finished job after this many days; 0 = never
 
 [tags]
 drop_categories = []                     # monbooru categories left out of every push
@@ -59,11 +59,11 @@ level = "warn"                           # warn / info / debug
 [ptr]                                    # see Hydrus PTR
 enabled      = false
 paused       = false                     # set by the PTR page's pause and resume
-data_path    = "/ptr"                    # applies on restart
+data_path    = "/ptr"                    # a running sync takes it on restart
 address      = "https://ptr.hydrus.network:45871"
 access_key   = ""                        # empty = the public read-only key
 fetch_sleep  = 1.0                       # seconds between update downloads
-min_free_gb  = 70                        # free space needed to start syncing
+min_free_gb  = 90                        # free space needed to start syncing
 commit_sleep = 1.0                       # seconds between contribution uploads
 
 [lookup]                                 # see Reverse lookup
@@ -90,7 +90,8 @@ username     = ""
 password     = ""
 gallery      = ""                        # monbooru gallery; empty = default_gallery
 label        = ""                        # source label; empty = the site name
-cookies      = ""                        # cookies file, in cookies_dir
+cookies      = ""                        # path to a cookies file; the paste box writes one into cookies_dir
+user_agent   = ""                        # text or +firefox, +chrome, +gallery-dl; empty = the default
 options      = ""                        # extra gallery-dl options, as JSON
 blacklist    = []                        # adds to [tags] blacklist for this site
 lookup_order = 4                         # position in the lookup chain; 0 = not asked
@@ -165,9 +166,13 @@ it in the compose file instead.
 | `MONLOADER_LOOKUP_IQDB_URL` | `lookup.iqdb.url` |
 | `MONLOADER_LOOKUP_SAUCENAO_URL` | `lookup.saucenao.url` |
 
-`TZ` sets the timezone for displayed times (UTC by default), and
+`TZ` sets the timezone for displayed times (UTC by default).
 `MONLOADER_CONTAINER`, set by the official image, makes a brand-new
-config use the container paths.
+config use the container defaults shown above. Without it,
+`bind_address` starts as `127.0.0.1:8456`, `api_url` as
+`http://127.0.0.1:8455`, and the paths sit beside the config file, or
+in the folders listed on [Install](getting-started/install.md) for the
+desktop builds.
 
 ## Pairing by hand
 
@@ -218,6 +223,6 @@ icon and drawings come with it. See
 
 ## Log levels
 
-- `warn` (the default): warnings, errors, logins and settings changes.
-- `info`: adds a line per request and the startup banner.
+- `warn` (the default): warnings, errors and failed logins.
+- `info`: adds a line per request, the startup banner, logins and settings changes.
 - `debug`: adds the queue polling and health checks.

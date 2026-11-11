@@ -3,11 +3,10 @@ title: Auto-tagger
 weight: 50
 ---
 
-Tagging a big collection by hand can take quite a lot of time. The auto-tagger runs
-an image-tagging model on your own CPU or GPU, looks at each picture
-and adds the tags it recognizes: `1girl`, `red_hair`, `outdoors`, a
-character it knows, a rating. Nothing is sent anywhere. It's off until
-you install a model.
+The auto-tagger runs an image-tagging model on your own CPU or GPU. It
+looks at each picture and adds the tags it recognizes: `1girl`,
+`red_hair`, `outdoors`, a character it knows, a rating. Nothing is
+sent anywhere. It's off until you install a model.
 
 Auto-tags are kept apart from yours. They remember which model added
 them, and you can strip one model's tags later without touching
@@ -17,12 +16,11 @@ anything you typed.
 
 Open **Settings -> Auto-Tagger** and press **Install** on one of the
 suggested models. The dialog tells you which files to download and
-where to put them, or gives you a command that fetches them. On
-Docker, run that command on the host, inside the folder you mounted at
-`/models`. Reload the page once the files are in place: the model is switched on
-as soon as monbooru finds them.
+where to put them, or gives you a command that fetches them. Reload
+the page once the files are in place: the model is switched on as soon
+as monbooru finds them.
 
-![The taggers list with one model installed and enabled](taggers-table.png)
+![The taggers list with one model installed and enabled](taggers-table.webp)
 
 More models are listed in the monbooru-plugins registry: copy a
 model's folder into the models folder. Other ONNX tagging models can work as well; see
@@ -30,8 +28,7 @@ model's folder into the models folder. Other ONNX tagging models can work as wel
 
 ## Tuning it
 
-**Configure** on a model's row opens its settings. It works while the
-model is disabled, so you can tune it before the first run.
+**Configure** on a model's row opens its settings.
 
 **Galleries.** Which galleries the model runs on. Handy when one
 gallery holds anime art and another your photos: an anime-trained
@@ -45,10 +42,10 @@ category one image can get, and unticking a category stops the model
 from producing it at all.
 
 **Mappings.** Every label the model knows, and the tag it turns into.
-Change a label's category, rename it, or mute it when the model keeps
+Change a label's category, rename it, or drop it when the model keeps
 getting it wrong. Changes apply from the next run.
 
-![The mappings tab, with one label muted by a custom rule](configure-mappings.png)
+![The mappings tab, with one label dropped by a custom rule](configure-mappings.webp)
 
 When several models are enabled, they all run and their results are
 merged, so a tag two models agree on is added once.

@@ -5,8 +5,8 @@ weight: 20
 
 Four themes come with monbooru: `dark` (the default), `light`,
 `legacy-dark` and `legacy-light`. You pick between them under
-**Settings -> Plugins**, and the choice applies at once, no restart
-needed. You can share your own in the
+**Settings -> Plugins -> Themes**, and the choice applies at once. You
+can share your own in the
 [monbooru-plugins registry](https://github.com/monbooru/monbooru-plugins).
 A theme folder works in monloader too, picked under its
 **Settings -> Themes**.
@@ -21,12 +21,12 @@ A theme is a folder in `themes/`, next to `monbooru.toml`, holding a
 /config/themes/mytheme/logo.png          # optional, replaces the topbar logo
 /config/themes/mytheme/favicon.png       # optional, replaces the tab icon
 /config/themes/mytheme/mascot-lost.png   # optional, the 404 page and a search with no match
-/config/themes/mytheme/mascot-sleep.png  # optional, an empty gallery, inbox or queue
+/config/themes/mytheme/mascot-sleep.png  # optional, an empty gallery or inbox
 /config/themes/mytheme/mascot-panic.png  # optional, a gallery that can't be read
 ```
 
 The other drawings are `mascot-hello.png` (the first-run setup page),
-`mascot-sparkle.png` (monloader's home page and its setup page), and
+`mascot-sparkle.png` and `mascot-sleep-head.png` (monloader only), and
 `mascot-sparkle-head.png` (beside a running job). The registry's
 `dark` and `light` folders carry every one of them. A theme without a
 drawing shows none there.
@@ -111,15 +111,15 @@ The name in the top bar and on the login screen has four variables:
 
 ```css
 :root {
-  --wordmark-font:     bold 16px var(--font-mono);  /* a CSS font shorthand */
-  --wordmark-case:     uppercase;
-  --wordmark-tracking: 2px;
-  --wordmark-accent:   currentColor;   /* the part after "mon" */
+  --wordmark-font:     18px "Dela Gothic One";   /* a CSS font shorthand */
+  --wordmark-case:     lowercase;
+  --wordmark-tracking: 0;
+  --wordmark-accent:   var(--link);   /* the part after "mon" */
 }
 ```
 
-Each page names its app, so a block like this one
-applies to monloader only:
+Each page names its app, so a block like this one applies to
+monloader only:
 
 ```css
 :root[data-app="monloader"] {
@@ -129,16 +129,10 @@ applies to monloader only:
 }
 ```
 
-These variable names are kept stable between releases. Anything else
-in monbooru's stylesheet can change, so a theme that overrides more
-than the variables may need fixing after an update.
+These variable names stay the same between releases; the rest of
+monbooru's stylesheet does not.
 
-## Name and colour outside the page
-
-Two settings under `[server]` in `monbooru.toml` go with a theme:
-
-- `theme_color` is the colour of the splash screen and the mobile
-  address bar when monbooru is installed as an app. Set it to your
-  `--bg`.
-- `name` replaces "monbooru" in the top bar, the page titles and the
-  login screen.
+Two keys under `[server]` in [the config file](configuration.md) go
+with a theme: `theme_color`, the splash screen and mobile address bar
+colour when monbooru is installed as an app (set it to your `--bg`),
+and `name`.

@@ -3,10 +3,8 @@ title: Addons
 weight: 95
 ---
 
-monbooru keeps everything local and never makes a network request of
-its own. That's on purpose, and you can run it alone forever. The
-addons are how you get online features anyway, without monbooru
-itself going online.
+monbooru never goes online by itself. The addons bring the features
+that need the internet.
 
 **[monloader](monloader/_index.md)** goes on the internet on
 monbooru's behalf. It downloads posts from booru sites into your
@@ -15,8 +13,8 @@ have to find their tags and sources. The monbooru features that need
 it stay hidden until the two are connected.
 
 **[monsender](monsender/_index.md)** is a browser extension for
-monloader. You're looking at a post you like, you press its button,
-and a moment later the post is in monbooru with its tags.
+monloader: one click sends the post you're looking at, and it lands in
+monbooru with its tags.
 
 **[Plugins](plugins.md)** are the same idea opened up to anyone: small
 programs that add a few buttons to monbooru.

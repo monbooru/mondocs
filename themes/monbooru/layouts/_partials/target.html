@@ -1,0 +1,5 @@
+{{ $page := . }}
+{{ if and .IsSection (not .IsHome) (not (strings.TrimSpace .RawContent)) }}
+  {{ with index .Pages 0 }}{{ $page = partial "target.html" . }}{{ end }}
+{{ end }}
+{{ return $page }}

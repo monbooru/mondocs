@@ -27,4 +27,10 @@ somewhere else; the keys are on [Configuration](configuration.md).
 A `-tags tagger` build needs the ONNX Runtime library at run time:
 `libonnxruntime.so` on the library path, or `ORT_LIB_PATH` pointing
 at it. See [Auto-tagger: GPU and models](auto-tagger.md). Video, AVIF
-and JPEG XL thumbnails need `ffmpeg` and `ffprobe` on the `PATH`.
+and JPEG XL thumbnails and the animated previews need `ffmpeg` and
+`ffprobe`, on the `PATH` or next to the program.
+
+`main` is one snapshot per release and what a clone builds. Work and
+pull requests go to `dev`;
+[CONTRIBUTING](https://github.com/monbooru/monbooru/blob/main/CONTRIBUTING.md)
+has the details.

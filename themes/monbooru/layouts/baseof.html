@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} - {{ site.Title }}{{ end }}</title>
+  {{- with partial "target.html" . }}{{ if ne . $ }}
+  <link rel="canonical" href="{{ .RelPermalink }}">
+  <meta http-equiv="refresh" content="0; url={{ path.Base .RelPermalink }}">
+  {{- end }}{{ end }}
   {{- if eq .Kind "404" }}
   <script>(function () { var b = document.createElement('base'); b.href = {{ site.Params.root | default "/" }}; document.head.appendChild(b); })();</script>
   {{- end }}
@@ -22,7 +26,7 @@
     <nav id="nav">
       {{ $first := .FirstSection }}
       {{ range site.Home.Sections }}
-      <a href="{{ .RelPermalink }}"{{ if eq $first . }} class="active"{{ end }}>{{ .Title }}</a>
+      <a href="{{ (partial "target.html" .).RelPermalink }}"{{ if eq $first . }} class="active"{{ end }}>{{ .Title }}</a>
       {{ end }}
     </nav>
     <div id="search" role="search">

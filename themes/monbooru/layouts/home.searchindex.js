@@ -1,5 +1,5 @@
 {{- $entries := slice -}}
-{{- range site.Pages -}}
+{{- range where site.Pages "RawContent" "ne" "" -}}
   {{- $path := slice -}}
   {{- range .Ancestors.Reverse -}}
     {{- if not .IsHome -}}{{- $path = $path | append .Title -}}{{- end -}}

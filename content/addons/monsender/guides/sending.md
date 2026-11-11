@@ -14,7 +14,7 @@ What you send decides what arrives in monbooru:
   an artist page) comes in with its tags, rating and source. The popup
   labels these "booru - tags will be included".
 - A **direct image file** (an address ending in `.jpg` on some image
-  server) is just downloaded, so it comes in without tags or rating.
+  server) is only downloaded, so it comes in without tags or rating.
   When you send one from the right-click menu or a page scan, the page
   you were on is recorded as its source, so you can find your way
   back.
@@ -25,8 +25,7 @@ knows is covered in [Sites and credentials](../../monloader/guides/sites/index.m
 ## The toolbar button
 
 **send page** works on any web page, labelled or not: monloader makes
-the final call, and a page it can't handle comes back as "not a
-supported site".
+the final call.
 
 The result shows in the popup within a few seconds. If monloader takes
 longer than the wait set in [settings](../settings/index.md), the
@@ -51,9 +50,9 @@ extension sends the best thing it can:
 
 When it sent the page but you pointed at one image, say on a post
 holding a finished piece plus sketches, a note appears next to the
-image for a few seconds: "sent the post page [only this image]". Click
-**only this image** to swap the post for just that file. To pick
-several images from a page, [scan it](scanning/index.md).
+image for a few seconds. Click **only this image** in it to swap the
+post for that file alone. To pick several images from a page,
+[scan it](scanning/index.md).
 
 ## Following what you sent
 
@@ -64,12 +63,13 @@ outcomes in short words (new, dup, skip, fail...), explained on
 [Downloading](../../monloader/guides/downloading/index.md#per-item-outcomes).
 Hover a failed row to see why.
 
-Each job can be retried. When a job skipped posts monloader had
-downloaded before, **[force download]** fetches them anyway, the way
-to get back something you deleted in monbooru. A tag search that hit
-monloader's limit offers **[continue]** for the next batch and
-**[fetch all]** for the rest.
+Rows carry monloader's own actions: **[retry]** on a job that didn't
+finish cleanly, **[force download]** on one that skipped posts
+monloader had fetched before, and **[continue]** and **[fetch all]**
+on a tag search that stopped at monloader's limit.
+[Downloading](../../monloader/guides/downloading/index.md#retrying)
+explains each.
 
-The pause button holds monloader's whole queue: the download in
-progress finishes, and nothing new starts until you resume. It's the
-same pause as on monloader's own pages.
+The pause button at the top of the popup is monloader's own
+[pause](../../monloader/guides/downloading/index.md#pause-and-resume):
+it holds the whole queue, not only what this browser sent.

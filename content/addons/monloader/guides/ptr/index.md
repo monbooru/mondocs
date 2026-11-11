@@ -12,13 +12,12 @@ posted there. It's off until you turn it on.
 
 ## What it costs
 
-The PTR can't be asked about a single file (on purpose, so its server
-never learns what files you have). Using it means downloading the
-whole thing once and keeping it up to date:
+The PTR can't be asked about a single file. Using it means downloading
+the whole thing once and keeping it up to date:
 
-- **Disk**: the local copy needs more than 70 GB, on a volume of its
-  own. Put it on an SSD; building it on a spinning disk can take
-  weeks.
+- **Disk**: the local copy takes about 80 GB, and the first sync waits
+  for 90 GiB free. Give it a volume of its own. Put it on an SSD;
+  building it on a spinning disk can take weeks.
 - **Time**: the first sync takes days. You can pause and resume it
   whenever you like.
 - **After that**: one small update a day or so.
@@ -29,7 +28,7 @@ public data. To skip most of the first sync, start from a snapshot
 
 ## Turning it on
 
-![The PTR page before enabling](ptr-disabled.png)
+![The PTR page before enabling](ptr-disabled.webp)
 
 1. Give the copy a place to live. A desktop install already has a
    `ptr` folder next to its data; on Docker, mount a volume at `/ptr`
@@ -39,11 +38,11 @@ public data. To skip most of the first sync, start from a snapshot
 2. Open **PTR** in the top bar, check the free space, and click
    **Enable PTR sync**.
 
-Unticking **Enable sync and answer SHA-256 lookups** in **Settings ->
+Unticking **Enable the PTR** in **Settings ->
 PTR** turns it off and keeps the copy; **Delete PTR data** frees the
 disk.
 
-![The PTR page once the index has caught up](ptr-synced.png)
+![The PTR page once the index has caught up](ptr-synced.webp)
 
 ## Starting from a snapshot
 
@@ -62,8 +61,7 @@ from scratch. monloader then only fetches the days since it was made.
 
 ## Using it
 
-The PTR answers only once the copy has caught up: a half-built copy
-would give a few of a file's tags as if they were all of them.
+The PTR answers only once the copy has caught up.
 
 From then on, monbooru can use it to
 [look up images](../../../../guides/lookup/index.md) and to find
@@ -71,6 +69,23 @@ aliases and implications for your tags. Tags come back in monbooru's
 form: hydrus namespaces become categories (`creator:` is artist,
 `series:` is copyright...), and bookkeeping namespaces like `title:`
 or `filename:` are left out.
+
+## Its mappings and blacklist
+
+**Settings -> Sites** has a `ptr` row at the top. **Edit** sets what
+happens to the tags the PTR answers, the way
+[a site's mappings](../mapping/index.md#editing-a-sites-profile) do:
+
+- **Rating map**, **Category map** and **Tag rules** change the tags
+  monbooru receives. The category map is keyed by hydrus namespace,
+  and `general` covers tags with no namespace.
+- **Blacklist**: an image matching a rule gets no tags from the PTR,
+  while online lookups still run. The global blacklist does not apply
+  here.
+
+Categories unchecked in **Settings -> Rules** are dropped here too.
+All of this only changes what comes in: contributing back keeps the
+PTR's own spellings.
 
 ## Contributing back
 

@@ -3,10 +3,30 @@ title: Metadata mapping
 weight: 30
 ---
 
-Every site describes its posts its own way: its own tag categories,
-its own rating letters, its own URLs. monloader translates all of that
-into what monbooru expects, using a profile per site (the shipped
-ones, with your edits on top) and a generic fallback for the rest.
+Each site has its own tag categories and rating letters. monloader
+translates them into monbooru's, so a site's `circle` tags land in
+`artist` and its `parody` tags in `copyright`. It uses a profile per
+site (the shipped ones, with your edits on top) and a generic fallback
+for the rest.
+
+## The three steps
+
+A post goes through three steps on its way to monbooru, shown at the
+top of **Settings -> Rules**:
+
+![The flow strip: mappings, blacklist, download, categories kept, push, then monbooru's own steps](tag-flow.webp)
+
+1. **Mappings** translate the site's ratings, categories and tags into
+   monbooru's. Each site has its own, see
+   [editing a site's profile](#editing-a-sites-profile).
+2. **Blacklist** skips the whole post before anything downloads. One
+   list covers every site and a site can add its own, see
+   [skipping posts by tag](../downloading/index.md#skipping-posts-by-tag).
+3. **Categories kept** drops the tags of the categories you unchecked,
+   on every site. The post still downloads.
+
+Tags from the Public Tag Repository go through the same steps, see
+[the PTR's mappings and blacklist](../ptr/index.md#its-mappings-and-blacklist).
 
 ## Tags
 
@@ -23,13 +43,9 @@ go to the closest match:
 | invalid, deprecated | dropped |
 | anything else | general |
 
-Tag names are brought into monbooru's form on the way: lowercase, with
-spaces turned into underscores (`fate/grand order` becomes
-`fate/grand_order`).
-
 If you only want some categories at all, say characters and copyrights,
-uncheck the others under **Settings -> Tags**. That applies to every site,
-after everything above.
+uncheck the others under **Keep tags from these categories** in
+**Settings -> Rules**.
 
 ## Ratings
 
@@ -39,18 +55,14 @@ which becomes general) mean the same everywhere. The trap is the letter
 "safe". monloader knows which kind of site each one is and reads it
 accordingly. A rating it doesn't recognize leaves the image unrated.
 
-Manga sites usually don't rate their galleries at all, which would let
-them through a safe-for-work ceiling. So the profiles of adult-only
-sites (nhentai, hitomi, exhentai and the like) rate their downloads
-`explicit` whenever the site doesn't say otherwise.
+Manga sites rarely rate their galleries, so the profiles of
+adult-only sites (nhentai, hitomi, exhentai and the like) rate their
+downloads explicit unless the site says otherwise.
 
 ## Sources
 
 Each image gets its post's page as its source, labelled with the
-site's name, so `source:danbooru` finds everything from danbooru. A
-direct link to a file has no post page, so its source is the file's
-own address; when monsender sends a file along with the page you found
-it on, that page is used instead.
+site's name, so `source:danbooru` finds everything from danbooru.
 
 Booru posts also bring the artist's commentary, the original upload
 they point to (a pixiv or twitter page, say), and any note boxes drawn
@@ -64,13 +76,12 @@ The same site can show up under several names: `danbooru` from its
 posts, `cdn.donmai.us` from a direct link to one of its files. To keep
 them under one source in monbooru, a site's settings have two fields:
 
-![The source label and host aliases on a site's monbooru tab](source-label.png)
+![The source label and extra hosts on a site's general tab](source-label.webp)
 
 - **Source label** is the name its downloads are filed under. Empty
   keeps the site's own name.
-- **Host aliases** are the other addresses that belong to it: file
+- **Extra hosts** are the other addresses that belong to it: file
   servers, mirrors. A file from one of them counts as the site.
-  monsender uses the same list to recognize the site on a mirror.
 
 For a host that isn't any site gallery-dl knows (a wiki you save
 images from, say), give it a label under **Host labels**, below the
@@ -78,10 +89,10 @@ sites tables. Labels only apply to new downloads.
 
 ## Editing a site's profile
 
-![The mappings tab of a site's edit dialog](site-profile.png)
+![The tags tab of a site's edit dialog](site-profile.webp)
 
 When a site's tags or ratings come out wrong, fix them on the
-**profile** and **mappings** tabs of its settings. Changes apply to the
+**profile** and **tags** tabs of its settings. Changes apply to the
 next download.
 
 - **Family** decides how ratings and tag categories are read. Most
@@ -92,32 +103,41 @@ next download.
 - The **Category map** sends one of the site's tag categories to a
   different monbooru category, your own included, or drops it.
 - **Tag rules** fix single tags: rename a misspelled one, move it to
-  another category, your own included, with a `category:` prefix, or
+  another category, your own or general included, with a `category:` prefix, or
   leave the replacement empty to drop it.
-- Setting the **MD5 search** URL lets the site take part in
+- Setting the **MD5 search template** lets the site take part in
   [reverse lookup](../lookup/index.md).
 
-Your profile is saved as one file, and the **export** tab gives it to
-you ready to share. If a fix is worth having for everyone, see
+The **export** tab gives you your profile, ready to share. If a fix is
+worth having for everyone, see
 [site profiles](../../development.md#site-profiles).
 
 ## What applies when
 
-| You want to... | Use | Applies to |
+A tag passes through monloader's rules on its way out, then through the
+gallery's own on arrival. Each step lives where it applies.
+
+| To... | Use | Applies to |
 |---|---|---|
-| never fetch posts with a tag | **Global blacklist** | every site |
-| never fetch them from one site | the site's **Blacklist** | that site |
-| keep the posts, lose a whole category | **Categories sent** | every site |
+| skip posts with a tag | **Blacklist** in **Settings -> Rules** | every site |
+| skip them from one site only | the site's **Blacklist** | that site |
+| keep the posts, drop a whole category | **Keep tags from these categories** | every site |
 | the same, on one site | **Category map**, set to drop | that site |
-| keep the posts, lose one tag | **Tag rules**, empty replacement | that site |
+| keep the posts, drop one tag | **Tag rules**, empty replacement | that site |
 | rename a tag or move it to another category | **Tag rules** | that site |
+| drop a label one auto-tagger keeps getting wrong | **Configure -> mappings** on the tagger, in monbooru | that tagger |
+| keep a name out of the gallery, whatever brings it | **Reject tags** on monbooru's Tags page | the gallery |
+| rename a tag for everyone, whatever brings it | an **alias** on monbooru's Tags page | the gallery |
 
 A blacklist rule reads every tag the post lists, including the ones you drop,
-so a post can be skipped for a tag you'd never have kept.
+so a post can be skipped for a tag you'd never have kept. The flow strip at
+the top of **Settings -> Rules** shows the whole path, and a tag's own page in
+monbooru draws it for that one name (see
+[Cleaning up tags](../../../../guides/tag-cleanup/index.md#rejected-names)).
 
 ## Tracing a post
 
-To see what these steps would do, paste a post URL under **Trace a post**, in
-**Settings -> Tags** or on a site's **mappings** tab. You get one line per tag,
-showing what each step did to it and what monbooru would receive, or which rule
-would skip the post. Nothing is downloaded.
+To see what these steps would do to a post, paste its URL under
+**Settings -> Trace a post**. You get one line per tag, showing what
+each step did to it and what monbooru would receive. Nothing is
+downloaded.

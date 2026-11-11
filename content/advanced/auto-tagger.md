@@ -37,10 +37,9 @@ container the usual way; the compose file has a commented example for
 each. An Intel GPU also needs `/dev/dri` passed in and the container
 added to the host's render group. Both tags are amd64 only.
 
-The first GPU run on a new machine spends a few minutes compiling. The
-result is cached under the data folder (`.nv-cache/` for CUDA,
-`.openvino-cache/` for OpenVINO), so keep that folder on a persistent
-volume and later starts are quick.
+The first GPU run compiles the model and caches the result under the
+data folder (`.nv-cache/` for CUDA, `.openvino-cache/` for OpenVINO),
+so keep that folder on a persistent volume.
 
 **Settings -> Auto-Tagger -> Parallel workers** (`tagger.parallel`,
 default 4) is how many images are prepared and tagged at once. On a
@@ -58,9 +57,9 @@ the folder does not hold.
 
 A registry folder holds a `model.json` (the description, the default
 thresholds and the files to download), and when the model needs them
-a `profile_default.json` and a `dispatch_default.json`. Those two are
-the stock settings: a newer copy of the folder can replace them, while
-your own changes go in `tagger.json` and `dispatch.json` beside them.
+a `profile_default.json` and a `dispatch_default.json`. Leave those
+two alone, a newer copy of the folder replaces them. Your own changes
+go in `tagger.json` and `dispatch.json` beside them.
 
 ## Your own models
 
@@ -76,7 +75,7 @@ label file:
 - a `.json` label file, described by the `tagger.json` below.
 
 The new tagger shows up in **Settings -> Auto-Tagger** on the next
-page load. 
+page load.
 
 monbooru works out how to feed `.csv` (WD14-style) and `.txt`
 (JoyTag-style) models on its own. For anything else, add a
@@ -97,7 +96,7 @@ field is optional and only restates what differs from that guess:
 | `category_map` | renames the label file's categories, `{"style": "artist"}` |
 | `output_index` | which of the model's outputs holds the scores, when it has several |
 
-Here's an example with PixAI's tagger. Its runner pads to a black square,
+Here's the one for PixAI's tagger. Its runner pads to a black square,
 maps pixels to `-1..1`, applies a sigmoid, and keeps its labels in
 `tags.json` as one block per category, the `style` block being
 artists:
@@ -119,8 +118,10 @@ artists:
 }
 ```
 
-Its ratings are labelled `rating:g` and so on, so it also needs the
-four `dispatch.json` rules below that rename them. The
+Its ratings are labelled `rating:g`, `rating:s`, `rating:q` and
+`rating:e`, so it also needs four
+[label rules](#label-rules-dispatchjson) that rename them to
+`general`, `sensitive`, `questionable` and `explicit`. The
 `profile_default.json` files in the registry's folders are more
 examples.
 
@@ -148,13 +149,8 @@ to the model, and you can also write or share that file by hand:
 
 monbooru ships rules of its own for the suggested taggers, taken from
 their registry folders, and any other model from the registry brings
-its own as `dispatch_default.json`. Your file
-goes on top: a rule for the same label replaces the shipped one, a new
-label is added. **Reset** removes your file and keeps the shipped
-rules. The **export** tab of the Configure dialog shows the
-merged result, ready to copy over the folder's `dispatch_default.json`
-in a pull request to the registry or to drop next to `model.onnx` on
-another install.
+its own as `dispatch_default.json`. Your file goes on top: a rule for
+the same label replaces the shipped one, a new label is added.
 
 ## Memory
 
@@ -163,10 +159,6 @@ to free RAM and VRAM. **Settings -> Auto-Tagger** has the delay
 (`tagger.idle_release_after_minutes`); `0` unloads right after each
 run. **Settings -> Maintenance -> Free memory** unloads it on the
 spot.
-
-Tagging runs in a separate `tagger-worker` process. If it gives you
-trouble, `MONBOORU_TAGGER_BACKEND=inproc` runs tagging inside monbooru
-itself instead.
 
 ## Videos and archives
 
@@ -179,9 +171,7 @@ of the frames that is. Set it to `0` and one frame is enough.
 
 | Variable | What it does |
 |---|---|
-| `MONBOORU_TAGGER_EXECUTION_PROVIDER` | Overrides `tagger.execution_provider`. |
-| `MONBOORU_TAGGER_BACKEND` | `inproc` runs tagging inside monbooru instead of a separate process. |
 | `MONBOORU_TAGGER_WORKER_LOG` | Log level (`warn` / `info` / `debug`) for the tagger process only. Unset, it follows monbooru's own level. |
-| `MONBOORU_TAGGER_DIRECTML_DEVICE_ID` | Which GPU DirectML uses, by adapter number. Defaults to `0`, which on a laptop is often the integrated GPU rather than the fast one. |
+| `MONBOORU_TAGGER_DIRECTML_DEVICE_ID` | Which GPU DirectML uses, by adapter number. Defaults to `0`. |
 | `ORT_LIB_PATH` | Full path to the ONNX Runtime library, when it isn't next to the program or on the system library path. |
 | `CUDA_CACHE_PATH` | Where CUDA keeps its compiled cache. Defaults to `.nv-cache/` in the data folder. |

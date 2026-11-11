@@ -4,10 +4,10 @@ weight: 80
 ---
 
 Open the popup and click **options**, or right-click the toolbar icon
-and open the extension's options. Settings are kept in this browser
-only.
+and open the extension's options. Click **save** after a change.
+Settings are kept in this browser only.
 
-![The options page](options.png)
+![The options page](options.webp)
 
 - **URL**: the address your browser reaches monloader at. Saving a
   different one forgets the pairing, so you'll

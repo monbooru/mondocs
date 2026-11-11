@@ -9,13 +9,13 @@ pictures tags like `red_hair`, `character:hakurei_reimu` or
 If you have thousands of images and can never find the one you want,
 monbooru might help.
 
-![The gallery grid](gallery.png)
+![The gallery grid](gallery.webp)
 
 It's made for a local collection: your photos and videos, downloaded
-art, manga archives, etc. Your files stay ordinary
-files in ordinary folders. monbooru watches those folders and keeps
-what it knows about them (tags, ratings, relations) in its own
-database, so removing it leaves your files exactly where they were.
+art, manga archives. Your files stay ordinary files in ordinary
+folders. monbooru watches those folders and keeps what it knows about
+them (tags, ratings, relations) in its own database, so removing it
+leaves your files exactly where they were.
 
 monbooru never goes on the internet by itself. Downloading from boorus
 and looking up where an image came from are the job of the optional
@@ -43,9 +43,6 @@ and looking up where an image came from are the job of the optional
   keep track of which is which.
 - Hold several [galleries](guides/galleries/index.md), and
   [import a library](guides/migrating.md) from supported apps.
-- With [monloader](addons/monloader/_index.md), download from boorus
-  and [look up tags](guides/lookup/index.md) for images you already
-  have.
 
 ## Where to start
 

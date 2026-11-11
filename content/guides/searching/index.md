@@ -3,8 +3,7 @@ title: Searching
 weight: 10
 ---
 
-Finding things again is what tags are for. Type a tag in the search
-bar and you get every image that has it. Type two, `red_hair beach`,
+Type a tag in the search bar and you get every image that has it. Type two, `red_hair beach`,
 and you get only the images that have both. Every extra term narrows
 the results down.
 
@@ -27,15 +26,13 @@ specific: `character:saber` finds the character, not the general tag.
 `cat:artist` finds any image with an artist tag at all.
 
 Ratings search like tags: `rating:general` finds the images rated
-general. Adding `-rating:explicit` is a quick way to keep a search
-safe.
+general. Add `-rating:explicit` to keep a search safe.
 
 ## Filters
 
-Anything written as `key:value` with a known key is a filter, which
-searches something other than tags: the file, where it came from,
-when you added it. Filters combine with tags and each other like any
-other term.
+A filter looks like `key:value` and searches something other than
+tags: the file, where it came from, when you added it. Mix filters
+with tags and with each other.
 
 Numbers can be compared (`width:>=1920`, `duration:<30`) or given as
 a range (`width:1000..2000`, `pages:100..`). Dates work the same, in
@@ -49,16 +46,12 @@ A few you're likely to use:
 | `inbox:true` | images you haven't reviewed yet |
 | `fav:true` | your favorites |
 | `tagged:false` | images nobody has tagged |
-| `autotagged:false` | images no auto-tagger has seen |
 | `tagcount:<5` | images with fewer than five tags |
 | `folder:2024/trip` | a folder and everything under it |
 | `name:vacation` | files with "vacation" in their name |
 | `type:animated` | videos and animated GIFs |
 | `width:>=3840 ratio:>1` | large landscape images, wallpapers maybe |
 | `date:>2024-06-01` | images added since June 2024 |
-| `source:none` | images with no known source |
-| `ai:any model:sdxl` | AI images made with an SDXL model |
-| `relation:duplicate` | images you marked as duplicates |
 
 Files that have gone missing from disk are left out of every search.
 Add `missing:true` to see them.
@@ -78,14 +71,16 @@ generation settings, relation types, lookup states and so on. Type
 `system:` in the search bar and a dropdown lists every filter with a
 hint for each, and the values it takes once you pick one.
 
-![The system: dropdown in the search bar](search-system.png)
+![The system: dropdown in the search bar](search-system.webp)
 
 The [AI metadata](../ai-metadata.md) page covers the filters for
 generation data, including searching inside ComfyUI workflows.
 
 ## Sorting and saving
 
-Random order (`R`) keeps the same shuffle as you turn pages.
+The menu and the arrow after the search bar set the order. The shuffle
+button next to them (`R`) puts the results in random order and keeps
+the same shuffle as you turn pages.
 
 The play button at the end of the search controls (`w`) plays the
 search as a slideshow, or only the images you've ticked. On an image's

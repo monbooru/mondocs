@@ -17,11 +17,10 @@ them and use **Collection** in the batch bar.
 
 ## The Collections page
 
-![A collection and its members on the Collections page](collections-page.png)
+![A collection and its members on the Collections page](collections-page.webp)
 
 On the Collections page, renaming a collection to the name of another
-merges the two, the incoming pages going after the last page of the
-other. Dissolving a collection removes the grouping and keeps the
+merges the two. **[dissolve]** removes the grouping and keeps the
 images.
 
 The near-duplicate finder leaves pairs from the same collection alone,
@@ -35,7 +34,7 @@ images come up in the collection's own order.
 
 **[generate cbz]** on the Collections page packs a collection into a
 CBZ archive, in collection order, which you can then read like any
-other [comic archive](../manga/index.md). Handy when a set was
+other [comic archive](../manga/index.md). Use it when a set was
 downloaded as loose images but reads as one book. The archive lands
 in your upload folder, and the collection and its images stay as they
 were.

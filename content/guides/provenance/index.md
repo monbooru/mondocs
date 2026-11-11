@@ -8,7 +8,7 @@ you know about it. All of it is on the image's page.
 
 ## Sources
 
-![The Sources rows and the panel a source expands into](sources.png)
+![The Sources rows and the panel a source expands into](sources.webp)
 
 A source is a link to where the image lives online: a booru post, an
 artist's page. An image can have several. monloader adds them when it
@@ -25,28 +25,21 @@ refresh, and what an upgrade to a bigger file comes from.
 
 ## Personal note
 
-A free-text note on the image, just for you (`e n` to edit it).
-
-![The personal note and annotations under the image](note.png)
+Each image can carry a free-text note of your own. Press `e n` to
+edit it.
 
 ## Annotations
 
 Annotations are boxes drawn on the image with some text, the way
 boorus mark up translated speech bubbles. A booru lookup brings in the
 post's annotations, and you can draw your own on the image's page.
-They show when you hover over the image.
+The boxes are outlined on the image, and hovering one shows its text.
+
+![The personal note and annotations under the image](note.webp)
 
 ## Formatting
 
 Notes, annotations, tag notes and commentary understand a little
-markup:
-
-```
-[b]bold[/b]  [i]italic[/i]  [u]underline[/u]  [s]struck[/s]
-[code]code[/code]  [tn]translator note[/tn]
-
-[tag]blue_eyes[/tag]              a search for that tag
-[tag=blue_eyes]Blue eyes[/tag]    the same, with your own wording
-[url=https://example.com]link[/url]
-[image:123]                       another image in this gallery
-```
+markup, like `[b]bold[/b]` or `[tag]blue_eyes[/tag]` for a link to
+that tag's search. The bar above each editor adds the markup for you,
+and **[preview]** shows the result.

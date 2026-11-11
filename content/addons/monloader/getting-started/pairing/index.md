@@ -12,30 +12,25 @@ this page is the monloader side.
 ## Pair with monbooru
 
 1. In monloader's **Settings**, check the **API URL** under
-   **monbooru**. The default, `http://monbooru:8455`, is right when
-   both run from monbooru's compose file.
+   **Monbooru**. The default is right when both run from monbooru's
+   compose file, or on the same computer for a desktop build.
 2. Under **Pairing**, click **Connect to monbooru**.
 3. In monbooru, approve the request under **Settings -> Plugins**.
 
-   ![The pairing request waiting for approval in monbooru](approve-request.png)
+   ![The pairing request waiting for approval in monbooru](approve-request.webp)
 
-4. Back in monloader, pick the **Default gallery** downloads go to,
-   and save.
+4. Back in monloader, downloads go to monbooru's active gallery. To send
+   them elsewhere, pick a **Default gallery** and click **Save**.
 
-   ![monloader's monbooru and pairing sections once paired](settings-monbooru.png)
-
-monloader can then add images and tags to monbooru, but never delete
-anything, and monbooru can ask monloader for lookups.
-
-If the link breaks later, say after moving one of the apps, press
-**Reconnect** and approve the new request in monbooru.
+   ![monloader's monbooru and pairing sections once paired](settings-monbooru.webp)
 
 ## Pair with monsender
 
-1. In the extension's options, set monloader's address and click
-   **connect to monloader** (see
-   [monsender setup](../../../monsender/getting-started/setup/index.md)).
-2. Approve the request in monloader under **Settings -> Pairing**.
+The extension asks from its own options, and you approve the request
+here under **Settings -> Pairing**, in the **Monsender extension**
+block.
+[monsender setup](../../../monsender/getting-started/setup/index.md)
+has the steps.
 
 ## Pausing the link
 

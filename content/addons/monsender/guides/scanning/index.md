@@ -7,7 +7,7 @@ Some pages hold lots of images and aren't a booru post: a forum
 thread, a blog post, an image dump. Scan the page and pick the ones
 you want.
 
-![The side panel after scanning a page](panel.png)
+![The side panel after scanning a page](panel.webp)
 
 Open the popup and click **scan page**. The chooser opens beside the
 page (Chrome's side panel, Firefox's sidebar), so you can scroll the
@@ -27,12 +27,11 @@ images arrive in monbooru without tags (see
 
 Both are in [settings](../../settings/index.md).
 
-When the page offers an image in several sizes, its card shows one
-button per size ("1500w", "800w"). The largest is picked for you.
+When the page offers an image in several sizes, its card has a button
+per size, with the largest picked for you.
 
-If some picks fail to send, the chooser says why and keeps your
-selection, so you can send again once it's fixed. Sending the ones
-that made it a second time is harmless: they come back as duplicates.
+If some picks fail to send, the chooser says why and leaves only those
+ticked, so you can send them again once it's fixed.
 
 ## Previews
 

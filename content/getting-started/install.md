@@ -26,6 +26,10 @@ program and end up in the same place, a web page at
 Keep `/data` on a persistent volume: it holds everything monbooru
 knows about your files.
 
+The compose file only answers on the machine it runs on. To open
+monbooru from another device, see
+[Running it on a server](../advanced/configuration.md#running-it-on-a-server).
+
 The container runs as user `1000:1000`, the usual first user on a
 Linux machine. Change `user:` in the compose file to your own uid:gid
 so the files monbooru writes belong to you.
@@ -63,10 +67,10 @@ alone.
 
 Each build comes in two flavours:
 
-- **lite** is just the program. Video, AVIF and JPEG XL thumbnails
-  need ffmpeg installed on your system, and auto-tagging needs ONNX
-  Runtime.
-- **bundled** adds both, so everything works out of the box.
+- **lite** is the program alone. It has no auto-tagger, and video,
+  AVIF and JPEG XL thumbnails need ffmpeg installed on your system.
+- **bundled** adds ffmpeg and the auto-tagger, so everything works
+  out of the box.
 
 ## Installed
 
@@ -89,9 +93,8 @@ download.
 | Settings, plugins, themes | `~/.config/monbooru` | `%AppData%\monbooru` |
 | Database and thumbnails | `~/.local/share/monbooru` | `%LocalAppData%\monbooru` |
 | Log file | `logs` in the database folder | same |
-| Your images | wherever you pointed setup | same |
 
-A Flatpak keeps the first three under
+A Flatpak keeps all three under
 `~/.var/app/io.github.monbooru.Monbooru/` instead.
 
 To run monbooru as a service on a server, see

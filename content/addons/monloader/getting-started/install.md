@@ -22,19 +22,20 @@ from elsewhere on your network.
 | Mount | What goes there |
 |---|---|
 | `/config` | `monloader.toml`, gallery-dl's config, cookies, and your site profiles |
-| `/ptr` | optional: the Hydrus PTR copy, only if you turn it on (tens of GB, see [Hydrus PTR](../guides/ptr/index.md)) |
+| `/ptr` | optional: the Hydrus PTR copy, only if you turn it on (about 80 GB, see [Hydrus PTR](../guides/ptr/index.md)) |
 
 ## Portable
 
 Download a **portable** build from the
 [releases page](https://github.com/monbooru/monloader/releases),
-unpack it and run it. Everything it writes goes in a `data` folder next
+unpack it and run it. Everything it keeps goes in a `data` folder next
 to the program. The **lite** build expects gallery-dl to be installed
 already; the **bundled** one brings its own.
 
 ## Installed
 
-On Windows there's an installer; on Linux, an AppImage and a Flatpak. They keep their files here:
+On Windows there's an installer; on Linux, an AppImage, an AUR package
+and a Flatpak. They keep their files here:
 
 | | Linux (AppImage, AUR) | Windows |
 |---|---|---|
@@ -51,9 +52,9 @@ A Flatpak keeps all of it under
 The portable and installed builds open a browser on a short setup page
 the first time they start. Under **Connect to monbooru**, check the
 **monbooru API URL**; the default fits a monbooru on the same computer.
-If monbooru is already running, tick **Ask monbooru to pair** and
+If monbooru is already running, tick **Pair with monbooru** and
 approve the request in monbooru under **Settings -> Plugins**. Under
-**Who can reach it?**, pick **Other devices on the LAN too** if
+**Who can open monloader?**, pick **Other devices on the LAN too** if
 monsender will send from a browser on another device; **Only this
 computer** keeps monloader to this machine.
 

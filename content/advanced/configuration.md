@@ -16,14 +16,17 @@ how you installed:
 
 Almost everything in it can be changed from the Settings page, which
 writes the file back for you. A few things can only be changed here,
-followed by a restart: the paths, the bind address and where each
-gallery lives on disk. A save from the Settings page rewrites the
-whole file, so comments and your own ordering don't survive it.
+followed by a restart: the paths, the bind address, `base_url`,
+`cors_origins`, `name`, `theme_color`, the log level, how long a login
+lasts and where each gallery lives on disk. A save from the Settings
+page rewrites the whole file, so comments and your own ordering don't
+survive it.
 
 ## monbooru.toml
 
-The sample below shows the Docker defaults. Other installs seed their
-own paths.
+The sample below shows the Docker defaults. The downloads seed their
+own paths, `log.level = "info"` and
+`schedule.mode = "at_time_catchup"`.
 
 ```toml
 default_gallery = "default"      # the gallery loaded on startup
@@ -35,7 +38,7 @@ gallery_path = "/gallery"        # the folder holding your images
 
 [server]
 bind_address  = "127.0.0.1:8455"          # the containers set 0.0.0.0:8455 instead
-base_url      = "http://localhost:8455"   # links back to monbooru and CORS
+base_url      = "http://localhost:8455"   # links back to monbooru and CORS; set it to a public domain you reach monbooru by
 cors_origins  = []               # other pages allowed to call the API; "*" for any
 name          = ""               # rename the UI; empty = monbooru
 theme         = ""               # see Themes
@@ -124,7 +127,8 @@ tray = true                      # tray icon, desktop builds only
 
 ## Environment variables
 
-Each of these overrides its key in the file. The file keeps its own value, and Settings shows the key greyed out with the variable's name.
+Each of these overrides its key in the file. The file keeps its own
+value, and Settings shows the key greyed out with the variable's name.
 
 | Variable | Overrides |
 |---|---|
@@ -148,7 +152,8 @@ Each of these overrides its key in the file. The file keeps its own value, and S
 Two more aren't tied to a key:
 
 - `TZ` is the timezone for displayed times and the nightly schedule,
-  for example `Europe/Paris`. It defaults to UTC.
+  for example `Europe/Paris`. Without it monbooru uses the system's
+  timezone, which is UTC in the Docker images.
 - `MONBOORU_CONTAINER` is set by the official images. It only decides
   where a brand-new config puts its folders: the `/data`, `/models`
   and `/gallery` mounts with it, next to the config file without it.
@@ -159,17 +164,17 @@ The auto-tagger's own variables are on
 
 ## Log levels
 
-- `warn` (the default): warnings, errors and failed logins.
+- `warn` (the Docker default; the downloads start at `info`):
+  warnings, errors and failed logins.
 - `info`: adds a line per request, startup messages, logins and
   settings changes.
 - `debug`: adds everything else, thumbnails and status polls included.
 
 ## Password
 
-There's no login by default, which is fine on a home network. To add
-one, turn it on under **Settings -> Authentication**, or set
-`auth.enable_password = true` and a `password_hash` in the file. To
-make the hash:
+There's no login by default. To add one, turn it on under
+**Settings -> Authentication**, or set `auth.enable_password = true`
+and a `password_hash` in the file. To make the hash:
 
 ```bash
 ./monbooru -hash-password 'your-password'
@@ -182,7 +187,11 @@ restarts. Changing the password logs out every other browser.
 
 ## Running it on a server
 
-Docker is the best option for servers. Its compose file only publishes the port on the machine itself, so change its `ports:` line for other machines to reach it. To run the program directly instead, there's no separate server download: take a portable archive, and before starting it as a service,
+Docker is the simplest way to run it on a server. Its compose file
+only publishes the port on the machine itself, so change its `ports:`
+line for other machines to reach it. To run the program directly
+instead, there's no separate server download: take a portable archive,
+and before starting it as a service,
 
 - write a `monbooru.toml` next to the program with the settings you
   want, at least `bind_address` under `[server]` if other machines
@@ -190,9 +199,7 @@ Docker is the best option for servers. Its compose file only publishes the port 
 - add `-no-browser` to the launch line.
 
 Everything monbooru makes still lands in that folder, so backing up
-is copying one directory. Paths you point elsewhere are stored as
-full paths; paths inside the folder stay relative, so the folder can
-still move.
+is copying one directory.
 
 An empty `monbooru.toml` next to the program is what makes a copy
 portable. The AppImage behaves like an installed app; put an empty
@@ -212,7 +219,7 @@ or delete them.
 
 The image has a healthcheck built in (`monbooru healthcheck`, which
 probes `/health`), so `docker ps` shows the container as healthy once
-it's up. Point your own monitoring at `GET /health` if you like.
+it's up.
 
 ## ComfyUI nodes
 
@@ -234,19 +241,20 @@ type, the input that holds each field:
 ```
 
 The fields are `prompt`, `seed`, `steps`, `cfg`, `sampler`,
-`scheduler`, `model`, `lora`, and `positive` (the sampler input that
-points at the prompt node). An entry replaces monbooru's own for the
-same node type. New images pick the file up as they arrive; run
-**Settings -> Maintenance -> Re-extract metadata** for the ones
-already in the gallery.
+`scheduler`, `model`, `lora`, `lora_count`, and `positive` (the
+sampler input that points at the prompt node). An entry replaces
+monbooru's own for the same node type. New images pick the file up as
+they arrive; run **Settings -> Maintenance -> Re-extract metadata**
+for the ones already in the gallery.
 
 ## Command-line flags
 
 - `-config <path>`: the config file to use.
 - `-hash-password <password>`: print a password hash and exit.
 - `-desktop`: the desktop profile (OS folders or a portable folder, a
-  log file, a browser at startup, the setup page). Every download has
-  it on; `-desktop=false` turns it off.
+  log file, a browser at startup, the setup page). The archives, the
+  installers, the AppImage and the Flatpak have it on;
+  `-desktop=false` turns it off.
 - `-no-browser`: with `-desktop`, don't open a browser at startup.
 - `-version`: print the version and exit.
 - `healthcheck`: probe the local `/health` endpoint and exit 0 when
