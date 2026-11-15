@@ -1,0 +1,29 @@
+name: Project board
+
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Say what would change, change nothing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: board
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: python3 .github/board/test_sweep.py
+      - run: python3 .github/board/sweep.py --project 4 ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}

@@ -29,7 +29,7 @@ needs an ONNX Runtime built for it: take one from the
 (1.21 or newer) and either put it next to the program in place of the
 `onnxruntime.dll` or `libonnxruntime.so` that came with it, or point
 `ORT_LIB_PATH` at it. The libraries the provider itself needs go in
-the same folder. CUDA also wants CUDA 12 and cuDNN 9 installed.
+the same folder. Restart monbooru afterwards.
 
 On Docker, the default image is CPU-only. Use the `-cuda` image tag
 for NVIDIA or `-openvino` for Intel, and pass the GPU into the
